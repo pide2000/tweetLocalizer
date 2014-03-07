@@ -1,0 +1,41 @@
+﻿@model TwitterWebFrontend.ViewModels.manualAssignementViewModel
+<h1></h1>
+@ViewBag.test
+
+@{
+    var grid = new WebGrid(Model.containsSearchGeoNamesRestricted,canPage:false,canSort: true,
+        defaultSort: "country_code",
+        sortDirectionFieldName: "DESC");
+    @grid.GetHtml( tableStyle: "tableGeo", alternatingRowStyle: "alternate", headerStyle: "header", rowStyle: "rowe", columns:
+      grid.Columns(
+      grid.Column("geonameid", "id", style: "id", canSort: true),
+                  grid.Column("name", "Name", style: "name", canSort: true),
+                  grid.Column("country_code", "Land", canSort: true),
+                  grid.Column("admin1_code", "adm1", canSort: true),
+                  grid.Column("feature_class", "class", canSort: true),
+                  grid.Column("feature_code", "code", canSort: true),
+                  grid.Column("Action", format: @<div class="btn"><button class="show-in-map btn btn-default">in Karte zeigen</button><br /><button class="takeIt btn btn-default">übernehmen</button></div>),
+                  grid.Column(null,null,format: @<text>@item.longitude</text>, style: "lon hidden"),
+                  grid.Column(null,null,format: @<text>@item.latitude</text>, style: "lat hidden")));
+}
+
+@{
+    var grid2 = new WebGrid(Model.containsSearchAlternateNames3, canPage: false, canSort: true,
+        defaultSort: "country_code",
+        sortDirectionFieldName: "DESC");
+    
+    @grid2.GetHtml(tableStyle: "tableGeo", alternatingRowStyle: "alternate", headerStyle: "header", rowStyle: "rowe", columns:
+      grid2.Columns(
+      grid2.Column("geonameid", "id", style: "id", canSort: true),
+                  grid2.Column("name", "Name", style: "name", canSort: true),
+                  grid2.Column("alternateName",style: "an",canSort:true),
+                  grid2.Column("country_code", "Land", canSort: true),
+                  grid2.Column("admin1_code", "adm1", canSort: true),
+                  grid.Column("feature_class", "class", canSort: true),
+                  grid.Column("feature_code", "code", canSort: true),
+                  grid2.Column("Action", format: @<div class="btn btn btn-default"><button class="show-in-map btn btn-default">in Karte zeigen</button><br /><button class="takeIt btn btn-default">übernehmen</button></div>),
+                  grid2.Column(null,null,format: @<text>@item.longitude</text>, style: "lon hidden"),
+                  grid2.Column(null,null,format: @<text>@item.latitude</text>, style: "lat hidden")));
+}
+
+

@@ -1,0 +1,38 @@
+﻿@model TwitterWebFrontend.ViewModels.trsStatisticsViewModel
+
+@{
+    ViewBag.Title = "gmapsGeocodingStatistics";
+}
+
+@section scripts{
+    
+   
+    }
+
+@
+    <h2>gmapsGeocodingStatistics</h2>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            @foreach (var dataItem in Model.dataDict)
+            {
+                <tr>
+                    <td>@dataItem.Key in km</td>
+                    <td>@dataItem.Value</td>
+                </tr>
+
+            }
+
+        </table>
+    </div>
+    
+</div>
+
+
+
+<div class="row">
+    <div id="visualization" class="col-md-6"></div>
+
+    <div id="visualizationLogarithmic" class="col-md-6"></div>
+</div>
+

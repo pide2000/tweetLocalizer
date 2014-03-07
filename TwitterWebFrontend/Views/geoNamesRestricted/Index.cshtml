@@ -1,0 +1,45 @@
+﻿@model IEnumerable<TwitterWebFrontend.Models.like_search_geonames_restricted_Result>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('tbody tr').on('hover', function () {
+                $(this).toggleClass('clickable');
+            }).on('click', function () {
+                location.href = '/geoNamesRestricted/Details/' + $(this).find('td:first').text();
+            });
+        });
+    </script>
+}
+
+<h2>Index</h2>
+
+
+<input  class="form-control" id="searchString" type="textbox">
+<input type="button" id="Button1" class="btn btn-default" value="clickAjax" >
+<div id="testArea">
+</div>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Ajax.BeginForm("_geoNamesRestrictedTest", "geoNamesRestricted",
+    new AjaxOptions { HttpMethod = "GET", InsertionMode = InsertionMode.Replace, UpdateTargetId = "geoNamesSearchView" }))
+{
+    <h3>Search Music Albums:</h3>
+    <input type="text" name="q" />
+    <input type="submit" value="Ajax Search" />
+}
+
+
+<div id="geoNamesSearchView">
+ @{
+     Html.RenderPartial("~/Views/Shared/_geoNamesRestrictedTest.cshtml");
+ }
+
+</div>

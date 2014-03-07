@@ -1,0 +1,251 @@
+﻿@model TwitterWebFrontend.ViewModels.manualAssignementViewModel
+
+@{
+    ViewBag.Title = "Tweet Localizer";
+}
+
+@section header{
+    <style type="text/css">
+        .navbar {
+        display:none !important;
+        }
+        body {
+        padding:0;
+        }
+        .drop-down {
+        margin-top:30px;
+        }
+        .first-row{
+        border-bottom:1px solid grey;
+        }
+        .row {
+        padding-top:10px;
+        }
+
+    </style>
+    }
+
+@section scripts{
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+<script>
+ var clicks = function () {
+        $('.show-in-map').on('click', function () {
+            var lon = $(this).parent().parent().siblings(".lon").text();
+            var lat = $(this).parent().parent().siblings(".lat").text();
+            console.log(lat + " " + lon);
+            var tr = lat + "." + lon;
+           
+            codeLatLng(tr);
+            window.scrollTo(0,0);
+        })
+
+
+ }
+
+ var useAsLocation = function () {
+     $('.takeIt').on('click', function () {
+         var id = $(this).parent().parent().siblings('.id').text();
+         console.log("test"+id);
+         $('#manualAssign_geoNamesRestricted_geonameid').val(id);
+         var lon = $(this).parent().parent().siblings(".lon").text();
+         var lat = $(this).parent().parent().siblings(".lat").text();
+         console.log(lat + " " + lon);
+         var tr = lat + "." + lon;
+
+         codeLatLng(tr);
+         window.scrollTo(0, 0);
+     })
+     }
+
+
+ 
+ $(document).ready(clicks(),useAsLocation());
+ 
+ var geocoder;
+ var map;
+ function initialize() {
+     geocoder = new google.maps.Geocoder();
+     var latlng = new google.maps.LatLng(0, 0);
+     var mapOptions = {
+         zoom: 2,
+         center: latlng
+     }
+     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+     var test = "@Model.tweetRandomSample2.First().userlocation";
+     $(document).ready(codeAddressFromTweet(test));
+ }
+
+ function codeAddressFromTweet(loc) {
+     var address = loc;
+     geocoder.geocode({ 'address': address }, function (results, status) {
+         if (status == google.maps.GeocoderStatus.OK) {
+             map.setZoom(4);
+             map.setCenter(results[0].geometry.location);
+             var marker = new google.maps.Marker({
+                 map: map,
+                 position: results[0].geometry.location
+             });
+            
+         } else {
+             alert('Geocode was not successful for the following reason: ' + status);
+         }
+     });
+ }
+
+ function codeAddress() {
+     var address = document.getElementById('address').value;
+     geocoder.geocode({ 'address': address }, function (results, status) {
+         if (status == google.maps.GeocoderStatus.OK) {
+             map.setZoom(4);
+             map.setCenter(results[0].geometry.location);
+             var marker = new google.maps.Marker({
+                 map: map,
+                 position: results[0].geometry.location
+             });
+         } else {
+             alert('Geocode was not successful for the following reason: ' + status);
+         }
+     });
+ }
+ google.maps.event.addDomListener(window, 'load', initialize);
+
+ $('.tooltip-demo').tooltip({
+     selector: "a[rel=tooltip]",
+     placement: 'right'
+ })
+</script>
+<script src="@Url.Content("~/Scripts/reverseGeocodingMap.js")"></script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+}
+
+
+
+<div class="row first-row">
+    
+    @using( Html.BeginForm("Create", "manualAssignment", FormMethod.Post)) {
+        
+         @Html.AntiForgeryToken()
+ 
+        @Html.ValidationSummary(true)
+            
+         <div class="form-group">
+        @Html.LabelFor(m => m.manualAssign.tweetRandomSample2_id, "trs_id", new { @class="control-label"})    
+        @Html.TextBoxFor(m => m.manualAssign.tweetRandomSample2_id, new { @class = "form-control", @Value = @Model.tweetRandomSample2.First().id })
+        @Html.ValidationMessageFor(m => m.manualAssign.tweetRandomSample2_id)
+        </div>
+         <div class="form-group">
+        @Html.LabelFor(m => m.manualAssign.tweetId, "tweetId", new { @class="control-label"})    
+        @Html.TextBoxFor(m => m.manualAssign.tweetId, new {@class= "form-control", @Value = @Model.tweetRandomSample2.First().tweetid })
+        @Html.ValidationMessageFor(m => m.manualAssign.tweetId)
+        </div>
+         <div class="form-group">
+        @Html.LabelFor(m => m.manualAssign.geoNamesRestricted_geonameid, "geonameId", new { @class="control-label"})    
+        @Html.TextBoxFor(m => m.manualAssign.geoNamesRestricted_geonameid, new {@class= "form-control"})
+        @Html.ValidationMessageFor(m => m.manualAssign.geoNamesRestricted_geonameid)
+        </div>
+        <div class="form-group drop-down">
+        @Html.LabelFor(m => m.manualAssign.is_unambiguously, "isUnambigously", new { @class="control-label"})    
+        @Html.DropDownListFor(m => m.manualAssign.is_unambiguously, new SelectList(
+                  new List<Object>{ 
+                      
+                      new { value = true , text = "eindeutig" }, 
+                      new { value = false , text = "Problem"}
+                       
+                    },
+                  "value",
+                  "text",
+                   Model.manualAssign
+           ),"bitte wählen")
+        @Html.ValidationMessageFor(m => m.manualAssign.is_unambiguously)
+        </div>
+        
+         <div class="form-group">
+        @Html.LabelFor(m => m.manualAssign.comment, "comment", new { @class="control-label "})    
+         @Html.TextAreaFor(m => m.manualAssign.comment, 1, 20, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.manualAssign.comment)
+        </div>
+    <div class="form-group drop-down">
+        <div class="tooltip-demo ">
+            <a title="<ul><li>alles okay = OK</li><li>kein Ort = Text ist kein Ort</li><li>nicht eindeutig -> mehrere Ergebnisse = die Suche ergibt mehrere Ergebnisse, es ist nicht unterscheidabr welches Ergebnis gemeint ist. Bsp. New York -> New York, US oder New York, UK. Vorgehen: Wähle intuitiv</li><li>nicht eindeutig -> mehrere Locations = Bsp: Berlin, Hamburg -> Sind zwei unterschiedliche Städte! -> Vorgehen: Wähle erstes</li><li>nicht bestimmbar -> Sprache = Bsp: المدينة العظيمة heißt tolle Stadt in Arabisch </li><li>schwer bestimmbar -> Sprache = Mehrere Ergebnisse in fremder Sprache(Zeichen) Vorgehen: wähle erste Stadt in Liste</li></ul>" data-html="true" rel="tooltip" href="#">Hinweise</a>
+        </div>
+        @Html.LabelFor(m => m.manualAssign.misc, "misc", new { @class = "control-label" })
+        @Html.DropDownListFor(m => m.manualAssign.misc, new SelectList(
+                  new List<Object>{
+                      new { value = "-1", text = "alles okay"},
+                      new { value = "0" , text = "kein Ort" },
+                      new { value = "1" , text = "nicht eindeutig -> mehrere Ergebnisse"},
+                      new { value = "2" , text = "nicht eindeutig -> mehrere Locations"},
+                      new { value = "3" , text = "nicht bestimmbar -> Sprache" },
+                      new { value = "4" , text = "nicht eindeutig -> Sprache"}
+
+                    },
+                  "value",
+                  "text",
+                   Model.manualAssign
+           ))
+        @Html.ValidationMessageFor(m => m.manualAssign.misc)
+    </div>
+
+         
+
+         <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+        
+    }
+
+    
+
+</div>
+<div class="row">
+    
+   
+    <p class="col-md-12 userloc">@Model.tweetRandomSample2.First().userlocation</p>
+
+</div>
+
+<div class="row">
+    <div id="map" class="col-md-4">
+        <div id="panel">
+            <input class="form-control" id="address" type="textbox" value="@Model.tweetRandomSample2.First().userlocation">
+            <input type="button" class="btn btn-default" value="Geocode" onclick="codeAddress()">
+        </div>
+        <div id="map-canvas"></div>
+    </div>
+    <div id="map" class="col-md-4">
+        <div id="panel">
+            <input class="form-control-ll form-control" id="latlng" type="textbox">
+            <input type="button" class="btn btn-default" value="Geocode" onclick="codeLtLg()">
+        </div>
+        <div id="map-canvas-lat-lng"></div>
+    </div>
+
+
+    <div id="geonamesRestricted" class="col-md-4">
+        @using (Ajax.BeginForm("_geoNamesRestricted", "manualAssignment",
+         new AjaxOptions { OnSuccess = "clicks(),useAsLocation()", HttpMethod = "GET", InsertionMode = InsertionMode.Replace, UpdateTargetId = "geoNamesRestricted" }))
+        {
+            <input type="text" class="form-control" name="q" value="@Model.tweetRandomSample2.First().userlocation" />
+    <input type="submit" class="btn btn-default" value="Search" />
+        }
+
+        <div id="geoNamesRestricted">
+            @{
+                Html.RenderPartial("~/Views/Shared/_geoNamesRestricted.cshtml");
+            }
+        </div>
+
+    </div> 
+</div>
+
+
+<div class="row">
+  
+   
+</div>
+

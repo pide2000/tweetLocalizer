@@ -1,0 +1,69 @@
+﻿@model IEnumerable<TwitterWebFrontend.Models.manualAssign_tweetRandomSample2_to_geonamesRestricted>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tweetId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_unambiguously)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.comment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.misc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GeoNamesRestricted.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tweetRandomSample2.username)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tweetId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_unambiguously)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.comment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.misc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GeoNamesRestricted.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tweetRandomSample2.username)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

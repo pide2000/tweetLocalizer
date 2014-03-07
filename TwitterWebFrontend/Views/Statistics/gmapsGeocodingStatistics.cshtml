@@ -1,0 +1,96 @@
+﻿@model TwitterWebFrontend.ViewModels.gmapsGeocodingStatisticsViewModel
+
+@{
+    ViewBag.Title = "gmapsGeocodingStatistics";
+}
+
+@section scripts{
+    
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        
+  // Load the Visualization API and the piechart package.
+  google.load('visualization', '1.0', {'packages':['corechart']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+  google.setOnLoadCallback(drawVisualization);
+
+       
+        function drawVisualization() {
+            // Create and populate the data table.
+            
+
+            var data = google.visualization.arrayToDataTable([
+                    ['km', 'count'],
+                    @foreach (var item in Model.dataDictDynamic.First()) { 
+                    <text>[ @item.Key,@item.Value ],</text>
+                        }
+                    ]);
+            // Create and draw the visualization.
+            
+            new google.visualization.LineChart(document.getElementById('visualization')).
+                draw(data, {
+                    title:"cumulative distances",
+                    curveType: "function",
+                    width: 500, height: 400,
+                    hAxis: { title: "distances" },
+                    vAxis: {title: "cumulated count"}
+                });
+
+            new google.visualization.LineChart(document.getElementById('visualizationLogarithmic')).
+                draw(data, {
+                    title: "cumulative distances with logarithmic x-axis",
+                    curveType: "function",
+                    width: 500, height: 400,
+                    hAxis: {logScale:true,
+                            title:"distance (logarithmic)"
+                    },
+                    vAxis: { title: "cumulated count" }
+                });
+
+        }
+    </script>
+
+
+    }
+
+
+    <h2>gmapsGeocodingStatistics</h2>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            @foreach (var dataItem in Model.dataDict)
+            {
+                <tr>
+                    <td>@dataItem.Key in km</td>
+                    <td>@dataItem.Value</td>
+                </tr>
+
+            }
+
+        </table>
+    </div>
+    <div class="col-md-6">
+    <table class="table">
+        @foreach (var dataItem in Model.dataDict2)
+        {
+            <tr>
+                <td>@dataItem.Key</td>
+                <td>@dataItem.Value %</td>
+            </tr>
+
+        }
+
+    </table>
+</div>
+
+</div>
+
+
+
+<div class="row">
+    <div id="visualization" class="col-md-6"></div>
+
+    <div id="visualizationLogarithmic" class="col-md-6"></div>
+</div>
+

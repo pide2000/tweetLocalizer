@@ -1,0 +1,74 @@
+﻿@model TwitterWebFrontend.Models.manualAssign_tweetRandomSample2_to_geonamesRestricted
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>manualAssign_tweetRandomSample2_to_geonamesRestricted</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tweetId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tweetId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_unambiguously)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_unambiguously)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.comment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.comment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.misc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.misc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeoNamesRestricted.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeoNamesRestricted.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tweetRandomSample2.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tweetRandomSample2.username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

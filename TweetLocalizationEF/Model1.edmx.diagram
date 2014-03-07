@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="244f1bbe19934e5884abfc3f1ef89d3e" Name="Diagram1" ZoomLevel="59">
+        <EntityTypeShape EntityType="GeonamesDataModel.alternateNames" Width="1.5" PointX="6" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.alternateNames2" Width="1.5" PointX="3.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.alternateNames3" Width="1.5" PointX="3" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.countryCodes" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.countryinfo" Width="1.5" PointX="6" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.countryResolutionOutcome" Width="1.5" PointX="11.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.GeoNames" Width="1.5" PointX="3.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.GeoNamesRestricted" Width="1.5" PointX="1" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.manualAssign_tweetRandomSample2_to_geonamesRestricted" Width="1.5" PointX="6.375" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.sysdiagrams" Width="1.5" PointX="8.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.timeZones" Width="1.5" PointX="1.5" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.tweetRandomSample" Width="1.5" PointX="8.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.tweetRandomSample2" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.uniqueLocationFromTweetSample" Width="1.5" PointX="10.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.geonamesid_geotreenodeidstring" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.View_1" Width="1.5" PointX="8.75" PointY="11.5" IsExpanded="true" />
+        <AssociationConnector Association="GeonamesDataModel.FK__alternate__geoNa__1C97B845" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__alternate__geoNa__1D8BDC7E" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__alternate__geoNa__1D8BDC7E2" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__countryin__geona__14F6967D" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__countryin__geona__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__countryRe__tweet__6BD550B0" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__GeoNames__timezo__239E4DCF" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__manualAss__geoNa__0FBF4219" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__manualAss__tweet__10B36652" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.gmapsGeocoding" Width="1.5" PointX="6" PointY="0.5" />
+        <AssociationConnector Association="GeonamesDataModel.FK__gmapsGeocoding__trs" />
+        <AssociationConnector Association="GeonamesDataModel.FK__tweetRand__geoNa__7363C5E4" />
+        <EntityTypeShape EntityType="GeonamesDataModel.GeoNames_trs2_gmapsCoding" Width="1.5" PointX="11.375" PointY="11.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

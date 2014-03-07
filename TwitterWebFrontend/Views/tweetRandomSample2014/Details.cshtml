@@ -1,0 +1,138 @@
+﻿@model TwitterWebFrontend.Models.tweetRandomSample2
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tweetRandomSample2</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.tweetid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tweetid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.hashtag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.hashtag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tweetTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tweetTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.skipped)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.skipped)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.place)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.place)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.geotagged)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.geotagged)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.userlocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.userlocation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lang)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lang)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.utc_offset)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.utc_offset)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.timezone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.timezone)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e1ca0fef24334beab422f2c1604ebee5" Name="Diagram1" ZoomLevel="95">
+        <EntityTypeShape EntityType="GeonamesDataModel.alternateNames" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.alternateNames2" Width="1.5" PointX="0.875" PointY="5.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.alternateNames3" Width="1.5" PointX="3.125" PointY="6.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.countryCodes" Width="1.5" PointX="13.625" PointY="8.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.countryinfo" Width="1.5" PointX="7.75" PointY="0.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.countryResolutionOutcome" Width="1.5" PointX="13.625" PointY="1.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.GeoNames" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.GeoNamesRestricted" Width="1.5" PointX="5.125" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.sysdiagrams" Width="1.5" PointX="0.625" PointY="12.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.timeZones" Width="1.5" PointX="4.875" PointY="11" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.tweetRandomSample" Width="1.5" PointX="11.75" PointY="1.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.uniqueLocationFromTweetSample" Width="1.5" PointX="11.625" PointY="9.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.tokenTreePath_geoNamesId" Width="1.5" PointX="2.5" PointY="9.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.geonamesid_geotreenodeidstring" Width="1.5" PointX="0.875" PointY="9.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.View_1" Width="1.5" PointX="11.75" PointY="6.25" IsExpanded="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__alternate__geoNa__1C97B845" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__alternate__geoNa__1D8BDC7E" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__alternate__geoNa__1D8BDC7E2" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__countryin__geona__14F6967D" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__countryin__geona__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__countryRe__tweet__6BD550B0" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__GeoNames__timezo__239E4DCF" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__tokenTree__GeoNa__009141CB" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.tweetRandomSample2" Width="1.5" PointX="0.875" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="GeonamesDataModel.manualAssign_tweetRandomSample2_to_geonamesRestricted" Width="1.5" PointX="2.875" PointY="0.75" IsExpanded="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__manualAss__geoNa__0FBF4219" />
+        <AssociationConnector Association="GeonamesDataModel.FK__manualAss__tweet__10B36652" />
+        <EntityTypeShape EntityType="GeonamesDataModel.manualAssign_tweetRandomSample2_to_geonamesRestricted1" Width="1.5" PointX="0.5" PointY="2" />
+        <AssociationConnector Association="GeonamesDataModel.FK__manualAss__geoNa__0FBF42191" />
+        <AssociationConnector Association="GeonamesDataModel.FK__manualAss__tweet__10B366521" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

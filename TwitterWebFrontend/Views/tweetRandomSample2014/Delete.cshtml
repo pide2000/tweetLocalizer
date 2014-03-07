@@ -1,0 +1,144 @@
+﻿@model TwitterWebFrontend.Models.tweetRandomSample2
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>tweetRandomSample2</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.tweetid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tweetid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.hashtag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.hashtag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tweetTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tweetTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.skipped)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.skipped)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.place)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.place)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.geotagged)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.geotagged)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.userlocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.userlocation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lang)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lang)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.utc_offset)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.utc_offset)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.timezone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.timezone)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

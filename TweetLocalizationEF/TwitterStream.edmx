@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TwitterStreamModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="TwitterStreamModelStoreContainer">
+          <EntitySet Name="Retweets" EntityType="TwitterStreamModel.Store.Retweets" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Retweets">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="tweetid" Type="bigint" Nullable="false" />
+          <Property Name="username" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="long" Type="float" Nullable="false" />
+          <Property Name="lat" Type="float" Nullable="false" />
+          <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="status" Type="text" Nullable="false" />
+          <Property Name="tweetTime" Type="datetime" Nullable="false" />
+          <Property Name="place" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="city" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="country" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="sourcetweetid" Type="bigint" Nullable="false" />
+          <Property Name="sourcelat" Type="float" Nullable="false" />
+          <Property Name="sourcelong" Type="float" Nullable="false" />
+          <Property Name="sourcecity" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="sourcecountry" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="userlocation" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="sourceuserlocation" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="entity_picurl" Type="nvarchar" MaxLength="255" />
+          <Property Name="entity_url1" Type="nvarchar" MaxLength="255" />
+          <Property Name="entity_url2" Type="nvarchar" MaxLength="255" />
+          <Property Name="lang_code" Type="nchar" Nullable="false" MaxLength="3" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TwitterStreamModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TwitterStreamEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Retweets" EntityType="TwitterStreamModel.Retweets" />
+        </EntityContainer>
+        <EntityType Name="Retweets">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="tweetid" Type="Int64" Nullable="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="long" Type="Double" Nullable="false" />
+          <Property Name="lat" Type="Double" Nullable="false" />
+          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="tweetTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="place" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="city" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="country" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="sourcetweetid" Type="Int64" Nullable="false" />
+          <Property Name="sourcelat" Type="Double" Nullable="false" />
+          <Property Name="sourcelong" Type="Double" Nullable="false" />
+          <Property Name="sourcecity" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="sourcecountry" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="userlocation" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="sourceuserlocation" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="entity_picurl" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="entity_url1" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="entity_url2" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="lang_code" Type="String" Nullable="false" MaxLength="3" Unicode="true" FixedLength="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TwitterStreamModelStoreContainer" CdmEntityContainer="TwitterStreamEntities">
+          <EntitySetMapping Name="Retweets">
+            <EntityTypeMapping TypeName="TwitterStreamModel.Retweets">
+              <MappingFragment StoreEntitySet="Retweets">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tweetid" ColumnName="tweetid" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="long" ColumnName="long" />
+                <ScalarProperty Name="lat" ColumnName="lat" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="tweetTime" ColumnName="tweetTime" />
+                <ScalarProperty Name="place" ColumnName="place" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="sourcetweetid" ColumnName="sourcetweetid" />
+                <ScalarProperty Name="sourcelat" ColumnName="sourcelat" />
+                <ScalarProperty Name="sourcelong" ColumnName="sourcelong" />
+                <ScalarProperty Name="sourcecity" ColumnName="sourcecity" />
+                <ScalarProperty Name="sourcecountry" ColumnName="sourcecountry" />
+                <ScalarProperty Name="userlocation" ColumnName="userlocation" />
+                <ScalarProperty Name="sourceuserlocation" ColumnName="sourceuserlocation" />
+                <ScalarProperty Name="entity_picurl" ColumnName="entity_picurl" />
+                <ScalarProperty Name="entity_url1" ColumnName="entity_url1" />
+                <ScalarProperty Name="entity_url2" ColumnName="entity_url2" />
+                <ScalarProperty Name="lang_code" ColumnName="lang_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,20 @@
+﻿@model IEnumerable<TwitterWebFrontend.Models.like_search_geonames_restricted_Result>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@{
+    var grid = new WebGrid(Model);
+    grid.Pager(WebGridPagerModes.NextPrevious);
+    @grid.GetHtml(tableStyle: "table", alternatingRowStyle: "alternate", headerStyle: "header", rowStyle: "rowe", columns:
+      grid.Columns(
+      grid.Column("geonameid", "id", style: "id", canSort: true),
+                  grid.Column("name", "Name", style: "name", canSort: true),
+                  grid.Column("country_code", "Land", canSort: true),
+                  grid.Column("admin1_code", "adm1", canSort: true),
+                  grid.Column("Action", format: @<div class="btn"><button class="show-in-map">in Karte zeigen</button><button class="takeIt">übernehmen</button></div>),
+                  grid.Column(null,null,format: @<text>@item.longitude</text>, style: "lon hidden"),
+                  grid.Column(null,null,format: @<text>@item.latitude</text>, style: "lat hidden")));
+}
+
+

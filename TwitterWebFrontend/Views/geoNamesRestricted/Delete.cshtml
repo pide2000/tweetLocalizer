@@ -1,0 +1,168 @@
+﻿@model TwitterWebFrontend.Models.GeoNamesRestricted
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>GeoNamesRestricted</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.asciiname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.asciiname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.alternatenames)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.alternatenames)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.latitude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.latitude)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.longitude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.longitude)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.feature_class)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.feature_class)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.feature_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.feature_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.country_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.country_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cc2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cc2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.admin1_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.admin1_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.admin2_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.admin2_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.admin3_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.admin3_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.admin4_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.admin4_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.population)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.population)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.elevation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.elevation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.gtopo30)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.gtopo30)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.timezone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.timezone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.modification_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.modification_date)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

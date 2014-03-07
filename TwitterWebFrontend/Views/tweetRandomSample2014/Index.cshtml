@@ -1,0 +1,118 @@
+﻿@model IEnumerable<TwitterWebFrontend.Models.tweetRandomSample2>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.tweetid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lon)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.hashtag)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tweetTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.skipped)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.place)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.geotagged)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.userlocation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lang)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.utc_offset)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.timezone)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.tweetid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lon)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.hashtag)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tweetTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.skipped)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.place)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.geotagged)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.userlocation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lang)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.utc_offset)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.timezone)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>
+

@@ -1,0 +1,154 @@
+﻿@model TwitterWebFrontend.Models.tweetRandomSample2
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>tweetRandomSample2</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.tweetid, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.tweetid)
+                @Html.ValidationMessageFor(model => model.tweetid)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.username, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.username)
+                @Html.ValidationMessageFor(model => model.username)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.long, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.long)
+                @Html.ValidationMessageFor(model => model.long)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.lat, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.lat)
+                @Html.ValidationMessageFor(model => model.lat)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.hashtag, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.hashtag)
+                @Html.ValidationMessageFor(model => model.hashtag)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.time, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.time)
+                @Html.ValidationMessageFor(model => model.time)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.status, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.status)
+                @Html.ValidationMessageFor(model => model.status)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.tweetTime, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.tweetTime)
+                @Html.ValidationMessageFor(model => model.tweetTime)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.skipped, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.skipped)
+                @Html.ValidationMessageFor(model => model.skipped)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.place, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.place)
+                @Html.ValidationMessageFor(model => model.place)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.geotagged, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.geotagged)
+                @Html.ValidationMessageFor(model => model.geotagged)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.userlocation, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.userlocation)
+                @Html.ValidationMessageFor(model => model.userlocation)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.lang, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.lang)
+                @Html.ValidationMessageFor(model => model.lang)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.utc_offset, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.utc_offset)
+                @Html.ValidationMessageFor(model => model.utc_offset)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.timezone, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.timezone)
+                @Html.ValidationMessageFor(model => model.timezone)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
