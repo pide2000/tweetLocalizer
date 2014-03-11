@@ -1171,11 +1171,10 @@ namespace TweetLocalizationEF
            for (int i = level; i < toAdd.tokenArray.Count(); i++ )
            {
                 //addNode(parentId, toAdd.tokenArray[i]);
-               var watch4 = Stopwatch.StartNew();
-               conn.insertNode_TokenTreeGeoNames(toAdd.tokenArray[i], parentId);
-               watch4.Stop();
-               Console.WriteLine("----insertNode in addTokenStringToTree: {0} Text: {1} parentId: {2}", watch4.Elapsed, toAdd.tokenArray[i], parentId);
               
+               conn.insertNode_TokenTreeGeoNames(toAdd.tokenArray[i], parentId);
+               
+               
                var query = conn.getNodeIdString(parentId, toAdd.tokenArray[i]);
                 List<getNodeIdString_Result> liste = query.ToList();
                 List<string> resultList = new List<string>();
@@ -1187,24 +1186,23 @@ namespace TweetLocalizationEF
                
            }
            //parentId is the id of the leaf
-               var watch5 = Stopwatch.StartNew();
+              
            if (!(checkIsInConnection.testIsInList(new geonamesid_geotreenodeidstring {GeoNames_geonamesid=toAdd.geoNamesId,nodeId=parentId })))
                 {
-              watch5.Stop();
-              Console.WriteLine("----addGeonames_tokenTree in addTokenStringToTree: {0} ", watch5.Elapsed);
+              
       
-               //System.Console.WriteLine("addTokenizedStringToTokenTree -> addNodeId_GeoNamesId");
+               
                //conn.addNodeId_GeoNamesId(toAdd.geoNamesId, parentId);
                try
                {
-                       //var watch5 = Stopwatch.StartNew();
+                        System.Console.WriteLine("addTokenizedStringToTokenTree -> addNodeToGeonames");
                        conn.addNodeToGeonames(toAdd.geoNamesId, parentId);
-                       //watch5.Stop();
-                       //Console.WriteLine("----addGeonames_tokenTree in addTokenStringToTree: {0} ", watch5.Elapsed);
+                       
                }
                catch (Exception ex)
                {
-                   System.Console.WriteLine("ERROR: " + ex.Message);
+                   System.Console.WriteLine("ERROR: " + ex.Message  );
+                   System.Console.WriteLine("occured in addTokenizedStringToTokenTree");
                    if (ex.InnerException != null)
                    {
                        System.Console.WriteLine("Inner Exception Message: " + ex.InnerException.Message);
@@ -1381,13 +1379,14 @@ namespace TweetLocalizationEF
                         //conn.addNodeId_GeoNamesId(tokenData.geoNamesId, nodeIds.First());
                         try
                         {
-
+                            System.Console.WriteLine("addNodeToGeonames in findDeepestMatch");
                             conn.addNodeToGeonames(tokenData.geoNamesId, nodeIds.First());
                             
                         }
                         catch (Exception ex)
                         {
                             System.Console.WriteLine("ERROR: " + ex.Message);
+                            System.Console.WriteLine("occured in findDeepestMatchInTokenTree");
                             if (ex.InnerException != null)
                             {
                                 System.Console.WriteLine("Inner Exception Message: " + ex.InnerException.Message);
@@ -1420,7 +1419,7 @@ namespace TweetLocalizationEF
         static void Main(string[] args)
         {
 
-            //createTokenTree();
+            createTokenTree();
 
             //geoNamesDatabaseConnection conn = new geoNamesDatabaseConnection();
             //List<coordinates> coordList = new List<coordinates>();
@@ -1465,7 +1464,7 @@ namespace TweetLocalizationEF
             
             
             
-            geoCodingGMapseRoutine();
+            //geoCodingGMapseRoutine();
          
             //gmapsGeocoding(conn, uniqueLoc);
             //gmapsGeocoding(conn,uniqueLoc,2500);
@@ -1485,7 +1484,7 @@ namespace TweetLocalizationEF
         private static void geoCodingGMapseRoutine()
         {
             geoNamesDatabaseConnection conn = new geoNamesDatabaseConnection();
-            List<tweetRandomSample2> tweetliste = conn.executeQuery<tweetRandomSample2>("SELECT TOP 2500 trs.* FROM [dbo].[tweetRandomSample2] trs LEFT JOIN [gmapsGeocoding] mA ON trs.id = mA.tweetRandomSample2_id WHERE mA.tweetRandomSample2_id IS NULL AND userlocation != ''");
+            List<tweetRandomSample2> tweetliste = conn.executeQuery<tweetRandomSample2>("SELECT TOP 2500 * FROM GeonamesData.[dbo].[tweetRandomSample2] trs LEFT JOIN GeonamesData.[dbo].[gmapsGeocoding] mA ON trs.id = mA.tweetRandomSample2_id WHERE mA.country_by_ln_lat_from_tweet='0'");
             GeonamesDataEntities1 db = new GeonamesDataEntities1();
 
 
@@ -1531,8 +1530,8 @@ namespace TweetLocalizationEF
             {
                 timeStampOne = Environment.TickCount;
                 int timeStampOnePersistent = timeStampOne;
-                int i = 1503000;
-                foreach (var ttt in result.Skip(1503000))
+                int i = 1547000;
+                foreach (var ttt in result.Skip(1547000))
                 {
                     findDeepestMatchInTokenTree(ttt, DB, geoNamesId_To_geoTreeNode);
                     i++;

@@ -12,9 +12,22 @@ namespace TweetLocalizationEF
     using System;
     using System.Collections.Generic;
     
-    public partial class geonamesid_geotreenodeidstring
+    public partial class geonamesid_geotreenodeidstring : IEquatable<geonamesid_geotreenodeidstring>
     {
         public string nodeId { get; set; }
         public int GeoNames_geonamesid { get; set; }
+
+        public bool Equals(geonamesid_geotreenodeidstring other) {
+            if (this.nodeId.Equals(other.nodeId) && this.GeoNames_geonamesid == other.GeoNames_geonamesid) {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+        
+        }
+
     }
 }

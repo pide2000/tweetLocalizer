@@ -33,7 +33,6 @@ namespace TwitterWebFrontend.Controllers
             }
             
             firstQuartil = valueList[(int)(0.25 * (valueListCount + 1))];
-           
             thirdQuartil = valueList[(int)(0.75 * (valueListCount + 1))];
            
             resultDict.Add("Average", Math.Round((double)(average / divider),round));
