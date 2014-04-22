@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D6499E15-383B-4E76-86AC-49CEA0D9404D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>tweetLocalizerApp</RootNamespace>
+    <AssemblyName>tweetLocalizerApp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Libs\Locator\knowledgeObject\knowledgeObj.cs" />
+    <Compile Include="Libs\Locator\knowledgeObject\Ngram.cs" />
+    <Compile Include="Libs\Locator\NGramGenerator\Interfaces\IIndicatorSorter.cs" />
+    <Compile Include="Libs\Locator\NGramGenerator\Interfaces\INGramGenerator.cs" />
+    <Compile Include="TweetLocator\Abstract\TokenGenerator\EncoderAbstract.cs" />
+    <Compile Include="Libs\Locator\TokenGenerator\Interfaces\IEncoder.cs" />
+    <Compile Include="Libs\Locator\TokenGenerator\Interfaces\ITokenGenerator.cs" />
+    <Compile Include="Libs\Locator\TokenGenerator\Interfaces\ILocationIndicator.cs" />
+    <Compile Include="Libs\Locator\TokenGenerator\Interfaces\IPreprocessor.cs" />
+    <Compile Include="TweetLocator\Abstract\TokenGenerator\TokenGeneratorAbstract.cs" />
+    <Compile Include="Libs\Locator\TokenGenerator\Interfaces\ISorter.cs" />
+    <Compile Include="Libs\Locator\TokenGenerator\Interfaces\ITokenizer.cs" />
+    <Compile Include="TweetLocator\Abstract\TokenGenerator\LocationIndicatorAbstract.cs" />
+    <Compile Include="TweetLocator\Abstract\TokenGenerator\SorterAbstract.cs" />
+    <Compile Include="TweetLocator\Abstract\TokenGenerator\PreprocessorAbstract.cs" />
+    <Compile Include="TweetLocator\Abstract\TokenGenerator\TokenizerAbstract.cs" />
+    <Compile Include="Libs\Locator\ReverseGeocoding\Interfaces\IGeoCoder.cs" />
+    <Compile Include="TweetLocator\knowledgeObject\TweetknowledgeObj.cs" />
+    <Compile Include="TweetLocator\NGramGenerator\TweetIndicatorSorter.cs" />
+    <Compile Include="TweetLocator\NGramGenerator\TweetNGramGenerator.cs" />
+    <Compile Include="TweetLocator\TokenGenerator\EncoderCollection.cs" />
+    <Compile Include="TweetLocator\TokenGenerator\OrdererCollection.cs" />
+    <Compile Include="TweetLocator\TokenGenerator\preProcessorCollection.cs" />
+    <Compile Include="TweetLocator\TokenGenerator\TokenizerCollection.cs" />
+    <Compile Include="Libs\Locator\Interfaces\ILocator.cs" />
+    <Compile Include="TweetLocator\TokenGenerator\TimezoneIndicator.cs" />
+    <Compile Include="TweetLocator\TokenGenerator\TimezoneTokenGenerator.cs" />
+    <Compile Include="TweetLocator\GeoCoder\TweetGeoCoder.cs" />
+    <Compile Include="TweetLocator\TweetLocator.cs" />
+    <Compile Include="TweetLocator\TokenGenerator\UserlocationIndicator.cs" />
+    <Compile Include="TweetLocator\TweetInformation.cs" />
+    <Compile Include="TweetLocator\TokenGenerator\UserlocationTokenGenerator.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helper\" />
+    <Folder Include="Libs\Locator\DatabaseConnection\Interfaces\" />
+    <Folder Include="TweetLocator\Abstract\GeoCoder\" />
+    <Folder Include="TweetLocator\Abstract\NGramGenerator\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
