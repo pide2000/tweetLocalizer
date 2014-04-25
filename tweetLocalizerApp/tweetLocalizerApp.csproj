@@ -11,6 +11,8 @@
     <AssemblyName>tweetLocalizerApp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,8 +34,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,10 +52,98 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="admin1Codes.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="admin2Codes.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="alternateNames3.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BaseData.cs">
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="cities1000.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="cities15000.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="cities5000.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Coordinates.cs">
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="countryCodes.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="countryinfo.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Geonames.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Geonames.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GeoNames.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Geonames.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Geonames.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Geonames1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="getNearestCities1000_Result.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="getNearestCities15000_Result.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="getNearestCities5000_Result.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="getNearestNeighbours_Result.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="knowledgeBase.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>knowledgeBase.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KnowledgeBase.cs">
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="knowledgeBase.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>knowledgeBase.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="knowledgeBase1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Libs\Locator\knowledgeObject\IGeographyData.cs" />
     <Compile Include="Libs\Locator\knowledgeObject\knowledgeObj.cs" />
     <Compile Include="Libs\Locator\knowledgeObject\Ngram.cs" />
     <Compile Include="Libs\Locator\NGramGenerator\Interfaces\IIndicatorSorter.cs" />
     <Compile Include="Libs\Locator\NGramGenerator\Interfaces\INGramGenerator.cs" />
+    <Compile Include="NGramItems.cs">
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NGramItemTypes.cs">
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="timeZones.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
     <Compile Include="TweetLocator\Abstract\TokenGenerator\EncoderAbstract.cs" />
     <Compile Include="Libs\Locator\TokenGenerator\Interfaces\IEncoder.cs" />
     <Compile Include="Libs\Locator\TokenGenerator\Interfaces\ITokenGenerator.cs" />
@@ -58,9 +157,11 @@
     <Compile Include="TweetLocator\Abstract\TokenGenerator\PreprocessorAbstract.cs" />
     <Compile Include="TweetLocator\Abstract\TokenGenerator\TokenizerAbstract.cs" />
     <Compile Include="Libs\Locator\ReverseGeocoding\Interfaces\IGeoCoder.cs" />
+    <Compile Include="TweetLocator\GeographyData.cs" />
     <Compile Include="TweetLocator\knowledgeObject\TweetknowledgeObj.cs" />
     <Compile Include="TweetLocator\NGramGenerator\TweetIndicatorSorter.cs" />
     <Compile Include="TweetLocator\NGramGenerator\TweetNGramGenerator.cs" />
+    <Compile Include="TweetLocator\StatisticsData.cs" />
     <Compile Include="TweetLocator\TokenGenerator\EncoderCollection.cs" />
     <Compile Include="TweetLocator\TokenGenerator\OrdererCollection.cs" />
     <Compile Include="TweetLocator\TokenGenerator\preProcessorCollection.cs" />
@@ -75,9 +176,83 @@
     <Compile Include="TweetLocator\TokenGenerator\UserlocationTokenGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tweetRandomSample.cs">
+      <DependentUpon>Tweets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tweetRandomSample2.cs">
+      <DependentUpon>Tweets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tweets.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tweets.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tweets.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tweets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tweets.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tweets.edmx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EntityDeploy Include="knowledgeBase.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>knowledgeBase.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="Geonames.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Geonames.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Geonames.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Geonames.edmx</DependentUpon>
+      <LastGenOutput>Geonames.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Geonames.edmx.diagram">
+      <DependentUpon>Geonames.edmx</DependentUpon>
+    </None>
+    <None Include="Geonames.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Geonames.edmx</DependentUpon>
+      <LastGenOutput>Geonames1.cs</LastGenOutput>
+    </None>
+    <None Include="knowledgeBase.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>knowledgeBase.edmx</DependentUpon>
+      <LastGenOutput>knowledgeBase.Context.cs</LastGenOutput>
+    </None>
+    <None Include="knowledgeBase.edmx.diagram">
+      <DependentUpon>knowledgeBase.edmx</DependentUpon>
+    </None>
+    <None Include="knowledgeBase.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>knowledgeBase.edmx</DependentUpon>
+      <LastGenOutput>knowledgeBase1.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+    <EntityDeploy Include="Tweets.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Tweets.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Tweets.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Tweets.edmx</DependentUpon>
+      <LastGenOutput>Tweets.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Tweets.edmx.diagram">
+      <DependentUpon>Tweets.edmx</DependentUpon>
+    </None>
+    <None Include="Tweets.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Tweets.edmx</DependentUpon>
+      <LastGenOutput>Tweets.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Helper\" />
@@ -85,7 +260,11 @@
     <Folder Include="TweetLocator\Abstract\GeoCoder\" />
     <Folder Include="TweetLocator\Abstract\NGramGenerator\" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

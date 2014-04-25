@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using tweetLocalizerApp.Libs;
 
 namespace tweetLocalizerApp.TweetLocator.GeoCoder
 {
-    interface IGeoCoder
+    public interface IGeoCoder
     {
-        int locate(float longitude, float latitude);
+         IGeographyData locate(float longitude, float latitude);
+
+        
 
     }
 }

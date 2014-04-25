@@ -17,6 +17,15 @@ namespace tweetLocalizerApp.Libs
 
         public List<string> indicatorTypes;
 
+        public List<Tuple<string, string>> nGramItems;
+
+        public Ngram(string ngram, int order, List<string> indicatorTypes, List<Tuple<string,string>> nGramItems)
+        {
+            this.nGram = ngram;
+            this.nGramOrder = order;
+            this.indicatorTypes = indicatorTypes;
+            this.nGramItems = nGramItems;
+        }
         public Ngram(string ngram, int order,List<string> indicatorTypes )
         {
             this.nGram = ngram;

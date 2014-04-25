@@ -1,0 +1,1298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GeonamesDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="admin1Codes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+          <Property Name="geonamesId" Type="int" />
+        </EntityType>
+        <EntityType Name="admin2Codes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+          <Property Name="geonamesId" Type="int" />
+        </EntityType>
+        <EntityType Name="alternateNames3">
+          <Key>
+            <PropertyRef Name="alternateNameId" />
+          </Key>
+          <Property Name="alternateNameId" Type="int" Nullable="false" />
+          <Property Name="geoNameId" Type="int" />
+          <Property Name="isoLanguage" Type="nvarchar" MaxLength="7" />
+          <Property Name="alternateName" Type="nvarchar" MaxLength="200" />
+          <Property Name="isPrefferedName" Type="int" />
+          <Property Name="isShortName" Type="int" />
+          <Property Name="isColloquial" Type="int" />
+          <Property Name="isHistoric" Type="int" />
+        </EntityType>
+        <EntityType Name="cities1000">
+          <Key>
+            <PropertyRef Name="geonameid" />
+          </Key>
+          <Property Name="geonameid" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+          <Property Name="alternatenames" Type="nvarchar(max)" />
+          <Property Name="latitude" Type="float" />
+          <Property Name="longitude" Type="float" />
+          <Property Name="feature_class" Type="char" MaxLength="2" />
+          <Property Name="feature_code" Type="nvarchar" MaxLength="10" />
+          <Property Name="country_code" Type="char" MaxLength="3" />
+          <Property Name="cc2" Type="char" MaxLength="60" />
+          <Property Name="admin1_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="admin2_code" Type="nvarchar" MaxLength="80" />
+          <Property Name="admin3_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="admin4_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="population" Type="bigint" />
+          <Property Name="elevation" Type="int" />
+          <Property Name="gtopo30" Type="int" />
+          <Property Name="timezone" Type="nvarchar" MaxLength="200" />
+          <Property Name="modification_date" Type="nvarchar" MaxLength="50" />
+          <Property Name="coord" Type="geography" />
+        </EntityType>
+        <EntityType Name="cities15000">
+          <Key>
+            <PropertyRef Name="geonameid" />
+          </Key>
+          <Property Name="geonameid" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+          <Property Name="alternatenames" Type="nvarchar(max)" />
+          <Property Name="latitude" Type="float" />
+          <Property Name="longitude" Type="float" />
+          <Property Name="feature_class" Type="char" MaxLength="2" />
+          <Property Name="feature_code" Type="nvarchar" MaxLength="10" />
+          <Property Name="country_code" Type="char" MaxLength="3" />
+          <Property Name="cc2" Type="char" MaxLength="60" />
+          <Property Name="admin1_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="admin2_code" Type="nvarchar" MaxLength="80" />
+          <Property Name="admin3_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="admin4_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="population" Type="bigint" />
+          <Property Name="elevation" Type="int" />
+          <Property Name="gtopo30" Type="int" />
+          <Property Name="timezone" Type="nvarchar" MaxLength="200" />
+          <Property Name="modification_date" Type="date" />
+          <Property Name="coord" Type="geography" />
+        </EntityType>
+        <EntityType Name="cities5000">
+          <Key>
+            <PropertyRef Name="geonameid" />
+          </Key>
+          <Property Name="geonameid" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+          <Property Name="alternatenames" Type="nvarchar(max)" />
+          <Property Name="latitude" Type="float" />
+          <Property Name="longitude" Type="float" />
+          <Property Name="feature_class" Type="char" MaxLength="2" />
+          <Property Name="feature_code" Type="nvarchar" MaxLength="10" />
+          <Property Name="country_code" Type="char" MaxLength="3" />
+          <Property Name="cc2" Type="char" MaxLength="60" />
+          <Property Name="admin1_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="admin2_code" Type="nvarchar" MaxLength="80" />
+          <Property Name="admin3_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="admin4_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="population" Type="bigint" />
+          <Property Name="elevation" Type="int" />
+          <Property Name="gtopo30" Type="int" />
+          <Property Name="timezone" Type="nvarchar" MaxLength="200" />
+          <Property Name="modification_date" Type="date" />
+          <Property Name="coord" Type="geography" />
+        </EntityType>
+        <EntityType Name="countryCodes">
+          <Key>
+            <PropertyRef Name="countryCodeID" />
+          </Key>
+          <Property Name="countryCodeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="country_code" Type="char" MaxLength="3" />
+        </EntityType>
+        <EntityType Name="countryinfo">
+          <Key>
+            <PropertyRef Name="iso_alpha2" />
+          </Key>
+          <Property Name="iso_alpha2" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="iso_alpha3" Type="char" MaxLength="3" />
+          <Property Name="iso_numeric" Type="int" />
+          <Property Name="fips_code" Type="varchar" MaxLength="3" />
+          <Property Name="name" Type="varchar" MaxLength="200" />
+          <Property Name="capital" Type="varchar" MaxLength="200" />
+          <Property Name="areainsqkm" Type="float" />
+          <Property Name="population" Type="bigint" />
+          <Property Name="continent" Type="char" MaxLength="2" />
+          <Property Name="tld" Type="varchar" MaxLength="3" />
+          <Property Name="currencyCode" Type="varchar" MaxLength="3" />
+          <Property Name="currencyName" Type="varchar" MaxLength="20" />
+          <Property Name="phone" Type="varchar" MaxLength="50" />
+          <Property Name="postalCodeFormat" Type="varchar" MaxLength="200" />
+          <Property Name="postalCodeRegex" Type="varchar" MaxLength="200" />
+          <Property Name="languages" Type="varchar" MaxLength="200" />
+          <Property Name="geonameId" Type="int" />
+          <Property Name="neighbours" Type="varchar" MaxLength="100" />
+          <Property Name="equivalentFipsCode" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="GeoNames">
+          <Key>
+            <PropertyRef Name="geonameid" />
+          </Key>
+          <Property Name="geonameid" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+          <Property Name="alternatenames" Type="nvarchar(max)" />
+          <Property Name="latitude" Type="float" />
+          <Property Name="longitude" Type="float" />
+          <Property Name="feature_class" Type="char" MaxLength="2" />
+          <Property Name="feature_code" Type="nvarchar" MaxLength="10" />
+          <Property Name="country_code" Type="char" MaxLength="3" />
+          <Property Name="cc2" Type="char" MaxLength="60" />
+          <Property Name="admin1_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="admin2_code" Type="nvarchar" MaxLength="80" />
+          <Property Name="admin3_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="admin4_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="population" Type="bigint" />
+          <Property Name="elevation" Type="int" />
+          <Property Name="gtopo30" Type="int" />
+          <Property Name="timezone" Type="nvarchar" MaxLength="200" />
+          <Property Name="modification_date" Type="date" />
+          <Property Name="coord" Type="geography" />
+        </EntityType>
+        <EntityType Name="timeZones">
+          <Key>
+            <PropertyRef Name="time_zone_id" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="country_code" Type="char" MaxLength="3" />
+          <Property Name="time_zone_id" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="GMT_offset" Type="float" />
+          <Property Name="DST_offset" Type="float" />
+          <Property Name="rawOffset" Type="float" />
+        </EntityType>
+        <Association Name="FK__admin1codes__geonames">
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="0..1" />
+          <End Role="admin1Codes" Type="Self.admin1Codes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="admin1Codes">
+              <PropertyRef Name="geonamesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__admin2codes__geonames">
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="0..1" />
+          <End Role="admin2Codes" Type="Self.admin2Codes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="admin2Codes">
+              <PropertyRef Name="geonamesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__alternate__geoNa__1234">
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="0..1" />
+          <End Role="alternateNames3" Type="Self.alternateNames3" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="alternateNames3">
+              <PropertyRef Name="geoNameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities100__count__051861CB">
+          <End Role="countryinfo" Type="Self.countryinfo" Multiplicity="0..1" />
+          <End Role="cities1000" Type="Self.cities1000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countryinfo">
+              <PropertyRef Name="iso_alpha2" />
+            </Principal>
+            <Dependent Role="cities1000">
+              <PropertyRef Name="country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities150__count__08E8F2AF">
+          <End Role="countryinfo" Type="Self.countryinfo" Multiplicity="0..1" />
+          <End Role="cities15000" Type="Self.cities15000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countryinfo">
+              <PropertyRef Name="iso_alpha2" />
+            </Principal>
+            <Dependent Role="cities15000">
+              <PropertyRef Name="country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities150__timez__5198BDC5">
+          <End Role="timeZones" Type="Self.timeZones" Multiplicity="0..1" />
+          <End Role="cities15000" Type="Self.cities15000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeZones">
+              <PropertyRef Name="time_zone_id" />
+            </Principal>
+            <Dependent Role="cities15000">
+              <PropertyRef Name="timezone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities500__count__07F4CE76">
+          <End Role="countryinfo" Type="Self.countryinfo" Multiplicity="0..1" />
+          <End Role="cities5000" Type="Self.cities5000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countryinfo">
+              <PropertyRef Name="iso_alpha2" />
+            </Principal>
+            <Dependent Role="cities5000">
+              <PropertyRef Name="country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities500__timez__4EBC511A">
+          <End Role="timeZones" Type="Self.timeZones" Multiplicity="0..1" />
+          <End Role="cities5000" Type="Self.cities5000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeZones">
+              <PropertyRef Name="time_zone_id" />
+            </Principal>
+            <Dependent Role="cities5000">
+              <PropertyRef Name="timezone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__countryin__geona__398D8EEE">
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="0..1" />
+          <End Role="countryinfo" Type="Self.countryinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="countryinfo">
+              <PropertyRef Name="geonameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GeoNames__countr__09DD16E8">
+          <End Role="countryinfo" Type="Self.countryinfo" Multiplicity="0..1" />
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countryinfo">
+              <PropertyRef Name="iso_alpha2" />
+            </Principal>
+            <Dependent Role="GeoNames">
+              <PropertyRef Name="country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GeoNames__timezo__239E4DCF">
+          <End Role="timeZones" Type="Self.timeZones" Multiplicity="0..1" />
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeZones">
+              <PropertyRef Name="time_zone_id" />
+            </Principal>
+            <Dependent Role="GeoNames">
+              <PropertyRef Name="timezone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="getNearestCities1000" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="lon" Type="float" Mode="In" />
+          <Parameter Name="lat" Type="float" Mode="In" />
+          <Parameter Name="nearestNeighboursCount" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="geonameID" Type="int" />
+                <Property Name="name" Type="nvarchar" MaxLength="200" />
+                <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+                <Property Name="latitude" Type="float" />
+                <Property Name="longitude" Type="float" />
+                <Property Name="feature_class" Type="char" MaxLength="2" />
+                <Property Name="feature_code" Type="nvarchar" MaxLength="10" />
+                <Property Name="country_code" Type="char" MaxLength="3" />
+                <Property Name="cc2" Type="char" MaxLength="60" />
+                <Property Name="admin1_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="admin2_code" Type="nvarchar" MaxLength="80" />
+                <Property Name="admin3_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="admin4_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="pop" Type="bigint" />
+                <Property Name="elevation" Type="int" />
+                <Property Name="gtopo30" Type="int" />
+                <Property Name="distance" Type="float" />
+                <Property Name="coord" Type="geography" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="getNearestCities15000" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="lon" Type="float" Mode="In" />
+          <Parameter Name="lat" Type="float" Mode="In" />
+          <Parameter Name="nearestNeighboursCount" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="geonameID" Type="int" />
+                <Property Name="name" Type="nvarchar" MaxLength="200" />
+                <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+                <Property Name="latitude" Type="float" />
+                <Property Name="longitude" Type="float" />
+                <Property Name="feature_class" Type="char" MaxLength="2" />
+                <Property Name="feature_code" Type="nvarchar" MaxLength="10" />
+                <Property Name="country_code" Type="char" MaxLength="3" />
+                <Property Name="cc2" Type="char" MaxLength="60" />
+                <Property Name="admin1_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="admin2_code" Type="nvarchar" MaxLength="80" />
+                <Property Name="admin3_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="admin4_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="pop" Type="bigint" />
+                <Property Name="elevation" Type="int" />
+                <Property Name="gtopo30" Type="int" />
+                <Property Name="distance" Type="float" />
+                <Property Name="coord" Type="geography" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="getNearestCities5000" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="lon" Type="float" Mode="In" />
+          <Parameter Name="lat" Type="float" Mode="In" />
+          <Parameter Name="nearestNeighboursCount" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="geonameID" Type="int" />
+                <Property Name="name" Type="nvarchar" MaxLength="200" />
+                <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+                <Property Name="latitude" Type="float" />
+                <Property Name="longitude" Type="float" />
+                <Property Name="feature_class" Type="char" MaxLength="2" />
+                <Property Name="feature_code" Type="nvarchar" MaxLength="10" />
+                <Property Name="country_code" Type="char" MaxLength="3" />
+                <Property Name="cc2" Type="char" MaxLength="60" />
+                <Property Name="admin1_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="admin2_code" Type="nvarchar" MaxLength="80" />
+                <Property Name="admin3_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="admin4_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="pop" Type="bigint" />
+                <Property Name="elevation" Type="int" />
+                <Property Name="gtopo30" Type="int" />
+                <Property Name="distance" Type="float" />
+                <Property Name="coord" Type="geography" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="getNearestNeighbours" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="lon" Type="float" Mode="In" />
+          <Parameter Name="lat" Type="float" Mode="In" />
+          <Parameter Name="nearestNeighboursCount" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="geonameID" Type="int" />
+                <Property Name="name" Type="nvarchar" MaxLength="200" />
+                <Property Name="asciiname" Type="nvarchar" MaxLength="200" />
+                <Property Name="latitude" Type="float" />
+                <Property Name="longitude" Type="float" />
+                <Property Name="feature_class" Type="char" MaxLength="2" />
+                <Property Name="feature_code" Type="nvarchar" MaxLength="10" />
+                <Property Name="country_code" Type="char" MaxLength="3" />
+                <Property Name="cc2" Type="char" MaxLength="60" />
+                <Property Name="admin1_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="admin2_code" Type="nvarchar" MaxLength="80" />
+                <Property Name="admin3_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="admin4_code" Type="nvarchar" MaxLength="20" />
+                <Property Name="pop" Type="bigint" />
+                <Property Name="elevation" Type="int" />
+                <Property Name="gtopo30" Type="int" />
+                <Property Name="distance" Type="float" />
+                <Property Name="coord" Type="geography" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <EntityContainer Name="GeonamesDataModelStoreContainer">
+          <EntitySet Name="admin1Codes" EntityType="Self.admin1Codes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="admin2Codes" EntityType="Self.admin2Codes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="alternateNames3" EntityType="Self.alternateNames3" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cities1000" EntityType="Self.cities1000" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cities15000" EntityType="Self.cities15000" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cities5000" EntityType="Self.cities5000" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="countryCodes" EntityType="Self.countryCodes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="countryinfo" EntityType="Self.countryinfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GeoNames" EntityType="Self.GeoNames" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="timeZones" EntityType="Self.timeZones" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__admin1codes__geonames" Association="Self.FK__admin1codes__geonames">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="admin1Codes" EntitySet="admin1Codes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__admin2codes__geonames" Association="Self.FK__admin2codes__geonames">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="admin2Codes" EntitySet="admin2Codes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__alternate__geoNa__1234" Association="Self.FK__alternate__geoNa__1234">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="alternateNames3" EntitySet="alternateNames3" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities100__count__051861CB" Association="Self.FK__cities100__count__051861CB">
+            <End Role="countryinfo" EntitySet="countryinfo" />
+            <End Role="cities1000" EntitySet="cities1000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities150__count__08E8F2AF" Association="Self.FK__cities150__count__08E8F2AF">
+            <End Role="countryinfo" EntitySet="countryinfo" />
+            <End Role="cities15000" EntitySet="cities15000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities150__timez__5198BDC5" Association="Self.FK__cities150__timez__5198BDC5">
+            <End Role="timeZones" EntitySet="timeZones" />
+            <End Role="cities15000" EntitySet="cities15000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities500__count__07F4CE76" Association="Self.FK__cities500__count__07F4CE76">
+            <End Role="countryinfo" EntitySet="countryinfo" />
+            <End Role="cities5000" EntitySet="cities5000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities500__timez__4EBC511A" Association="Self.FK__cities500__timez__4EBC511A">
+            <End Role="timeZones" EntitySet="timeZones" />
+            <End Role="cities5000" EntitySet="cities5000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__countryin__geona__398D8EEE" Association="Self.FK__countryin__geona__398D8EEE">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="countryinfo" EntitySet="countryinfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GeoNames__countr__09DD16E8" Association="Self.FK__GeoNames__countr__09DD16E8">
+            <End Role="countryinfo" EntitySet="countryinfo" />
+            <End Role="GeoNames" EntitySet="GeoNames" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GeoNames__timezo__239E4DCF" Association="Self.FK__GeoNames__timezo__239E4DCF">
+            <End Role="timeZones" EntitySet="timeZones" />
+            <End Role="GeoNames" EntitySet="GeoNames" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GeonamesDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="getNearestCities1000_Result">
+          <Property Name="geonameID" Type="Int32" Nullable="true" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="latitude" Type="Double" Nullable="true" />
+          <Property Name="longitude" Type="Double" Nullable="true" />
+          <Property Name="feature_class" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="feature_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="cc2" Type="String" MaxLength="60" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="admin1_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin2_code" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin3_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin4_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="pop" Type="Int64" Nullable="true" />
+          <Property Name="elevation" Type="Int32" Nullable="true" />
+          <Property Name="gtopo30" Type="Int32" Nullable="true" />
+          <Property Name="distance" Type="Double" Nullable="true" />
+          <Property Type="Geography" Name="coord" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getNearestCities15000_Result">
+          <Property Name="geonameID" Type="Int32" Nullable="true" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="latitude" Type="Double" Nullable="true" />
+          <Property Name="longitude" Type="Double" Nullable="true" />
+          <Property Name="feature_class" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="feature_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="cc2" Type="String" MaxLength="60" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="admin1_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin2_code" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin3_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin4_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="pop" Type="Int64" Nullable="true" />
+          <Property Name="elevation" Type="Int32" Nullable="true" />
+          <Property Name="gtopo30" Type="Int32" Nullable="true" />
+          <Property Name="distance" Type="Double" Nullable="true" />
+          <Property Type="Geography" Name="coord" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getNearestCities5000_Result">
+          <Property Name="geonameID" Type="Int32" Nullable="true" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="latitude" Type="Double" Nullable="true" />
+          <Property Name="longitude" Type="Double" Nullable="true" />
+          <Property Name="feature_class" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="feature_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="cc2" Type="String" MaxLength="60" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="admin1_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin2_code" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin3_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin4_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="pop" Type="Int64" Nullable="true" />
+          <Property Name="elevation" Type="Int32" Nullable="true" />
+          <Property Name="gtopo30" Type="Int32" Nullable="true" />
+          <Property Name="distance" Type="Double" Nullable="true" />
+          <Property Type="Geography" Name="coord" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getNearestNeighbours_Result">
+          <Property Name="geonameID" Type="Int32" Nullable="true" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="latitude" Type="Double" Nullable="true" />
+          <Property Name="longitude" Type="Double" Nullable="true" />
+          <Property Name="feature_class" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="feature_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="cc2" Type="String" MaxLength="60" FixedLength="true" Unicode="false" Nullable="true" />
+          <Property Name="admin1_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin2_code" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin3_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="admin4_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="pop" Type="Int64" Nullable="true" />
+          <Property Name="elevation" Type="Int32" Nullable="true" />
+          <Property Name="gtopo30" Type="Int32" Nullable="true" />
+          <Property Name="distance" Type="Double" Nullable="true" />
+          <Property Type="Geography" Name="coord" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="alternateNames3">
+          <Key>
+            <PropertyRef Name="alternateNameId" />
+          </Key>
+          <Property Name="alternateNameId" Type="Int32" Nullable="false" />
+          <Property Name="geoNameId" Type="Int32" />
+          <Property Name="isoLanguage" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Name="alternateName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="isPrefferedName" Type="Int32" />
+          <Property Name="isShortName" Type="Int32" />
+          <Property Name="isColloquial" Type="Int32" />
+          <Property Name="isHistoric" Type="Int32" />
+          <NavigationProperty Name="GeoNames" Relationship="Self.FK__alternate__geoNa__1234" FromRole="alternateNames3" ToRole="GeoNames" />
+        </EntityType>
+        <EntityType Name="cities1000">
+          <Key>
+            <PropertyRef Name="geonameid" />
+          </Key>
+          <Property Name="geonameid" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="alternatenames" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Double" />
+          <Property Name="longitude" Type="Double" />
+          <Property Name="feature_class" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="feature_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="cc2" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="admin1_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="admin2_code" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="admin3_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="admin4_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="population" Type="Int64" />
+          <Property Name="elevation" Type="Int32" />
+          <Property Name="gtopo30" Type="Int32" />
+          <Property Name="timezone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="modification_date" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="coord" Type="Geography" />
+          <NavigationProperty Name="timeZones" Relationship="Self.FK__cities100__timez__54752A70" FromRole="cities1000" ToRole="timeZones" />
+          <NavigationProperty Name="countryinfo" Relationship="GeonamesDataModel.FK__cities100__count__051861CB" FromRole="cities1000" ToRole="countryinfo" />
+        </EntityType>
+        <EntityType Name="cities15000">
+          <Key>
+            <PropertyRef Name="geonameid" />
+          </Key>
+          <Property Name="geonameid" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="alternatenames" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Double" />
+          <Property Name="longitude" Type="Double" />
+          <Property Name="feature_class" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="feature_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="cc2" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="admin1_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="admin2_code" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="admin3_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="admin4_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="population" Type="Int64" />
+          <Property Name="elevation" Type="Int32" />
+          <Property Name="gtopo30" Type="Int32" />
+          <Property Name="timezone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="modification_date" Type="DateTime" Precision="0" />
+          <Property Name="coord" Type="Geography" />
+          <NavigationProperty Name="timeZones" Relationship="Self.FK__cities150__timez__5198BDC5" FromRole="cities15000" ToRole="timeZones" />
+          <NavigationProperty Name="countryinfo" Relationship="GeonamesDataModel.FK__cities150__count__08E8F2AF" FromRole="cities15000" ToRole="countryinfo" />
+        </EntityType>
+        <EntityType Name="cities5000">
+          <Key>
+            <PropertyRef Name="geonameid" />
+          </Key>
+          <Property Name="geonameid" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="alternatenames" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Double" />
+          <Property Name="longitude" Type="Double" />
+          <Property Name="feature_class" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="feature_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="cc2" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="admin1_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="admin2_code" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="admin3_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="admin4_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="population" Type="Int64" />
+          <Property Name="elevation" Type="Int32" />
+          <Property Name="gtopo30" Type="Int32" />
+          <Property Name="timezone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="modification_date" Type="DateTime" Precision="0" />
+          <Property Name="coord" Type="Geography" />
+          <NavigationProperty Name="timeZones" Relationship="Self.FK__cities500__timez__4EBC511A" FromRole="cities5000" ToRole="timeZones" />
+          <NavigationProperty Name="countryinfo" Relationship="GeonamesDataModel.FK__cities500__count__07F4CE76" FromRole="cities5000" ToRole="countryinfo" />
+        </EntityType>
+        <EntityType Name="countryCodes">
+          <Key>
+            <PropertyRef Name="countryCodeID" />
+          </Key>
+          <Property Name="countryCodeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="countryinfo">
+          <Key>
+            <PropertyRef Name="iso_alpha2" />
+          </Key>
+          <Property Name="iso_alpha2" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="iso_alpha3" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="iso_numeric" Type="Int32" />
+          <Property Name="fips_code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="capital" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="areainsqkm" Type="Double" />
+          <Property Name="population" Type="Int64" />
+          <Property Name="continent" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="tld" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="currencyCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="currencyName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="postalCodeFormat" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="postalCodeRegex" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="languages" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="geonameId" Type="Int32" />
+          <Property Name="neighbours" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="equivalentFipsCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="GeoNames" Relationship="Self.FK__countryin__geona__398D8EEE" FromRole="countryinfo" ToRole="GeoNames" />
+          <NavigationProperty Name="cities1000" Relationship="GeonamesDataModel.FK__cities100__count__051861CB" FromRole="countryinfo" ToRole="cities1000" />
+          <NavigationProperty Name="cities15000" Relationship="GeonamesDataModel.FK__cities150__count__08E8F2AF" FromRole="countryinfo" ToRole="cities15000" />
+          <NavigationProperty Name="cities5000" Relationship="GeonamesDataModel.FK__cities500__count__07F4CE76" FromRole="countryinfo" ToRole="cities5000" />
+          <NavigationProperty Name="GeoNames1" Relationship="GeonamesDataModel.FK__GeoNames__countr__09DD16E8" FromRole="countryinfo" ToRole="GeoNames" />
+        </EntityType>
+        <EntityType Name="GeoNames">
+          <Key>
+            <PropertyRef Name="geonameid" />
+          </Key>
+          <Property Name="geonameid" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="alternatenames" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Double" />
+          <Property Name="longitude" Type="Double" />
+          <Property Name="feature_class" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="feature_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="cc2" Type="String" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="admin1_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="admin2_code" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="admin3_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="admin4_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="population" Type="Int64" />
+          <Property Name="elevation" Type="Int32" />
+          <Property Name="gtopo30" Type="Int32" />
+          <Property Name="timezone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="modification_date" Type="DateTime" Precision="0" />
+          <Property Name="coord" Type="Geography" />
+          <NavigationProperty Name="alternateNames3" Relationship="Self.FK__alternate__geoNa__1234" FromRole="GeoNames" ToRole="alternateNames3" />
+          <NavigationProperty Name="countryinfo" Relationship="Self.FK__countryin__geona__398D8EEE" FromRole="GeoNames" ToRole="countryinfo" />
+          <NavigationProperty Name="timeZones" Relationship="Self.FK__GeoNames__timezo__239E4DCF" FromRole="GeoNames" ToRole="timeZones" />
+          <NavigationProperty Name="countryinfo1" Relationship="GeonamesDataModel.FK__GeoNames__countr__09DD16E8" FromRole="GeoNames" ToRole="countryinfo" />
+          <NavigationProperty Name="admin1Codes" Relationship="GeonamesDataModel.FK__admin1codes__geonames" FromRole="GeoNames" ToRole="admin1Codes" />
+          <NavigationProperty Name="admin2Codes" Relationship="GeonamesDataModel.FK__admin2codes__geonames" FromRole="GeoNames" ToRole="admin2Codes" />
+        </EntityType>
+        <EntityType Name="timeZones">
+          <Key>
+            <PropertyRef Name="time_zone_id" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="time_zone_id" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GMT_offset" Type="Double" />
+          <Property Name="DST_offset" Type="Double" />
+          <Property Name="rawOffset" Type="Double" />
+          <NavigationProperty Name="cities1000" Relationship="Self.FK__cities100__timez__54752A70" FromRole="timeZones" ToRole="cities1000" />
+          <NavigationProperty Name="cities15000" Relationship="Self.FK__cities150__timez__5198BDC5" FromRole="timeZones" ToRole="cities15000" />
+          <NavigationProperty Name="cities5000" Relationship="Self.FK__cities500__timez__4EBC511A" FromRole="timeZones" ToRole="cities5000" />
+          <NavigationProperty Name="GeoNames" Relationship="Self.FK__GeoNames__timezo__239E4DCF" FromRole="timeZones" ToRole="GeoNames" />
+        </EntityType>
+        <Association Name="FK__alternate__geoNa__1234">
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="0..1" />
+          <End Role="alternateNames3" Type="Self.alternateNames3" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="alternateNames3">
+              <PropertyRef Name="geoNameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities100__timez__54752A70">
+          <End Role="timeZones" Type="Self.timeZones" Multiplicity="0..1" />
+          <End Role="cities1000" Type="Self.cities1000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeZones">
+              <PropertyRef Name="time_zone_id" />
+            </Principal>
+            <Dependent Role="cities1000">
+              <PropertyRef Name="timezone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities150__timez__5198BDC5">
+          <End Role="timeZones" Type="Self.timeZones" Multiplicity="0..1" />
+          <End Role="cities15000" Type="Self.cities15000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeZones">
+              <PropertyRef Name="time_zone_id" />
+            </Principal>
+            <Dependent Role="cities15000">
+              <PropertyRef Name="timezone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities500__timez__4EBC511A">
+          <End Role="timeZones" Type="Self.timeZones" Multiplicity="0..1" />
+          <End Role="cities5000" Type="Self.cities5000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeZones">
+              <PropertyRef Name="time_zone_id" />
+            </Principal>
+            <Dependent Role="cities5000">
+              <PropertyRef Name="timezone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__countryin__geona__398D8EEE">
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="0..1" />
+          <End Role="countryinfo" Type="Self.countryinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="countryinfo">
+              <PropertyRef Name="geonameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GeoNames__timezo__239E4DCF">
+          <End Role="timeZones" Type="Self.timeZones" Multiplicity="0..1" />
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeZones">
+              <PropertyRef Name="time_zone_id" />
+            </Principal>
+            <Dependent Role="GeoNames">
+              <PropertyRef Name="timezone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GeonamesDataEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="alternateNames3" EntityType="Self.alternateNames3" />
+          <EntitySet Name="cities1000" EntityType="Self.cities1000" />
+          <EntitySet Name="cities15000" EntityType="Self.cities15000" />
+          <EntitySet Name="cities5000" EntityType="Self.cities5000" />
+          <EntitySet Name="countryCodes" EntityType="Self.countryCodes" />
+          <EntitySet Name="countryinfo" EntityType="Self.countryinfo" />
+          <EntitySet Name="GeoNames" EntityType="Self.GeoNames" />
+          <EntitySet Name="timeZones" EntityType="Self.timeZones" />
+          <AssociationSet Name="FK__alternate__geoNa__1234" Association="Self.FK__alternate__geoNa__1234">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="alternateNames3" EntitySet="alternateNames3" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities100__timez__54752A70" Association="Self.FK__cities100__timez__54752A70">
+            <End Role="timeZones" EntitySet="timeZones" />
+            <End Role="cities1000" EntitySet="cities1000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities150__timez__5198BDC5" Association="Self.FK__cities150__timez__5198BDC5">
+            <End Role="timeZones" EntitySet="timeZones" />
+            <End Role="cities15000" EntitySet="cities15000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities500__timez__4EBC511A" Association="Self.FK__cities500__timez__4EBC511A">
+            <End Role="timeZones" EntitySet="timeZones" />
+            <End Role="cities5000" EntitySet="cities5000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__countryin__geona__398D8EEE" Association="Self.FK__countryin__geona__398D8EEE">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="countryinfo" EntitySet="countryinfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GeoNames__timezo__239E4DCF" Association="Self.FK__GeoNames__timezo__239E4DCF">
+            <End Role="timeZones" EntitySet="timeZones" />
+            <End Role="GeoNames" EntitySet="GeoNames" />
+          </AssociationSet>
+          <FunctionImport Name="getNearestCities1000" ReturnType="Collection(GeonamesDataModel.getNearestCities1000_Result)" IsComposable="true">
+            <Parameter Name="lon" Mode="In" Type="Double" />
+            <Parameter Name="lat" Mode="In" Type="Double" />
+            <Parameter Name="nearestNeighboursCount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getNearestCities15000" ReturnType="Collection(GeonamesDataModel.getNearestCities15000_Result)" IsComposable="true">
+            <Parameter Name="lon" Mode="In" Type="Double" />
+            <Parameter Name="lat" Mode="In" Type="Double" />
+            <Parameter Name="nearestNeighboursCount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getNearestCities5000" ReturnType="Collection(GeonamesDataModel.getNearestCities5000_Result)" IsComposable="true">
+            <Parameter Name="lon" Mode="In" Type="Double" />
+            <Parameter Name="lat" Mode="In" Type="Double" />
+            <Parameter Name="nearestNeighboursCount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getNearestNeighbours" ReturnType="Collection(GeonamesDataModel.getNearestNeighbours_Result)" IsComposable="true">
+            <Parameter Name="lon" Mode="In" Type="Double" />
+            <Parameter Name="lat" Mode="In" Type="Double" />
+            <Parameter Name="nearestNeighboursCount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="FK__cities100__count__051861CB" Association="GeonamesDataModel.FK__cities100__count__051861CB">
+            <End Role="countryinfo" EntitySet="countryinfo" />
+            <End Role="cities1000" EntitySet="cities1000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities150__count__08E8F2AF" Association="GeonamesDataModel.FK__cities150__count__08E8F2AF">
+            <End Role="countryinfo" EntitySet="countryinfo" />
+            <End Role="cities15000" EntitySet="cities15000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cities500__count__07F4CE76" Association="GeonamesDataModel.FK__cities500__count__07F4CE76">
+            <End Role="countryinfo" EntitySet="countryinfo" />
+            <End Role="cities5000" EntitySet="cities5000" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GeoNames__countr__09DD16E8" Association="GeonamesDataModel.FK__GeoNames__countr__09DD16E8">
+            <End Role="countryinfo" EntitySet="countryinfo" />
+            <End Role="GeoNames" EntitySet="GeoNames" />
+          </AssociationSet>
+          <EntitySet Name="admin1Codes" EntityType="GeonamesDataModel.admin1Codes" />
+          <EntitySet Name="admin2Codes" EntityType="GeonamesDataModel.admin2Codes" />
+          <AssociationSet Name="FK__admin1codes__geonames" Association="GeonamesDataModel.FK__admin1codes__geonames">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="admin1Codes" EntitySet="admin1Codes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__admin2codes__geonames" Association="GeonamesDataModel.FK__admin2codes__geonames">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="admin2Codes" EntitySet="admin2Codes" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK__cities100__count__051861CB">
+          <End Type="GeonamesDataModel.countryinfo" Role="countryinfo" Multiplicity="0..1" />
+          <End Type="GeonamesDataModel.cities1000" Role="cities1000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countryinfo">
+              <PropertyRef Name="iso_alpha2" />
+            </Principal>
+            <Dependent Role="cities1000">
+              <PropertyRef Name="country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities150__count__08E8F2AF">
+          <End Type="GeonamesDataModel.countryinfo" Role="countryinfo" Multiplicity="0..1" />
+          <End Type="GeonamesDataModel.cities15000" Role="cities15000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countryinfo">
+              <PropertyRef Name="iso_alpha2" />
+            </Principal>
+            <Dependent Role="cities15000">
+              <PropertyRef Name="country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cities500__count__07F4CE76">
+          <End Type="GeonamesDataModel.countryinfo" Role="countryinfo" Multiplicity="0..1" />
+          <End Type="GeonamesDataModel.cities5000" Role="cities5000" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countryinfo">
+              <PropertyRef Name="iso_alpha2" />
+            </Principal>
+            <Dependent Role="cities5000">
+              <PropertyRef Name="country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GeoNames__countr__09DD16E8">
+          <End Type="GeonamesDataModel.countryinfo" Role="countryinfo" Multiplicity="0..1" />
+          <End Type="GeonamesDataModel.GeoNames" Role="GeoNames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="countryinfo">
+              <PropertyRef Name="iso_alpha2" />
+            </Principal>
+            <Dependent Role="GeoNames">
+              <PropertyRef Name="country_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="admin1Codes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="geonamesId" Type="Int32" />
+          <NavigationProperty Name="GeoNames" Relationship="GeonamesDataModel.FK__admin1codes__geonames" FromRole="admin1Codes" ToRole="GeoNames" />
+        </EntityType>
+        <EntityType Name="admin2Codes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="asciiname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="geonamesId" Type="Int32" />
+          <NavigationProperty Name="GeoNames" Relationship="GeonamesDataModel.FK__admin2codes__geonames" FromRole="admin2Codes" ToRole="GeoNames" />
+        </EntityType>
+        <Association Name="FK__admin1codes__geonames">
+          <End Type="GeonamesDataModel.GeoNames" Role="GeoNames" Multiplicity="0..1" />
+          <End Type="GeonamesDataModel.admin1Codes" Role="admin1Codes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="admin1Codes">
+              <PropertyRef Name="geonamesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__admin2codes__geonames">
+          <End Type="GeonamesDataModel.GeoNames" Role="GeoNames" Multiplicity="0..1" />
+          <End Type="GeonamesDataModel.admin2Codes" Role="admin2Codes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="admin2Codes">
+              <PropertyRef Name="geonamesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GeonamesDataModelStoreContainer" CdmEntityContainer="GeonamesDataEntities">
+          <EntitySetMapping Name="alternateNames3">
+            <EntityTypeMapping TypeName="GeonamesDataModel.alternateNames3">
+              <MappingFragment StoreEntitySet="alternateNames3">
+                <ScalarProperty Name="alternateNameId" ColumnName="alternateNameId" />
+                <ScalarProperty Name="geoNameId" ColumnName="geoNameId" />
+                <ScalarProperty Name="isoLanguage" ColumnName="isoLanguage" />
+                <ScalarProperty Name="alternateName" ColumnName="alternateName" />
+                <ScalarProperty Name="isPrefferedName" ColumnName="isPrefferedName" />
+                <ScalarProperty Name="isShortName" ColumnName="isShortName" />
+                <ScalarProperty Name="isColloquial" ColumnName="isColloquial" />
+                <ScalarProperty Name="isHistoric" ColumnName="isHistoric" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cities1000">
+            <EntityTypeMapping TypeName="GeonamesDataModel.cities1000">
+              <MappingFragment StoreEntitySet="cities1000">
+                <ScalarProperty Name="geonameid" ColumnName="geonameid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="alternatenames" ColumnName="alternatenames" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="feature_class" ColumnName="feature_class" />
+                <ScalarProperty Name="feature_code" ColumnName="feature_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="cc2" ColumnName="cc2" />
+                <ScalarProperty Name="admin1_code" ColumnName="admin1_code" />
+                <ScalarProperty Name="admin2_code" ColumnName="admin2_code" />
+                <ScalarProperty Name="admin3_code" ColumnName="admin3_code" />
+                <ScalarProperty Name="admin4_code" ColumnName="admin4_code" />
+                <ScalarProperty Name="population" ColumnName="population" />
+                <ScalarProperty Name="elevation" ColumnName="elevation" />
+                <ScalarProperty Name="gtopo30" ColumnName="gtopo30" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="modification_date" ColumnName="modification_date" />
+                <ScalarProperty Name="coord" ColumnName="coord" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cities15000">
+            <EntityTypeMapping TypeName="GeonamesDataModel.cities15000">
+              <MappingFragment StoreEntitySet="cities15000">
+                <ScalarProperty Name="geonameid" ColumnName="geonameid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="alternatenames" ColumnName="alternatenames" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="feature_class" ColumnName="feature_class" />
+                <ScalarProperty Name="feature_code" ColumnName="feature_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="cc2" ColumnName="cc2" />
+                <ScalarProperty Name="admin1_code" ColumnName="admin1_code" />
+                <ScalarProperty Name="admin2_code" ColumnName="admin2_code" />
+                <ScalarProperty Name="admin3_code" ColumnName="admin3_code" />
+                <ScalarProperty Name="admin4_code" ColumnName="admin4_code" />
+                <ScalarProperty Name="population" ColumnName="population" />
+                <ScalarProperty Name="elevation" ColumnName="elevation" />
+                <ScalarProperty Name="gtopo30" ColumnName="gtopo30" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="modification_date" ColumnName="modification_date" />
+                <ScalarProperty Name="coord" ColumnName="coord" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cities5000">
+            <EntityTypeMapping TypeName="GeonamesDataModel.cities5000">
+              <MappingFragment StoreEntitySet="cities5000">
+                <ScalarProperty Name="geonameid" ColumnName="geonameid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="alternatenames" ColumnName="alternatenames" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="feature_class" ColumnName="feature_class" />
+                <ScalarProperty Name="feature_code" ColumnName="feature_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="cc2" ColumnName="cc2" />
+                <ScalarProperty Name="admin1_code" ColumnName="admin1_code" />
+                <ScalarProperty Name="admin2_code" ColumnName="admin2_code" />
+                <ScalarProperty Name="admin3_code" ColumnName="admin3_code" />
+                <ScalarProperty Name="admin4_code" ColumnName="admin4_code" />
+                <ScalarProperty Name="population" ColumnName="population" />
+                <ScalarProperty Name="elevation" ColumnName="elevation" />
+                <ScalarProperty Name="gtopo30" ColumnName="gtopo30" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="modification_date" ColumnName="modification_date" />
+                <ScalarProperty Name="coord" ColumnName="coord" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="countryCodes">
+            <EntityTypeMapping TypeName="GeonamesDataModel.countryCodes">
+              <MappingFragment StoreEntitySet="countryCodes">
+                <ScalarProperty Name="countryCodeID" ColumnName="countryCodeID" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="countryinfo">
+            <EntityTypeMapping TypeName="GeonamesDataModel.countryinfo">
+              <MappingFragment StoreEntitySet="countryinfo">
+                <ScalarProperty Name="iso_alpha2" ColumnName="iso_alpha2" />
+                <ScalarProperty Name="iso_alpha3" ColumnName="iso_alpha3" />
+                <ScalarProperty Name="iso_numeric" ColumnName="iso_numeric" />
+                <ScalarProperty Name="fips_code" ColumnName="fips_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="capital" ColumnName="capital" />
+                <ScalarProperty Name="areainsqkm" ColumnName="areainsqkm" />
+                <ScalarProperty Name="population" ColumnName="population" />
+                <ScalarProperty Name="continent" ColumnName="continent" />
+                <ScalarProperty Name="tld" ColumnName="tld" />
+                <ScalarProperty Name="currencyCode" ColumnName="currencyCode" />
+                <ScalarProperty Name="currencyName" ColumnName="currencyName" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="postalCodeFormat" ColumnName="postalCodeFormat" />
+                <ScalarProperty Name="postalCodeRegex" ColumnName="postalCodeRegex" />
+                <ScalarProperty Name="languages" ColumnName="languages" />
+                <ScalarProperty Name="geonameId" ColumnName="geonameId" />
+                <ScalarProperty Name="neighbours" ColumnName="neighbours" />
+                <ScalarProperty Name="equivalentFipsCode" ColumnName="equivalentFipsCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GeoNames">
+            <EntityTypeMapping TypeName="GeonamesDataModel.GeoNames">
+              <MappingFragment StoreEntitySet="GeoNames">
+                <ScalarProperty Name="geonameid" ColumnName="geonameid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="alternatenames" ColumnName="alternatenames" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="feature_class" ColumnName="feature_class" />
+                <ScalarProperty Name="feature_code" ColumnName="feature_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="cc2" ColumnName="cc2" />
+                <ScalarProperty Name="admin1_code" ColumnName="admin1_code" />
+                <ScalarProperty Name="admin2_code" ColumnName="admin2_code" />
+                <ScalarProperty Name="admin3_code" ColumnName="admin3_code" />
+                <ScalarProperty Name="admin4_code" ColumnName="admin4_code" />
+                <ScalarProperty Name="population" ColumnName="population" />
+                <ScalarProperty Name="elevation" ColumnName="elevation" />
+                <ScalarProperty Name="gtopo30" ColumnName="gtopo30" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="modification_date" ColumnName="modification_date" />
+                <ScalarProperty Name="coord" ColumnName="coord" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="timeZones">
+            <EntityTypeMapping TypeName="GeonamesDataModel.timeZones">
+              <MappingFragment StoreEntitySet="timeZones">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="time_zone_id" ColumnName="time_zone_id" />
+                <ScalarProperty Name="GMT_offset" ColumnName="GMT_offset" />
+                <ScalarProperty Name="DST_offset" ColumnName="DST_offset" />
+                <ScalarProperty Name="rawOffset" ColumnName="rawOffset" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionName="GeonamesDataModel.Store.getNearestCities1000" FunctionImportName="getNearestCities1000">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GeonamesDataModel.getNearestCities1000_Result">
+                <ScalarProperty Name="geonameID" ColumnName="geonameID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="feature_class" ColumnName="feature_class" />
+                <ScalarProperty Name="feature_code" ColumnName="feature_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="cc2" ColumnName="cc2" />
+                <ScalarProperty Name="admin1_code" ColumnName="admin1_code" />
+                <ScalarProperty Name="admin2_code" ColumnName="admin2_code" />
+                <ScalarProperty Name="admin3_code" ColumnName="admin3_code" />
+                <ScalarProperty Name="admin4_code" ColumnName="admin4_code" />
+                <ScalarProperty Name="pop" ColumnName="pop" />
+                <ScalarProperty Name="elevation" ColumnName="elevation" />
+                <ScalarProperty Name="gtopo30" ColumnName="gtopo30" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
+                <ScalarProperty Name="coord" ColumnName="coord" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionName="GeonamesDataModel.Store.getNearestCities15000" FunctionImportName="getNearestCities15000">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GeonamesDataModel.getNearestCities15000_Result">
+                <ScalarProperty Name="geonameID" ColumnName="geonameID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="feature_class" ColumnName="feature_class" />
+                <ScalarProperty Name="feature_code" ColumnName="feature_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="cc2" ColumnName="cc2" />
+                <ScalarProperty Name="admin1_code" ColumnName="admin1_code" />
+                <ScalarProperty Name="admin2_code" ColumnName="admin2_code" />
+                <ScalarProperty Name="admin3_code" ColumnName="admin3_code" />
+                <ScalarProperty Name="admin4_code" ColumnName="admin4_code" />
+                <ScalarProperty Name="pop" ColumnName="pop" />
+                <ScalarProperty Name="elevation" ColumnName="elevation" />
+                <ScalarProperty Name="gtopo30" ColumnName="gtopo30" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
+                <ScalarProperty Name="coord" ColumnName="coord" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionName="GeonamesDataModel.Store.getNearestCities5000" FunctionImportName="getNearestCities5000">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GeonamesDataModel.getNearestCities5000_Result">
+                <ScalarProperty Name="geonameID" ColumnName="geonameID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="feature_class" ColumnName="feature_class" />
+                <ScalarProperty Name="feature_code" ColumnName="feature_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="cc2" ColumnName="cc2" />
+                <ScalarProperty Name="admin1_code" ColumnName="admin1_code" />
+                <ScalarProperty Name="admin2_code" ColumnName="admin2_code" />
+                <ScalarProperty Name="admin3_code" ColumnName="admin3_code" />
+                <ScalarProperty Name="admin4_code" ColumnName="admin4_code" />
+                <ScalarProperty Name="pop" ColumnName="pop" />
+                <ScalarProperty Name="elevation" ColumnName="elevation" />
+                <ScalarProperty Name="gtopo30" ColumnName="gtopo30" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
+                <ScalarProperty Name="coord" ColumnName="coord" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionName="GeonamesDataModel.Store.getNearestNeighbours" FunctionImportName="getNearestNeighbours">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GeonamesDataModel.getNearestNeighbours_Result">
+                <ScalarProperty Name="geonameID" ColumnName="geonameID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="feature_class" ColumnName="feature_class" />
+                <ScalarProperty Name="feature_code" ColumnName="feature_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="cc2" ColumnName="cc2" />
+                <ScalarProperty Name="admin1_code" ColumnName="admin1_code" />
+                <ScalarProperty Name="admin2_code" ColumnName="admin2_code" />
+                <ScalarProperty Name="admin3_code" ColumnName="admin3_code" />
+                <ScalarProperty Name="admin4_code" ColumnName="admin4_code" />
+                <ScalarProperty Name="pop" ColumnName="pop" />
+                <ScalarProperty Name="elevation" ColumnName="elevation" />
+                <ScalarProperty Name="gtopo30" ColumnName="gtopo30" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
+                <ScalarProperty Name="coord" ColumnName="coord" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="admin1Codes">
+            <EntityTypeMapping TypeName="GeonamesDataModel.admin1Codes">
+              <MappingFragment StoreEntitySet="admin1Codes">
+                <ScalarProperty Name="geonamesId" ColumnName="geonamesId" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admin2Codes">
+            <EntityTypeMapping TypeName="GeonamesDataModel.admin2Codes">
+              <MappingFragment StoreEntitySet="admin2Codes">
+                <ScalarProperty Name="geonamesId" ColumnName="geonamesId" />
+                <ScalarProperty Name="asciiname" ColumnName="asciiname" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace tweetLocalizerApp.Libs.Locator
 {
-    abstract class PreprocessorAbstract<T>:IPreprocessor<T>
+    public abstract class PreprocessorAbstract<T>:IPreprocessor<T>
     {
         private T localIndicatorItem;
         private T processedIndicatorItem;

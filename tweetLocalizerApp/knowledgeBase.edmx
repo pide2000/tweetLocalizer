@@ -1,0 +1,433 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="KnowledgeBaseDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BaseData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BaseDataId" Type="int" Nullable="false" />
+          <Property Name="AText" Type="nvarchar" MaxLength="300" />
+          <Property Name="ANumber" Type="float" />
+        </EntityType>
+        <EntityType Name="BaseDataToKnowledgeBase">
+          <Key>
+            <PropertyRef Name="KnowledgeBaseId" />
+            <PropertyRef Name="BaseDataId" />
+          </Key>
+          <Property Name="KnowledgeBaseId" Type="int" Nullable="false" />
+          <Property Name="BaseDataId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Coordinates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Coord" Type="geography" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="KnowledgeBaseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KnowledgeBase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NGram" Type="nvarchar" MaxLength="448" Nullable="false" />
+          <Property Name="NGramCount" Type="bigint" Nullable="false" />
+          <Property Name="GeoNamesId" Type="int" Nullable="false" />
+          <Property Name="CountryId" Type="int" />
+          <Property Name="Admin1Id" Type="int" />
+          <Property Name="Admin2Id" Type="int" />
+          <Property Name="Admin3Id" Type="int" />
+          <Property Name="Admin4Id" Type="int" />
+          <Property Name="FkIdAdditional" Type="int" />
+          <Property Name="ParentId" Type="int" />
+        </EntityType>
+        <EntityType Name="NGramItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Item" Type="nvarchar" MaxLength="448" Nullable="false" />
+          <Property Name="NGramItemTypesId" Type="int" Nullable="false" />
+          <Property Name="ItemCounter" Type="int" />
+        </EntityType>
+        <EntityType Name="NGramItemsInNGram">
+          <Key>
+            <PropertyRef Name="KnowledgeBaseId" />
+            <PropertyRef Name="NGramItemsId" />
+          </Key>
+          <Property Name="KnowledgeBaseId" Type="int" Nullable="false" />
+          <Property Name="NGramItemsId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NGramItemTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemType" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__BaseDataT__BaseD__191F5A78">
+          <End Role="BaseData" Type="Self.BaseData" Multiplicity="1" />
+          <End Role="BaseDataToKnowledgeBase" Type="Self.BaseDataToKnowledgeBase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BaseDataToKnowledgeBase">
+              <PropertyRef Name="BaseDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BaseDataT__Knowl__1A137EB1">
+          <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="1" />
+          <End Role="BaseDataToKnowledgeBase" Type="Self.BaseDataToKnowledgeBase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KnowledgeBase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BaseDataToKnowledgeBase">
+              <PropertyRef Name="KnowledgeBaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Coordinat__Knowl__1C30D14D">
+          <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="1" />
+          <End Role="Coordinates" Type="Self.Coordinates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KnowledgeBase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Coordinates">
+              <PropertyRef Name="KnowledgeBaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Knowledge__Paren__12725CE9">
+          <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="0..1" />
+          <End Role="KnowledgeBase1" Type="Self.KnowledgeBase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KnowledgeBase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KnowledgeBase1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NGramItem__Knowl__176C1C30">
+          <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="1" />
+          <End Role="NGramItemsInNGram" Type="Self.NGramItemsInNGram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KnowledgeBase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NGramItemsInNGram">
+              <PropertyRef Name="KnowledgeBaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NGramItem__NGram__18604069">
+          <End Role="NGramItems" Type="Self.NGramItems" Multiplicity="1" />
+          <End Role="NGramItemsInNGram" Type="Self.NGramItemsInNGram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NGramItems">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NGramItemsInNGram">
+              <PropertyRef Name="NGramItemsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NGramItem__NGram__3C9DA0DF">
+          <End Role="NGramItemTypes" Type="Self.NGramItemTypes" Multiplicity="1" />
+          <End Role="NGramItems" Type="Self.NGramItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NGramItemTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NGramItems">
+              <PropertyRef Name="NGramItemTypesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KnowledgeBaseDataModelStoreContainer">
+          <EntitySet Name="BaseData" EntityType="Self.BaseData" Schema="knowledgeObjects" store:Type="Tables" />
+          <EntitySet Name="BaseDataToKnowledgeBase" EntityType="Self.BaseDataToKnowledgeBase" Schema="knowledgeObjects" store:Type="Tables" />
+          <EntitySet Name="Coordinates" EntityType="Self.Coordinates" Schema="knowledgeObjects" store:Type="Tables" />
+          <EntitySet Name="KnowledgeBase" EntityType="Self.KnowledgeBase" Schema="knowledgeObjects" store:Type="Tables" />
+          <EntitySet Name="NGramItems" EntityType="Self.NGramItems" Schema="knowledgeObjects" store:Type="Tables" />
+          <EntitySet Name="NGramItemsInNGram" EntityType="Self.NGramItemsInNGram" Schema="knowledgeObjects" store:Type="Tables" />
+          <EntitySet Name="NGramItemTypes" EntityType="Self.NGramItemTypes" Schema="knowledgeObjects" store:Type="Tables" />
+          <AssociationSet Name="FK__BaseDataT__BaseD__191F5A78" Association="Self.FK__BaseDataT__BaseD__191F5A78">
+            <End Role="BaseData" EntitySet="BaseData" />
+            <End Role="BaseDataToKnowledgeBase" EntitySet="BaseDataToKnowledgeBase" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BaseDataT__Knowl__1A137EB1" Association="Self.FK__BaseDataT__Knowl__1A137EB1">
+            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
+            <End Role="BaseDataToKnowledgeBase" EntitySet="BaseDataToKnowledgeBase" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Coordinat__Knowl__1C30D14D" Association="Self.FK__Coordinat__Knowl__1C30D14D">
+            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
+            <End Role="Coordinates" EntitySet="Coordinates" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Knowledge__Paren__12725CE9" Association="Self.FK__Knowledge__Paren__12725CE9">
+            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
+            <End Role="KnowledgeBase1" EntitySet="KnowledgeBase" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NGramItem__Knowl__176C1C30" Association="Self.FK__NGramItem__Knowl__176C1C30">
+            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
+            <End Role="NGramItemsInNGram" EntitySet="NGramItemsInNGram" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NGramItem__NGram__18604069" Association="Self.FK__NGramItem__NGram__18604069">
+            <End Role="NGramItems" EntitySet="NGramItems" />
+            <End Role="NGramItemsInNGram" EntitySet="NGramItemsInNGram" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NGramItem__NGram__3C9DA0DF" Association="Self.FK__NGramItem__NGram__3C9DA0DF">
+            <End Role="NGramItemTypes" EntitySet="NGramItemTypes" />
+            <End Role="NGramItems" EntitySet="NGramItems" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KnowledgeBaseDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Coordinates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Coord" Type="Geography" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="KnowledgeBaseId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="KnowledgeBase" Relationship="Self.FK__Coordinat__Knowl__1C30D14D" FromRole="Coordinates" ToRole="KnowledgeBase" />
+        </EntityType>
+        <EntityType Name="KnowledgeBase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NGram" Type="String" MaxLength="448" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NGramCount" Type="Int64" Nullable="false" />
+          <Property Name="GeoNamesId" Type="Int32" Nullable="false" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="Admin1Id" Type="Int32" />
+          <Property Name="Admin2Id" Type="Int32" />
+          <Property Name="Admin3Id" Type="Int32" />
+          <Property Name="Admin4Id" Type="Int32" />
+          <Property Name="FkIdAdditional" Type="Int32" />
+          <NavigationProperty Name="Coordinates" Relationship="Self.FK__Coordinat__Knowl__1C30D14D" FromRole="KnowledgeBase" ToRole="Coordinates" />
+          <NavigationProperty Name="NGramItems" Relationship="Self.NGramItemsInNGram" FromRole="KnowledgeBase" ToRole="NGramItems" />
+          <Property Name="ParentId" Type="Int32" />
+          <NavigationProperty Name="KnowledgeBase1" Relationship="KnowledgeBaseDataModel.FK__Knowledge__Paren__12725CE9" FromRole="KnowledgeBase" ToRole="KnowledgeBase1" />
+          <NavigationProperty Name="KnowledgeBase2" Relationship="KnowledgeBaseDataModel.FK__Knowledge__Paren__12725CE9" FromRole="KnowledgeBase1" ToRole="KnowledgeBase" />
+          <NavigationProperty Name="BaseData" Relationship="KnowledgeBaseDataModel.BaseDataToKnowledgeBase" FromRole="KnowledgeBase" ToRole="BaseData" />
+          </EntityType>
+        <EntityType Name="NGramItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Item" Type="String" MaxLength="448" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NGramItemTypesId" Type="Int32" Nullable="false" />
+          <Property Name="ItemCounter" Type="Int32" />
+          <NavigationProperty Name="NGramItemTypes" Relationship="Self.FK__NGramItem__NGram__3C9DA0DF" FromRole="NGramItems" ToRole="NGramItemTypes" />
+          <NavigationProperty Name="KnowledgeBase" Relationship="Self.NGramItemsInNGram" FromRole="NGramItems" ToRole="KnowledgeBase" />
+        </EntityType>
+        <EntityType Name="NGramItemTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemType" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="NGramItems" Relationship="Self.FK__NGramItem__NGram__3C9DA0DF" FromRole="NGramItemTypes" ToRole="NGramItems" />
+        </EntityType>
+        <Association Name="FK__Coordinat__Knowl__1C30D14D">
+          <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="1" />
+          <End Role="Coordinates" Type="Self.Coordinates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KnowledgeBase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Coordinates">
+              <PropertyRef Name="KnowledgeBaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__NGramItem__NGram__3C9DA0DF">
+          <End Role="NGramItemTypes" Type="Self.NGramItemTypes" Multiplicity="1" />
+          <End Role="NGramItems" Type="Self.NGramItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NGramItemTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NGramItems">
+              <PropertyRef Name="NGramItemTypesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="NGramItemsInNGram">
+          <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="*" />
+          <End Role="NGramItems" Type="Self.NGramItems" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="knowledgeObjects" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Coordinates" EntityType="Self.Coordinates" />
+          <EntitySet Name="KnowledgeBase" EntityType="Self.KnowledgeBase" />
+          <EntitySet Name="NGramItems" EntityType="Self.NGramItems" />
+          <EntitySet Name="NGramItemTypes" EntityType="Self.NGramItemTypes" />
+          <AssociationSet Name="FK__Coordinat__Knowl__1C30D14D" Association="Self.FK__Coordinat__Knowl__1C30D14D">
+            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
+            <End Role="Coordinates" EntitySet="Coordinates" />
+          </AssociationSet>
+          <AssociationSet Name="FK__NGramItem__NGram__3C9DA0DF" Association="Self.FK__NGramItem__NGram__3C9DA0DF">
+            <End Role="NGramItemTypes" EntitySet="NGramItemTypes" />
+            <End Role="NGramItems" EntitySet="NGramItems" />
+          </AssociationSet>
+          <AssociationSet Name="NGramItemsInNGram" Association="Self.NGramItemsInNGram">
+            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
+            <End Role="NGramItems" EntitySet="NGramItems" />
+          </AssociationSet>
+          <EntitySet Name="BaseData" EntityType="KnowledgeBaseDataModel.BaseData" />
+          <AssociationSet Name="FK__Knowledge__Paren__12725CE9" Association="KnowledgeBaseDataModel.FK__Knowledge__Paren__12725CE9">
+            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
+            <End Role="KnowledgeBase1" EntitySet="KnowledgeBase" />
+          </AssociationSet>
+          <AssociationSet Name="BaseDataToKnowledgeBase" Association="KnowledgeBaseDataModel.BaseDataToKnowledgeBase">
+            <End Role="BaseData" EntitySet="BaseData" />
+            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BaseData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BaseDataId" Type="Int32" Nullable="false" />
+          <Property Name="AText" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ANumber" Type="Double" />
+          <NavigationProperty Name="KnowledgeBase" Relationship="KnowledgeBaseDataModel.BaseDataToKnowledgeBase" FromRole="BaseData" ToRole="KnowledgeBase" />
+        </EntityType>
+        <Association Name="FK__Knowledge__Paren__12725CE9">
+          <End Type="KnowledgeBaseDataModel.KnowledgeBase" Role="KnowledgeBase" Multiplicity="0..1" />
+          <End Type="KnowledgeBaseDataModel.KnowledgeBase" Role="KnowledgeBase1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KnowledgeBase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KnowledgeBase1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BaseDataToKnowledgeBase">
+          <End Type="KnowledgeBaseDataModel.BaseData" Role="BaseData" Multiplicity="*" />
+          <End Type="KnowledgeBaseDataModel.KnowledgeBase" Role="KnowledgeBase" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KnowledgeBaseDataModelStoreContainer" CdmEntityContainer="knowledgeObjects">
+          <EntitySetMapping Name="Coordinates">
+            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.Coordinates">
+              <MappingFragment StoreEntitySet="Coordinates">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Coord" ColumnName="Coord" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="KnowledgeBaseId" ColumnName="KnowledgeBaseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KnowledgeBase">
+            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.KnowledgeBase">
+              <MappingFragment StoreEntitySet="KnowledgeBase">
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NGram" ColumnName="NGram" />
+                <ScalarProperty Name="NGramCount" ColumnName="NGramCount" />
+                <ScalarProperty Name="GeoNamesId" ColumnName="GeoNamesId" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="Admin1Id" ColumnName="Admin1Id" />
+                <ScalarProperty Name="Admin2Id" ColumnName="Admin2Id" />
+                <ScalarProperty Name="Admin3Id" ColumnName="Admin3Id" />
+                <ScalarProperty Name="Admin4Id" ColumnName="Admin4Id" />
+                <ScalarProperty Name="FkIdAdditional" ColumnName="FkIdAdditional" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NGramItems">
+            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.NGramItems">
+              <MappingFragment StoreEntitySet="NGramItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Item" ColumnName="Item" />
+                <ScalarProperty Name="NGramItemTypesId" ColumnName="NGramItemTypesId" />
+                <ScalarProperty Name="ItemCounter" ColumnName="ItemCounter" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NGramItemTypes">
+            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.NGramItemTypes">
+              <MappingFragment StoreEntitySet="NGramItemTypes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="NGramItemsInNGram" TypeName="KnowledgeBaseDataModel.NGramItemsInNGram" StoreEntitySet="NGramItemsInNGram">
+            <EndProperty Name="KnowledgeBase">
+              <ScalarProperty Name="Id" ColumnName="KnowledgeBaseId" />
+            </EndProperty>
+            <EndProperty Name="NGramItems">
+              <ScalarProperty Name="Id" ColumnName="NGramItemsId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="BaseData">
+            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.BaseData">
+              <MappingFragment StoreEntitySet="BaseData">
+                <ScalarProperty Name="ANumber" ColumnName="ANumber" />
+                <ScalarProperty Name="AText" ColumnName="AText" />
+                <ScalarProperty Name="BaseDataId" ColumnName="BaseDataId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="BaseDataToKnowledgeBase" TypeName="KnowledgeBaseDataModel.BaseDataToKnowledgeBase" StoreEntitySet="BaseDataToKnowledgeBase">
+            <EndProperty Name="KnowledgeBase">
+              <ScalarProperty Name="Id" ColumnName="KnowledgeBaseId" />
+            </EndProperty>
+            <EndProperty Name="BaseData">
+              <ScalarProperty Name="Id" ColumnName="BaseDataId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

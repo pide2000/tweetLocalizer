@@ -13,5 +13,6 @@ namespace tweetLocalizerApp.TweetLocator
         public string timezone { get; set; }
         public double longitude { get; set; }
         public double latitude { get; set; }
+        public int baseDataId { get; set; }
     }
 }

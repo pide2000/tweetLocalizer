@@ -7,12 +7,13 @@ using tweetLocalizerApp.Libs.Locator;
 
 namespace tweetLocalizerApp.TweetLocator
 {
-    class DeleteSigns : PreprocessorAbstract<string>
+    public class DeleteSigns : PreprocessorAbstract<string>
     {
         public override string preprocess(string indicatorItem)
         {
             String words = System.Text.RegularExpressions.Regex.Replace(indicatorItem, @"[^\p{L}\p{N} ]", " ");
-            words = System.Text.RegularExpressions.Regex.Replace(words, @"\s+", " ");
+            words = System.Text.RegularExpressions.Regex.Replace(words, @"\s+", " ").Trim();
+            
             return words;
         }
     }

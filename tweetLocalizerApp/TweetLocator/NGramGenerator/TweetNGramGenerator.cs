@@ -46,6 +46,8 @@ namespace tweetLocalizerApp.TweetLocator
         private HashSet<Ngram> nGramize(List<Tuple<string,string>> tokenList, int ngramOrder)
         {
             HashSet<Ngram> ngramlist = new HashSet<Ngram>();
+            List<Tuple<string, string>> usedItems = new List<Tuple<string, string>>();
+
             string ngramString = "";
 
             HashSet<string> itemTypes = new HashSet<string>();
@@ -71,7 +73,7 @@ namespace tweetLocalizerApp.TweetLocator
                     
                 }
             }
-            ngramlist.Add(new Ngram(ngramString, 0, itemTypes.ToList()));
+            ngramlist.Add(new Ngram(ngramString, 0, itemTypes.ToList(),tokenList));
 
             itemTypes.Clear();
 
@@ -88,28 +90,31 @@ namespace tweetLocalizerApp.TweetLocator
                     itemTypes.Clear();
                     ngramString = "";
                     firstElement = true;
+                    usedItems.Clear();
                     //get all tokens
                     for (int currentToken = startingPoint; currentToken - startingPoint < order; currentToken++)
                     {
                         if (firstElement)
                         {
                             itemTypes.Add(tokenList[currentToken].Item1);
+                            usedItems.Add(tokenList[currentToken]);
                             ngramString = ngramString + tokenList[currentToken].Item2;
                             firstElement = false;
                         }else
                         {
                             if (itemTypes.Contains(tokenList[currentToken].Item1))
                             {
+                                usedItems.Add(tokenList[currentToken]);
                                 ngramString = ngramString + "." + tokenList[currentToken].Item2;
-
                             }
                             else {
                                 itemTypes.Add(tokenList[currentToken].Item1);
+                                usedItems.Add(tokenList[currentToken]);
                                 ngramString = ngramString + ";" + tokenList[currentToken].Item2;
                             }
                         }
                     }
-                    ngramlist.Add(new Ngram(ngramString, order, itemTypes.ToList()));
+                    ngramlist.Add(new Ngram(ngramString, order, itemTypes.ToList(),usedItems));
                 }
             }
             return ngramlist;
@@ -168,19 +173,18 @@ namespace tweetLocalizerApp.TweetLocator
         {
             List<string> concatenated = new List<string>();
             List<Ngram> ngrams = new List<Ngram>();
-            List<Tuple<string, List<string>>> workingList = new List<Tuple<string, List<string>>>();
-            //sort the indictortypes 
-            workingList = sorter.sortEncodedIndicatorTokens(indicatorTokenList);
+            List<Tuple<string, List<string>>> sortedList = new List<Tuple<string, List<string>>>();
+            List<Tuple<string, string>> concatenatedList = new List<Tuple<string, string>>();
 
-            List<Tuple<string, string>> testliste = new List<Tuple<string, string>>();
+            sortedList = sorter.sortEncodedIndicatorTokens(indicatorTokenList);
 
-            testliste = concatListsWithType(workingList);
+            concatenatedList = concatListsWithType(sortedList);
 
-            foreach (Tuple<string,string> tup in testliste) {
-                System.Console.WriteLine(tup.Item1 + " " + tup.Item2);
-            }
+            //foreach (Tuple<string,string> tup in testliste) {
+            //    System.Console.WriteLine(tup.Item1 + " " + tup.Item2);
+            //}
 
-            ngrams = nGramize(testliste, nGramOrder).ToList();
+            ngrams = nGramize(concatenatedList, nGramOrder).ToList();
 
             return ngrams;
 

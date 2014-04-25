@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using tweetLocalizerApp.Libs.Locator;
 using tweetLocalizerApp.TweetLocator;
 using tweetLocalizerApp.Libs;
+using System.Diagnostics;
 
 
 namespace tweetLocalizerApp.TweetLocator
@@ -18,7 +19,9 @@ namespace tweetLocalizerApp.TweetLocator
         TimezoneTokenGenerator<string> timezoneTokenGenerator = new TimezoneTokenGenerator<string>();
         TweetNGramGenerator ngramGenerator = new TweetNGramGenerator();
         TweetGeoCoder geoCoder = new TweetGeoCoder();
-        
+        GeonamesDataEntities geonamesDB = new GeonamesDataEntities();
+        public StatisticsData statistics = new StatisticsData();
+
         public TweetLoc() {
 
             //instantiate Preprocessors, tokenizer, encoder, orderer
@@ -29,6 +32,7 @@ namespace tweetLocalizerApp.TweetLocator
             Standardtokenizer tokenizer = new Standardtokenizer();
             StandardEncoder encoder = new StandardEncoder();
             tokenizer.seperator = ':';
+
             // Add the Preprocessors to the List, the preprocessors will be executed in this order. 
             List<IPreprocessor<string>> userlocationPreprocessorList = new List<IPreprocessor<string>>();
             userlocationPreprocessorList.Add(delSigns);
@@ -41,15 +45,58 @@ namespace tweetLocalizerApp.TweetLocator
             //configure Timezone Token Generator
             timezoneTokenGenerator.configure(userlocationPreprocessorList, tokenizer, encoder, orderAlphanumeric);
 
+            //A first query to speed up the DB querying process. On the first query, EF sends some meta data to sql server this drops performance significantly.   
+            geonamesDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+            var nearestCity = (from geoNamesEntry in geonamesDB.countryCodes
+                               select geoNamesEntry).Take(1);
+            
+
         }
+
+        /**
+         * Flow:
+         * 1. Create Working Objects
+         * 2. 
+         **/
+
+        private void saveToDatabase(TweetKnowledgeObj tweetknowledge) {
+
+
+
+            KnowledgeBase knowBase = new KnowledgeBase(){
+                NGram = tweetknowledge.nGrams[0].nGram,
+                NGramCount = 1,
+                GeoNamesId = (int)tweetknowledge.geoEntityId,
+                CountryId = tweetknowledge.countryId,
+                Admin1Id = tweetknowledge.admin1Id,
+                Admin2Id = tweetknowledge.admin2Id,
+                Admin3Id = tweetknowledge.admin3Id,
+                Admin4Id = tweetknowledge.admin4Id,
+                
+                
+        };
+
+            knowledgeObjects knowledgeDB = new knowledgeObjects();
+            knowledgeDB.KnowledgeBase.Add(knowBase);
+            knowledgeDB.SaveChanges();
+            }    
+
+
+        
 
         public void learn(TweetInformation tweet)
         {
             //create working and Result Objects
             TweetKnowledgeObj tweetKnowledge = new TweetKnowledgeObj();
+            GeographyData geogData = new GeographyData();
+            //add Data to work with
             tweetKnowledge.userlocation = tweet.userlocation;
             tweetKnowledge.timezone = tweet.timezone;
+            tweetKnowledge.baseDataId = tweet.baseDataId;
+            tweetKnowledge.longitude = tweet.longitude;
+            tweetKnowledge.latitude = tweet.latitude;
 
+            //create new Indicators with Information about the Type
             tweetKnowledge.userlocationIndicator = new UserlocationIndicator<string>("USERLOCATION",tweetKnowledge.userlocation);
             tweetKnowledge.timezoneIndicator = new TimezoneIndicator<string>("TIMEZONE",tweetKnowledge.timezone);
 
@@ -57,28 +104,35 @@ namespace tweetLocalizerApp.TweetLocator
             userlocationTokenGenerator.assemblyToken(tweetKnowledge.userlocationIndicator);
             timezoneTokenGenerator.assemblyToken(tweetKnowledge.timezoneIndicator);
 
-
-            
-
-            // todo: 
-            // Set Informations of the Tweet. baseDataId, lon, lat, 
-            // tweetKnowledge.baseDataId = tweet.
-
-            //set tokens in knwoledge object
-            // todo: make it a little more beautiful, hide this in the knwoledge Objetc..... somehow
+            // set tokens in knowledge object
+            // todo: make it a little more beautiful, hide this in the knwoledge Object..... somehow
             tweetKnowledge.indicatorTokens.Add(tweetKnowledge.userlocationIndicator.indicatorType, tweetKnowledge.userlocationIndicator.finalIndicatorTokens);
             tweetKnowledge.indicatorTokens.Add(tweetKnowledge.timezoneIndicator.indicatorType, tweetKnowledge.timezoneIndicator.finalIndicatorTokens);
 
-            tweetKnowledge.nGrams= ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens,3);
+            //create nGrams
+            tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens,3);
 
-            foreach (Ngram oj in tweetKnowledge.nGrams) {
-                System.Console.WriteLine("-------------------");
-                System.Console.WriteLine(oj.nGram );
-                foreach (string type in oj.indicatorTypes) {
-                    System.Console.WriteLine(type);
-                }
-            }
 
+            
+
+            List<int> geonamesIds = new List<int>();
+
+            
+            geonamesIds = geoCoder.locateGeonames(tweetKnowledge.longitude, tweetKnowledge.latitude, geonamesDB, geogData);
+            
+
+            tweetKnowledge.geoEntityId = geonamesIds[0];
+            tweetKnowledge.countryId = geonamesIds[1];
+            tweetKnowledge.admin1Id = geonamesIds[2];
+            tweetKnowledge.admin2Id = geonamesIds[3];
+            tweetKnowledge.admin3Id = null;
+            tweetKnowledge.admin4Id = null;
+
+            statistics.addDistances((double)geogData.distance);
+            statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
+
+            saveToDatabase(tweetKnowledge);
+            
         }
 
         public void locate(TweetInformation tweet)

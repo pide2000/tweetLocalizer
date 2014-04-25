@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7226e98e8a81400e8decc9594a8e3d16" Name="Diagram1" ZoomLevel="86">
+        <EntityTypeShape EntityType="KnowledgeBaseDataModel.Coordinates" Width="1.5" PointX="0.5" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="KnowledgeBaseDataModel.KnowledgeBase" Width="1.5" PointX="2.875" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="KnowledgeBaseDataModel.NGramItems" Width="1.5" PointX="2.875" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="KnowledgeBaseDataModel.NGramItemTypes" Width="1.5" PointX="5.625" PointY="1.625" IsExpanded="true" />
+        <AssociationConnector Association="KnowledgeBaseDataModel.FK__Coordinat__Knowl__1C30D14D" ManuallyRouted="false" />
+        <AssociationConnector Association="KnowledgeBaseDataModel.FK__NGramItem__NGram__3C9DA0DF" ManuallyRouted="false" />
+        <AssociationConnector Association="KnowledgeBaseDataModel.NGramItemsInNGram" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="KnowledgeBaseDataModel.BaseData" Width="1.5" PointX="0.75" PointY="8.625" />
+        <AssociationConnector Association="KnowledgeBaseDataModel.FK__Knowledge__Paren__12725CE9" />
+        <AssociationConnector Association="KnowledgeBaseDataModel.BaseDataToKnowledgeBase" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

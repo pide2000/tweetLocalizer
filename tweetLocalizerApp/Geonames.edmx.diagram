@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ac79514b238948119e0c8ad4d2aeabb3" Name="Diagram1" ZoomLevel="73">
+        <EntityTypeShape EntityType="GeonamesDataModel.alternateNames3" Width="1.5" PointX="5.25" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.cities1000" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.cities15000" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.cities5000" Width="1.5" PointX="3" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.countryCodes" Width="1.5" PointX="5.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.countryinfo" Width="1.5" PointX="5.25" PointY="23.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.GeoNames" Width="1.5" PointX="2.625" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GeonamesDataModel.timeZones" Width="1.5" PointX="0.75" PointY="14.875" IsExpanded="true" />
+        <AssociationConnector Association="GeonamesDataModel.FK__alternate__geoNa__1234" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__cities100__timez__54752A70" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__cities150__timez__5198BDC5" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__cities500__timez__4EBC511A" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__countryin__geona__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__GeoNames__timezo__239E4DCF" ManuallyRouted="false" />
+        <AssociationConnector Association="GeonamesDataModel.FK__cities100__count__051861CB" />
+        <AssociationConnector Association="GeonamesDataModel.FK__cities150__count__08E8F2AF" />
+        <AssociationConnector Association="GeonamesDataModel.FK__cities500__count__07F4CE76" />
+        <AssociationConnector Association="GeonamesDataModel.FK__GeoNames__countr__09DD16E8" />
+        <EntityTypeShape EntityType="GeonamesDataModel.admin1Codes" Width="1.5" PointX="4.875" PointY="32.875" />
+        <EntityTypeShape EntityType="GeonamesDataModel.admin2Codes" Width="1.5" PointX="4.875" PointY="30.125" />
+        <AssociationConnector Association="GeonamesDataModel.FK__admin1codes__geonames" />
+        <AssociationConnector Association="GeonamesDataModel.FK__admin2codes__geonames" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
