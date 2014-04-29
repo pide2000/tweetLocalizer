@@ -53,8 +53,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Item" Type="nvarchar" MaxLength="448" Nullable="false" />
-          <Property Name="NGramItemTypesId" Type="int" Nullable="false" />
+          <Property Name="Item" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="NGramItemType" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ItemCounter" Type="int" />
         </EntityType>
         <EntityType Name="NGramItemsInNGram">
@@ -64,13 +64,6 @@
           </Key>
           <Property Name="KnowledgeBaseId" Type="int" Nullable="false" />
           <Property Name="NGramItemsId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="NGramItemTypes">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ItemType" Type="nvarchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <Association Name="FK__BaseDataT__BaseD__191F5A78">
           <End Role="BaseData" Type="Self.BaseData" Multiplicity="1" />
@@ -84,7 +77,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__BaseDataT__Knowl__1A137EB1">
+        <Association Name="FK__BaseDataT__Knowl__154EC994">
           <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="1" />
           <End Role="BaseDataToKnowledgeBase" Type="Self.BaseDataToKnowledgeBase" Multiplicity="*" />
           <ReferentialConstraint>
@@ -144,15 +137,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NGramItem__NGram__3C9DA0DF">
-          <End Role="NGramItemTypes" Type="Self.NGramItemTypes" Multiplicity="1" />
-          <End Role="NGramItems" Type="Self.NGramItems" Multiplicity="*" />
+        <Association Name="FK_BaseDataToKnowledgeBase_BaseDataToKnowledgeBase">
+          <End Role="BaseDataToKnowledgeBase" Type="Self.BaseDataToKnowledgeBase" Multiplicity="1" />
+          <End Role="BaseDataToKnowledgeBase1" Type="Self.BaseDataToKnowledgeBase" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="NGramItemTypes">
-              <PropertyRef Name="Id" />
+            <Principal Role="BaseDataToKnowledgeBase">
+              <PropertyRef Name="KnowledgeBaseId" />
+              <PropertyRef Name="BaseDataId" />
             </Principal>
-            <Dependent Role="NGramItems">
-              <PropertyRef Name="NGramItemTypesId" />
+            <Dependent Role="BaseDataToKnowledgeBase1">
+              <PropertyRef Name="KnowledgeBaseId" />
+              <PropertyRef Name="BaseDataId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -163,12 +158,11 @@
           <EntitySet Name="KnowledgeBase" EntityType="Self.KnowledgeBase" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="NGramItems" EntityType="Self.NGramItems" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="NGramItemsInNGram" EntityType="Self.NGramItemsInNGram" Schema="knowledgeObjects" store:Type="Tables" />
-          <EntitySet Name="NGramItemTypes" EntityType="Self.NGramItemTypes" Schema="knowledgeObjects" store:Type="Tables" />
           <AssociationSet Name="FK__BaseDataT__BaseD__191F5A78" Association="Self.FK__BaseDataT__BaseD__191F5A78">
             <End Role="BaseData" EntitySet="BaseData" />
             <End Role="BaseDataToKnowledgeBase" EntitySet="BaseDataToKnowledgeBase" />
           </AssociationSet>
-          <AssociationSet Name="FK__BaseDataT__Knowl__1A137EB1" Association="Self.FK__BaseDataT__Knowl__1A137EB1">
+          <AssociationSet Name="FK__BaseDataT__Knowl__154EC994" Association="Self.FK__BaseDataT__Knowl__154EC994">
             <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
             <End Role="BaseDataToKnowledgeBase" EntitySet="BaseDataToKnowledgeBase" />
           </AssociationSet>
@@ -188,9 +182,9 @@
             <End Role="NGramItems" EntitySet="NGramItems" />
             <End Role="NGramItemsInNGram" EntitySet="NGramItemsInNGram" />
           </AssociationSet>
-          <AssociationSet Name="FK__NGramItem__NGram__3C9DA0DF" Association="Self.FK__NGramItem__NGram__3C9DA0DF">
-            <End Role="NGramItemTypes" EntitySet="NGramItemTypes" />
-            <End Role="NGramItems" EntitySet="NGramItems" />
+          <AssociationSet Name="FK_BaseDataToKnowledgeBase_BaseDataToKnowledgeBase" Association="Self.FK_BaseDataToKnowledgeBase_BaseDataToKnowledgeBase">
+            <End Role="BaseDataToKnowledgeBase" EntitySet="BaseDataToKnowledgeBase" />
+            <End Role="BaseDataToKnowledgeBase1" EntitySet="BaseDataToKnowledgeBase" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -234,19 +228,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Item" Type="String" MaxLength="448" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NGramItemTypesId" Type="Int32" Nullable="false" />
+          <Property Name="Item" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ItemCounter" Type="Int32" />
-          <NavigationProperty Name="NGramItemTypes" Relationship="Self.FK__NGramItem__NGram__3C9DA0DF" FromRole="NGramItems" ToRole="NGramItemTypes" />
           <NavigationProperty Name="KnowledgeBase" Relationship="Self.NGramItemsInNGram" FromRole="NGramItems" ToRole="KnowledgeBase" />
-        </EntityType>
-        <EntityType Name="NGramItemTypes">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemType" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="NGramItems" Relationship="Self.FK__NGramItem__NGram__3C9DA0DF" FromRole="NGramItemTypes" ToRole="NGramItems" />
+          <Property Name="NGramItemType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK__Coordinat__Knowl__1C30D14D">
           <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="1" />
@@ -260,18 +245,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NGramItem__NGram__3C9DA0DF">
-          <End Role="NGramItemTypes" Type="Self.NGramItemTypes" Multiplicity="1" />
-          <End Role="NGramItems" Type="Self.NGramItems" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NGramItemTypes">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="NGramItems">
-              <PropertyRef Name="NGramItemTypesId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="NGramItemsInNGram">
           <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="*" />
           <End Role="NGramItems" Type="Self.NGramItems" Multiplicity="*" />
@@ -280,14 +253,9 @@
           <EntitySet Name="Coordinates" EntityType="Self.Coordinates" />
           <EntitySet Name="KnowledgeBase" EntityType="Self.KnowledgeBase" />
           <EntitySet Name="NGramItems" EntityType="Self.NGramItems" />
-          <EntitySet Name="NGramItemTypes" EntityType="Self.NGramItemTypes" />
           <AssociationSet Name="FK__Coordinat__Knowl__1C30D14D" Association="Self.FK__Coordinat__Knowl__1C30D14D">
             <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
             <End Role="Coordinates" EntitySet="Coordinates" />
-          </AssociationSet>
-          <AssociationSet Name="FK__NGramItem__NGram__3C9DA0DF" Association="Self.FK__NGramItem__NGram__3C9DA0DF">
-            <End Role="NGramItemTypes" EntitySet="NGramItemTypes" />
-            <End Role="NGramItems" EntitySet="NGramItems" />
           </AssociationSet>
           <AssociationSet Name="NGramItemsInNGram" Association="Self.NGramItemsInNGram">
             <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
@@ -366,18 +334,10 @@
           <EntitySetMapping Name="NGramItems">
             <EntityTypeMapping TypeName="KnowledgeBaseDataModel.NGramItems">
               <MappingFragment StoreEntitySet="NGramItems">
+                <ScalarProperty Name="NGramItemType" ColumnName="NGramItemType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Item" ColumnName="Item" />
-                <ScalarProperty Name="NGramItemTypesId" ColumnName="NGramItemTypesId" />
                 <ScalarProperty Name="ItemCounter" ColumnName="ItemCounter" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NGramItemTypes">
-            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.NGramItemTypes">
-              <MappingFragment StoreEntitySet="NGramItemTypes">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

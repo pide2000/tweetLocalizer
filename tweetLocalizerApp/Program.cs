@@ -20,20 +20,43 @@ namespace tweetLocalizerApp
 
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
                 var tweetsCollection = (from tweets in tweetDB.tweetRandomSample2
-                                        select tweets).Take(500).ToList();
+                                        select tweets).Take(1000).ToList();
 
-               
+                Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
                 TweetLoc tl = new TweetLoc();
+                TimeSpan timespan = new TimeSpan();
+                TimeSpan actualTime = new TimeSpan();
+                int i = 0;
                 foreach (var item in tweetsCollection)
                 {
+                    i++;
+                    stopwatch.Start();
+                    ti = new TweetInformation();
                     ti.userlocation = item.userlocation;
                     ti.timezone = item.timezone;
                     ti.longitude = item.lon;
                     ti.latitude = item.lat;
                     ti.baseDataId = item.id;
                     tl.learn(ti);
+                    stopwatch.Stop();
+                    actualTime += stopwatch.Elapsed;
+                    timespan += stopwatch.Elapsed;
+                    stopwatch.Reset();
+                    if (i % 10 == 0) {
+                        System.Console.WriteLine();
+                        System.Console.WriteLine("Tweets: {0} Total time {1} avg overall {2} avg last 10 {3}",i,timespan.TotalSeconds,timespan.TotalSeconds / i,actualTime.TotalSeconds / 10);
+                        actualTime = TimeSpan.Zero;
+                    }
                 }
+
+                //ti = new TweetInformation();
+                //ti.userlocation = "a a a b b b c";
+                //ti.timezone = "zeitzone";
+                //ti.longitude = -3.79908776283268;
+                //ti.latitude = 43.4694290161133;
+                //ti.baseDataId = 12;
+                //tl.learn(ti);
 
                 System.Console.WriteLine("Median " + tl.statistics.getMedianOfDistances());
                 System.Console.WriteLine("Average " + tl.statistics.getAverageDistance());

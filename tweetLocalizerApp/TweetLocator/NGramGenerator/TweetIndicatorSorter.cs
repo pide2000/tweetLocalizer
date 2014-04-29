@@ -13,7 +13,7 @@ namespace tweetLocalizerApp.TweetLocator
         public List<Tuple<string, List<string>>> sortEncodedIndicatorTokens(Dictionary<string, List<string>> locationIndicator)
         {
             List<Tuple<string, List<string>>> sortedList = new List<Tuple<string, List<string>>>();
-            sortedList.Add(Tuple.Create("USRELOCATION",locationIndicator["USERLOCATION"]));
+            sortedList.Add(Tuple.Create("USERLOCATION",locationIndicator["USERLOCATION"]));
             sortedList.Add(Tuple.Create("TIMEZONE", locationIndicator["TIMEZONE"]));
             return sortedList;
 

@@ -28,7 +28,6 @@ namespace tweetLocalizerApp
         public virtual DbSet<Coordinates> Coordinates { get; set; }
         public virtual DbSet<KnowledgeBase> KnowledgeBase { get; set; }
         public virtual DbSet<NGramItems> NGramItems { get; set; }
-        public virtual DbSet<NGramItemTypes> NGramItemTypes { get; set; }
         public virtual DbSet<BaseData> BaseData { get; set; }
     }
 }

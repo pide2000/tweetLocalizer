@@ -8,9 +8,7 @@
         <EntityTypeShape EntityType="KnowledgeBaseDataModel.Coordinates" Width="1.5" PointX="0.5" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="KnowledgeBaseDataModel.KnowledgeBase" Width="1.5" PointX="2.875" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="KnowledgeBaseDataModel.NGramItems" Width="1.5" PointX="2.875" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="KnowledgeBaseDataModel.NGramItemTypes" Width="1.5" PointX="5.625" PointY="1.625" IsExpanded="true" />
         <AssociationConnector Association="KnowledgeBaseDataModel.FK__Coordinat__Knowl__1C30D14D" ManuallyRouted="false" />
-        <AssociationConnector Association="KnowledgeBaseDataModel.FK__NGramItem__NGram__3C9DA0DF" ManuallyRouted="false" />
         <AssociationConnector Association="KnowledgeBaseDataModel.NGramItemsInNGram" ManuallyRouted="false" />
         <EntityTypeShape EntityType="KnowledgeBaseDataModel.BaseData" Width="1.5" PointX="0.75" PointY="8.625" />
         <AssociationConnector Association="KnowledgeBaseDataModel.FK__Knowledge__Paren__12725CE9" />

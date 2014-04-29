@@ -21,10 +21,9 @@ namespace tweetLocalizerApp
     
         public int Id { get; set; }
         public string Item { get; set; }
-        public int NGramItemTypesId { get; set; }
         public Nullable<int> ItemCounter { get; set; }
+        public string NGramItemType { get; set; }
     
-        public virtual NGramItemTypes NGramItemTypes { get; set; }
         public virtual ICollection<KnowledgeBase> KnowledgeBase { get; set; }
     }
 }

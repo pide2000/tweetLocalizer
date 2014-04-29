@@ -7,6 +7,10 @@ using tweetLocalizerApp.Libs.Locator;
 using tweetLocalizerApp.TweetLocator;
 using tweetLocalizerApp.Libs;
 using System.Diagnostics;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Data.Entity.Infrastructure;
+using LinqToTwitter;
 
 
 namespace tweetLocalizerApp.TweetLocator
@@ -20,7 +24,14 @@ namespace tweetLocalizerApp.TweetLocator
         TweetNGramGenerator ngramGenerator = new TweetNGramGenerator();
         TweetGeoCoder geoCoder = new TweetGeoCoder();
         GeonamesDataEntities geonamesDB = new GeonamesDataEntities();
+        knowledgeObjects knowledgeDB = new knowledgeObjects();
         public StatisticsData statistics = new StatisticsData();
+        //a combination of the idetifiying properties ngram and geoentityId
+        public Dictionary<string, HashSet<int>> knowledgeBaseIdentifierList = new Dictionary<string, HashSet<int>>();
+        //a combination of the identifying properties ngramItem and ngramType
+        public HashSet<Tuple<string, string>> nGramItemIdentifierList = new HashSet<Tuple<string, string>>();
+        Stopwatch globalstopwatch = new Stopwatch();
+
 
         public TweetLoc() {
 
@@ -45,13 +56,109 @@ namespace tweetLocalizerApp.TweetLocator
             //configure Timezone Token Generator
             timezoneTokenGenerator.configure(userlocationPreprocessorList, tokenizer, encoder, orderAlphanumeric);
 
-            //A first query to speed up the DB querying process. On the first query, EF sends some meta data to sql server this drops performance significantly.   
-            geonamesDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
-            var nearestCity = (from geoNamesEntry in geonamesDB.countryCodes
-                               select geoNamesEntry).Take(1);
+
+            //Getting all knowledge Entries in the Database. This is for Performance boost because EF6 is very slow
+            globalWatchStartStop();
+            var nGramItemsEntriesList = (from nGramItemEntry in knowledgeDB.NGramItems
+                                 select new
+                                 {
+                                     nGramItemEntry.Id,
+                                     nGramItemEntry.Item,
+                                     nGramItemEntry.NGramItemType
+                                 }).ToList();
+
+            nGramItemsEntriesList.ForEach(c => nGramItemIdentifierList.Add(Tuple.Create(c.Item, c.NGramItemType)));
+            
+            var knowledgeBaseEntriesList = (from knowledgeEntry in knowledgeDB.KnowledgeBase
+                               select new { 
+                                    knowledgeEntry.Id,
+                                    knowledgeEntry.NGram,
+                                    knowledgeEntry.GeoNamesId
+                               }).ToList();
+
+            foreach (var item in knowledgeBaseEntriesList)
+            {
+                HashSet<int> tempGeoNameList;
+                if (knowledgeBaseIdentifierList.TryGetValue(item.NGram, out tempGeoNameList))
+                {
+                    //eventually throw exception if the elemnt is present
+                    tempGeoNameList.Add(item.GeoNamesId);
+                    knowledgeBaseIdentifierList[item.NGram] = tempGeoNameList;
+                }
+                else {
+                    tempGeoNameList = new HashSet<int>();
+                    tempGeoNameList.Add(item.GeoNamesId);
+                    knowledgeBaseIdentifierList.Add(item.NGram,tempGeoNameList);
+                }
+
+            }
+            globalWatchStartStop("Get Lists " );
             
 
+            //Database Configurations (for Performance)
+            
+                //geonamesDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+                knowledgeDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+                knowledgeDB.Configuration.AutoDetectChangesEnabled = false;
+                knowledgeDB.Configuration.ValidateOnSaveEnabled = false;
+
+            //setting up twitter to tweet status
+            PinAuthorizer tw = twitter();
+
         }
+
+        public void globalWatchStartStop(string message = ""){
+            if (globalstopwatch.IsRunning)
+            {
+                globalstopwatch.Stop();
+                System.Console.WriteLine(message + globalstopwatch.Elapsed);
+                globalstopwatch.Reset();
+            }
+            else
+            {
+                globalstopwatch.Start();
+            }
+            
+        }
+
+        private static PinAuthorizer twitter()
+        {
+            var auth = new PinAuthorizer()
+            {
+
+                CredentialStore = new InMemoryCredentialStore
+                {
+                    ConsumerKey = "Ssa9qRLFOUS8SdaD1TE0w",
+                    ConsumerSecret = "sUcQ8oB7QJmXITjo8PGihGDxSbHrzCxmTs6BjVxlDo",
+                    OAuthToken = "92306096-X3nzRe89yM1zvjX5nqsENEkmKViHqoxequa8ysRAw",
+                    OAuthTokenSecret = "kYV8ZE3Px3PjeeOEjvo9VQZk37TktLXYM1UUJQCrta0yY"
+                }
+                //GoToTwitterAuthorization = pageLink => Process.Start(pageLink),
+                //GetPin = () =>
+                //{
+                //    Console.WriteLine(
+                //        "\nAfter authorizing this application, Twitter " +
+                //        "will give you a 7-digit PIN Number.\n");
+                //    Console.Write("Enter the PIN number here: ");
+                //    return Console.ReadLine();
+                //}
+            };
+
+            auth.AuthorizeAsync();
+
+            return auth;
+        }
+
+        private static void statusUpdate(String tweetText, PinAuthorizer auth)
+        {
+            using (var twitter = new TwitterContext(auth))
+            {
+                var tweet = twitter.TweetAsync(tweetText);
+            }
+
+
+        } 
+
 
         /**
          * Flow:
@@ -60,26 +167,115 @@ namespace tweetLocalizerApp.TweetLocator
          **/
 
         private void saveToDatabase(TweetKnowledgeObj tweetknowledge) {
+            List<KnowledgeBase> knowledgeBaseList = new List<KnowledgeBase>();
+            List<NGramItems> ngramItemsList = new List<NGramItems>();
 
-
-
-            KnowledgeBase knowBase = new KnowledgeBase(){
-                NGram = tweetknowledge.nGrams[0].nGram,
-                NGramCount = 1,
-                GeoNamesId = (int)tweetknowledge.geoEntityId,
-                CountryId = tweetknowledge.countryId,
-                Admin1Id = tweetknowledge.admin1Id,
-                Admin2Id = tweetknowledge.admin2Id,
-                Admin3Id = tweetknowledge.admin3Id,
-                Admin4Id = tweetknowledge.admin4Id,
+            //create NgramItemsList
+            foreach (var ngram in tweetknowledge.nGrams)
+            {
+                
+                HashSet<int> tempGeoIdknowledgeIdList = new HashSet<int>();
+                if (knowledgeBaseIdentifierList.TryGetValue(ngram.nGram,out tempGeoIdknowledgeIdList)&&tempGeoIdknowledgeIdList.Contains((int)tweetknowledge.geoEntityId))
+                {
+                   updateKnowledgeBase(ngram.nGram, (int)tweetknowledge.geoEntityId);
+                   
+                }
+                   
+                else
+                {
+                    
+                    List<NGramItems> items = persistNGramItems(knowledgeDB, ngram);
+                   
+                    //create the knowledgeBase Object to save
+                    
+                    KnowledgeBase knowBase = new KnowledgeBase()
+                    {
+                        NGram = ngram.nGram,
+                        NGramCount = 1,
+                        GeoNamesId = (int)tweetknowledge.geoEntityId,
+                        CountryId = tweetknowledge.countryId,
+                        Admin1Id = tweetknowledge.admin1Id,
+                        Admin2Id = tweetknowledge.admin2Id,
+                        Admin3Id = tweetknowledge.admin3Id,
+                        Admin4Id = tweetknowledge.admin4Id,
+                        NGramItems = items
+                    };
+                    
+                    if (knowledgeBaseIdentifierList.TryGetValue(ngram.nGram, out tempGeoIdknowledgeIdList))
+                    {
+                        tempGeoIdknowledgeIdList.Add((int)tweetknowledge.geoEntityId);
+                        knowledgeBaseIdentifierList[ngram.nGram] = tempGeoIdknowledgeIdList;
+                        
+                    }
+                    else {
+                        knowledgeBaseIdentifierList.Add(ngram.nGram,new HashSet<int>{(int)tweetknowledge.geoEntityId});
+                        
+                    }
+                    knowledgeDB.KnowledgeBase.Add(knowBase);
+                }
                 
                 
-        };
+                try
+                {
+                    knowledgeDB.SaveChanges();
+                }
+                catch (Exception ex)
+                {
 
-            knowledgeObjects knowledgeDB = new knowledgeObjects();
-            knowledgeDB.KnowledgeBase.Add(knowBase);
-            knowledgeDB.SaveChanges();
-            }    
+                    System.Console.WriteLine(ex.Message);
+                    if(ex.InnerException != null){
+                        System.Console.WriteLine(ex.InnerException.Message);
+                    }
+
+                    throw;
+                }
+
+            }
+            
+            }
+
+        private void updateKnowledgeBase(string ngram,int geoentityId)
+        {
+            
+            var knowledgeBaseEntry = knowledgeDB.KnowledgeBase.SingleOrDefault(c => c.NGram.Equals(ngram)&&c.GeoNamesId == geoentityId);
+            
+            knowledgeBaseEntry.NGramCount += 1;
+            
+            knowledgeDB.KnowledgeBase.Attach(knowledgeBaseEntry);
+            knowledgeDB.Entry(knowledgeBaseEntry).State = System.Data.Entity.EntityState.Modified;
+           
+        }
+
+        private List<NGramItems> persistNGramItems(knowledgeObjects knowledgeDB, Ngram ngram)
+        {
+            List<NGramItems> items = new List<NGramItems>();
+
+            foreach (var indicatortoken in ngram.nGramItems)
+            {
+                
+                //check if it is already in the DB
+                if (nGramItemIdentifierList.Contains(Tuple.Create(indicatortoken.Item2,indicatortoken.Item1)))
+                {
+                    var indicatorItem = knowledgeDB.NGramItems.SingleOrDefault(c => c.Item.Equals(indicatortoken.Item2) && c.NGramItemType.Equals(indicatortoken.Item1));
+                    items.Add(indicatorItem);
+                }
+                else
+                {
+                    NGramItems ngramItem = new NGramItems()
+                    {
+                        Item = indicatortoken.Item2,
+                        NGramItemType = indicatortoken.Item1
+                        
+                    };
+                    items.Add(ngramItem);
+                    nGramItemIdentifierList.Add(Tuple.Create(indicatortoken.Item2,indicatortoken.Item1));
+                }
+
+            }
+            
+            return items;
+        } 
+      
 
 
         
@@ -110,7 +306,7 @@ namespace tweetLocalizerApp.TweetLocator
             tweetKnowledge.indicatorTokens.Add(tweetKnowledge.timezoneIndicator.indicatorType, tweetKnowledge.timezoneIndicator.finalIndicatorTokens);
 
             //create nGrams
-            tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens,3);
+            tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens,2);
 
 
             
@@ -119,12 +315,12 @@ namespace tweetLocalizerApp.TweetLocator
 
             
             geonamesIds = geoCoder.locateGeonames(tweetKnowledge.longitude, tweetKnowledge.latitude, geonamesDB, geogData);
-            
 
-            tweetKnowledge.geoEntityId = geonamesIds[0];
-            tweetKnowledge.countryId = geonamesIds[1];
-            tweetKnowledge.admin1Id = geonamesIds[2];
-            tweetKnowledge.admin2Id = geonamesIds[3];
+
+            tweetKnowledge.geoEntityId = geogData.geonamesId;
+            tweetKnowledge.countryId = geogData.countryId;
+            tweetKnowledge.admin1Id = geogData.admin1Id;
+            tweetKnowledge.admin2Id = geogData.admin2Id;
             tweetKnowledge.admin3Id = null;
             tweetKnowledge.admin4Id = null;
 

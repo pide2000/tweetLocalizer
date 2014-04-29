@@ -54,7 +54,7 @@ namespace tweetLocalizerApp.TweetLocator
             {
                 median = (distances[(int)(distancesCount / 2)] + distances[(int)((distancesCount / 2) + 1)]) / 2;
                   }
-            else {
+            else if (distancesCount>1){
                 median = distances[(int)((distancesCount + 1) / 2)];
             }
             return median;

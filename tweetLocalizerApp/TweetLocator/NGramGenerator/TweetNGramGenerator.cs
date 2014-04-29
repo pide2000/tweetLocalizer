@@ -73,14 +73,14 @@ namespace tweetLocalizerApp.TweetLocator
                     
                 }
             }
-            ngramlist.Add(new Ngram(ngramString, 0, itemTypes.ToList(),tokenList));
+            ngramlist.Add(new Ngram(ngramString, 0, itemTypes.ToList(),tokenList.Distinct().ToList()));
 
             itemTypes.Clear();
 
             //iterate over orders to get all orders
-            if (ngramOrder > tokenList.Count)
+            if (ngramOrder >= tokenList.Count)
             {
-                ngramOrder = tokenList.Count;
+                ngramOrder = tokenList.Count-1;
             }
             for (int order = ngramOrder; order > 0; order--)
             {
@@ -90,7 +90,7 @@ namespace tweetLocalizerApp.TweetLocator
                     itemTypes.Clear();
                     ngramString = "";
                     firstElement = true;
-                    usedItems.Clear();
+                    usedItems = new List<Tuple<string, string>>();
                     //get all tokens
                     for (int currentToken = startingPoint; currentToken - startingPoint < order; currentToken++)
                     {
@@ -114,11 +114,11 @@ namespace tweetLocalizerApp.TweetLocator
                             }
                         }
                     }
+                    usedItems = usedItems.Distinct().ToList();
                     ngramlist.Add(new Ngram(ngramString, order, itemTypes.ToList(),usedItems));
                 }
             }
             return ngramlist;
-
         } 
 
 
