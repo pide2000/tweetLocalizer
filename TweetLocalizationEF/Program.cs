@@ -1419,7 +1419,7 @@ namespace TweetLocalizationEF
         static void Main(string[] args)
         {
 
-            createTokenTree();
+            //createTokenTree();
 
             //geoNamesDatabaseConnection conn = new geoNamesDatabaseConnection();
             //List<coordinates> coordList = new List<coordinates>();
@@ -1450,30 +1450,22 @@ namespace TweetLocalizationEF
             //                System.Console.WriteLine(obj.id);
             //                upd.distance_to_tweet_coord = obj.point1.Distance(obj.point2);
             //                DB.Entry(upd).Property(e => e.distance_to_tweet_coord).IsModified = true;
-
             //            }
             //        }
             //        DB.SaveChanges();
             //    }
-
             //};
 
+            geoCodingGMapseRoutine();
             
-           
-         
-            
-            
-            
-            //geoCodingGMapseRoutine();
-         
             //gmapsGeocoding(conn, uniqueLoc);
             //gmapsGeocoding(conn,uniqueLoc,2500);
 
-                /**
-                 * emergency function to reset a column to null,  
-                 * be careful and set the country field 
-                 **/
-                //setCountryFieldToNull()
+            /**
+                * emergency function to reset a column to null,  
+                * be careful and set the country field 
+                **/
+            //setCountryFieldToNull()
 
 #if DEBUG
                 System.Console.WriteLine("Press any key to quit !");
@@ -1530,12 +1522,12 @@ namespace TweetLocalizationEF
             {
                 timeStampOne = Environment.TickCount;
                 int timeStampOnePersistent = timeStampOne;
-                int i = 1547000;
-                foreach (var ttt in result.Skip(1547000))
+                int i = 0;
+                foreach (var ttt in result.Skip(0))
                 {
                     findDeepestMatchInTokenTree(ttt, DB, geoNamesId_To_geoTreeNode);
                     i++;
-                    if (i % 1000 == 0)
+                    if (i % 100000 == 0)
                     {
                         timeStampTwo = Environment.TickCount;
                         string timeOne = calculatePassedTimeAndPrint(timeStampTwo, timeStampOne);
@@ -1553,10 +1545,7 @@ namespace TweetLocalizationEF
             System.Console.WriteLine("Passed Time: " + passedTime);
             return passedTime;
         }
-
-
      
-
         private static void countSigns()
         {
             twitterStreamDatabaseConnector connection = new twitterStreamDatabaseConnector();

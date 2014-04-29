@@ -556,8 +556,6 @@ namespace TweetLocalizationEF
 
         }
 
-
-
         public List<T> executeQuery<T>(string query) {
             using (var context = new GeonamesDataEntities1())
             {
