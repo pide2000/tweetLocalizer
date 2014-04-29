@@ -28,6 +28,8 @@ namespace tweetLocalizerApp
                 TimeSpan timespan = new TimeSpan();
                 TimeSpan actualTime = new TimeSpan();
                 int i = 0;
+
+
                 foreach (var item in tweetsCollection)
                 {
                     i++;
@@ -50,6 +52,7 @@ namespace tweetLocalizerApp
                     }
                 }
 
+
                 //ti = new TweetInformation();
                 //ti.userlocation = "a a a b b b c";
                 //ti.timezone = "zeitzone";
@@ -57,6 +60,26 @@ namespace tweetLocalizerApp
                 //ti.latitude = 43.4694290161133;
                 //ti.baseDataId = 12;
                 //tl.learn(ti);
+
+                //ti = new TweetInformation();
+                //ti.userlocation = "a a a b b b c";
+                //ti.timezone = "zeitzone";
+                //ti.longitude = 107.026786804199;
+                //ti.latitude = -6.21288728713989;
+                //ti.baseDataId = 12;
+                //tl.learn(ti);
+
+                //ti = new TweetInformation();
+                //ti.userlocation = "a a a b b b c";
+                //ti.timezone = "zeitzone";
+                //ti.longitude = -3.79908776283268;
+                //ti.latitude = 43.4694290161133;
+                //ti.baseDataId = 12;
+                //tl.learn(ti);
+
+                
+
+	
 
                 System.Console.WriteLine("Median " + tl.statistics.getMedianOfDistances());
                 System.Console.WriteLine("Average " + tl.statistics.getAverageDistance());

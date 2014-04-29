@@ -31,6 +31,10 @@ namespace tweetLocalizerApp.TweetLocator
         //a combination of the identifying properties ngramItem and ngramType
         public HashSet<Tuple<string, string>> nGramItemIdentifierList = new HashSet<Tuple<string, string>>();
         Stopwatch globalstopwatch = new Stopwatch();
+        List<KnowledgeBase> knowledgeBaseList = new List<KnowledgeBase>();
+        List<NGramItems> ngramItemsList = new List<NGramItems>();
+        int learnCallCounter = new int();
+        
 
 
         public TweetLoc() {
@@ -98,9 +102,11 @@ namespace tweetLocalizerApp.TweetLocator
             //Database Configurations (for Performance)
             
                 //geonamesDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
-                knowledgeDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+                //knowledgeDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
                 knowledgeDB.Configuration.AutoDetectChangesEnabled = false;
                 knowledgeDB.Configuration.ValidateOnSaveEnabled = false;
+
+                learnCallCounter = 0;
 
             //setting up twitter to tweet status
             PinAuthorizer tw = twitter();
@@ -166,26 +172,32 @@ namespace tweetLocalizerApp.TweetLocator
          * 2. 
          **/
 
-        private void saveToDatabase(TweetKnowledgeObj tweetknowledge) {
-            List<KnowledgeBase> knowledgeBaseList = new List<KnowledgeBase>();
-            List<NGramItems> ngramItemsList = new List<NGramItems>();
+        private void saveToDatabase(TweetKnowledgeObj tweetknowledge,int bulkInsertSize) {
+            learnCallCounter++;
 
             //create NgramItemsList
             foreach (var ngram in tweetknowledge.nGrams)
             {
-                
                 HashSet<int> tempGeoIdknowledgeIdList = new HashSet<int>();
+                
                 if (knowledgeBaseIdentifierList.TryGetValue(ngram.nGram,out tempGeoIdknowledgeIdList)&&tempGeoIdknowledgeIdList.Contains((int)tweetknowledge.geoEntityId))
                 {
-                   updateKnowledgeBase(ngram.nGram, (int)tweetknowledge.geoEntityId);
-                   
-                }
-                   
-                else
+                    //check if in local list or already transferred to database
+                    KnowledgeBase tempKnowledgeBaseItem = new KnowledgeBase();
+                    tempKnowledgeBaseItem = knowledgeBaseList.Find(c => c.GeoNamesId == tweetknowledge.geoEntityId && c.NGram.Equals(ngram.nGram));
+                    if (tempKnowledgeBaseItem != null)
+                    {
+                        tempKnowledgeBaseItem.NGramCount += 1;
+                    }
+                    else
+                    {
+                        updateKnowledgeBase(ngram.nGram, (int)tweetknowledge.geoEntityId);
+                    }
+                }else
                 {
                     
-                    List<NGramItems> items = persistNGramItems(knowledgeDB, ngram);
-                   
+                    List<NGramItems> items = persistNGramItems(knowledgeDB, ngram,ngramItemsList);
+                    
                     //create the knowledgeBase Object to save
                     
                     KnowledgeBase knowBase = new KnowledgeBase()
@@ -201,6 +213,7 @@ namespace tweetLocalizerApp.TweetLocator
                         NGramItems = items
                     };
                     
+                    //just for actuality of the Identifier Lists
                     if (knowledgeBaseIdentifierList.TryGetValue(ngram.nGram, out tempGeoIdknowledgeIdList))
                     {
                         tempGeoIdknowledgeIdList.Add((int)tweetknowledge.geoEntityId);
@@ -211,10 +224,16 @@ namespace tweetLocalizerApp.TweetLocator
                         knowledgeBaseIdentifierList.Add(ngram.nGram,new HashSet<int>{(int)tweetknowledge.geoEntityId});
                         
                     }
+
+                    knowledgeBaseList.Add(knowBase);
                     knowledgeDB.KnowledgeBase.Add(knowBase);
                 }
                 
-                
+            }
+            if (learnCallCounter > bulkInsertSize)
+            {
+                globalWatchStartStop();
+                learnCallCounter = 0;
                 try
                 {
                     knowledgeDB.SaveChanges();
@@ -223,13 +242,14 @@ namespace tweetLocalizerApp.TweetLocator
                 {
 
                     System.Console.WriteLine(ex.Message);
-                    if(ex.InnerException != null){
+                    if (ex.InnerException != null)
+                    {
                         System.Console.WriteLine(ex.InnerException.Message);
                     }
 
                     throw;
                 }
-
+                globalWatchStartStop("save " );
             }
             
             }
@@ -246,18 +266,26 @@ namespace tweetLocalizerApp.TweetLocator
            
         }
 
-        private List<NGramItems> persistNGramItems(knowledgeObjects knowledgeDB, Ngram ngram)
+        private List<NGramItems> persistNGramItems(knowledgeObjects knowledgeDB, Ngram ngram, List<NGramItems> ngramItemsList)
         {
             List<NGramItems> items = new List<NGramItems>();
 
             foreach (var indicatortoken in ngram.nGramItems)
             {
                 
-                //check if it is already in the DB
+                //check if it is already in the DB or ngramItemsList
                 if (nGramItemIdentifierList.Contains(Tuple.Create(indicatortoken.Item2,indicatortoken.Item1)))
                 {
-                    var indicatorItem = knowledgeDB.NGramItems.SingleOrDefault(c => c.Item.Equals(indicatortoken.Item2) && c.NGramItemType.Equals(indicatortoken.Item1));
-                    items.Add(indicatorItem);
+                    NGramItems tempIndicatorItem = new NGramItems();
+                    if ((tempIndicatorItem = ngramItemsList.Find(c => c.Item.Equals(indicatortoken.Item2) && c.NGramItemType.Equals(indicatortoken.Item1))) != null)
+                    {
+                        items.Add(tempIndicatorItem);
+                    }
+                    else
+                    {
+                        var indicatorItem = knowledgeDB.NGramItems.SingleOrDefault(c => c.Item.Equals(indicatortoken.Item2) && c.NGramItemType.Equals(indicatortoken.Item1));
+                        items.Add(indicatorItem);
+                    }
                 }
                 else
                 {
@@ -265,10 +293,10 @@ namespace tweetLocalizerApp.TweetLocator
                     {
                         Item = indicatortoken.Item2,
                         NGramItemType = indicatortoken.Item1
-                        
                     };
                     items.Add(ngramItem);
                     nGramItemIdentifierList.Add(Tuple.Create(indicatortoken.Item2,indicatortoken.Item1));
+                    ngramItemsList.Add(ngramItem);
                 }
 
             }
@@ -308,14 +336,9 @@ namespace tweetLocalizerApp.TweetLocator
             //create nGrams
             tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens,2);
 
-
-            
-
             List<int> geonamesIds = new List<int>();
-
             
             geonamesIds = geoCoder.locateGeonames(tweetKnowledge.longitude, tweetKnowledge.latitude, geonamesDB, geogData);
-
 
             tweetKnowledge.geoEntityId = geogData.geonamesId;
             tweetKnowledge.countryId = geogData.countryId;
@@ -327,7 +350,7 @@ namespace tweetLocalizerApp.TweetLocator
             statistics.addDistances((double)geogData.distance);
             statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
 
-            saveToDatabase(tweetKnowledge);
+            saveToDatabase(tweetKnowledge,100);
             
         }
 
