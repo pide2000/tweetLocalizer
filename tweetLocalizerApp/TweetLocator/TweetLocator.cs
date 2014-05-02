@@ -57,12 +57,17 @@ namespace tweetLocalizerApp.TweetLocator
             userlocationPreprocessorList.Add(delSigns);
             userlocationPreprocessorList.Add(checkGL);
             userlocationPreprocessorList.Add(toLowerCase);
+
+            // Add the Preprocessors to the List, the preprocessors will be executed in this order. 
+            List<IPreprocessor<string>> timezonePreprocessorList = new List<IPreprocessor<string>>();
+            timezonePreprocessorList.Add(delSigns);
+            timezonePreprocessorList.Add(toLowerCase);
             
             //configure Userlocation Token Generator
             userlocationTokenGenerator.configure(userlocationPreprocessorList,tokenizer,encoder,orderAlphanumeric);
 
             //configure Timezone Token Generator
-            timezoneTokenGenerator.configure(userlocationPreprocessorList, tokenizer, encoder, orderAlphanumeric);
+            timezoneTokenGenerator.configure(timezonePreprocessorList, tokenizer, encoder, orderAlphanumeric);
 
 
             //Getting all knowledge Entries in the Database. This is for Performance boost because EF6 is very slow
@@ -190,6 +195,10 @@ namespace tweetLocalizerApp.TweetLocator
         private void saveToDatabase(TweetKnowledgeObj tweetknowledge,int bulkInsertSize) {
             learnCallCounter++;
 
+            BaseData baseDataItem = new BaseData();
+            baseDataItem = getbaseDataObject((int)tweetknowledge.baseDataId);
+            
+
             //create NgramItemsList
             foreach (var ngram in tweetknowledge.nGrams)
             {
@@ -202,15 +211,21 @@ namespace tweetLocalizerApp.TweetLocator
                      * todo: there has to be one more case checked. ngram: "a;b ...... a;b" => bigram : a;b,..... a;b and first a is e.g userlocation whereas 2nd a is timezone
                      * in this case the ngramitems for the two bigrams arent of the same type. => wrong item list is the result. Really? 
                     **/
-                    updateKnowledgeBaseEntry(tweetknowledge, ngram);
+                    updateKnowledgeBaseEntry(tweetknowledge, ngram,baseDataItem);
 
                 }else
                 {
                     
                     List<NGramItems> items = persistNGramItems(knowledgeDB, ngram, ngramItemsLocalList);
-                    List<BaseData> baseIds = persistBaseIds(knowledgeDB, tweetknowledge, baseDataLocalList);
+                    //in persist just check if the basedata entry is already present and add it. 
+                    //List<BaseData> baseIds = persistBaseIds(knowledgeDB, tweetknowledge, baseDataLocalList);
                     //create the knowledgeBase Object to save
+
+                    List<BaseData> baseDataIds = new List<BaseData>();
+                    baseDataIds.Add(baseDataItem);
+
                     
+
                     KnowledgeBase knowBase = new KnowledgeBase()
                     {
                         NGram = ngram.nGram,
@@ -221,7 +236,10 @@ namespace tweetLocalizerApp.TweetLocator
                         Admin2Id = tweetknowledge.admin2Id,
                         Admin3Id = tweetknowledge.admin3Id,
                         Admin4Id = tweetknowledge.admin4Id,
-                        NGramItems = items
+                        NGramItems = items,
+                        BaseData = baseDataIds
+                        
+                        
                     };
                     
                     //just for actuality of the Identifier Lists
@@ -233,8 +251,9 @@ namespace tweetLocalizerApp.TweetLocator
                     }
                     else {
                         knowledgeBaseIdentifierList.Add(ngram.nGram,new HashSet<int>{(int)tweetknowledge.geoEntityId});
-                        
                     }
+
+
 
                     knowledgeBaseLocalList.Add(knowBase);
                     knowledgeDB.KnowledgeBase.Add(knowBase);
@@ -267,34 +286,67 @@ namespace tweetLocalizerApp.TweetLocator
 
      
 
-        private void updateKnowledgeBaseEntry(TweetKnowledgeObj tweetknowledge, Ngram ngram)
+        private BaseData getbaseDataObject(int basedataId){
+
+                if (baseDataIdentifierList.Contains(basedataId))
+                {
+                    BaseData baseDataItemLocal = baseDataLocalList.Find(c => c.BaseDataId == basedataId);
+                    //basedataObject is already Present determine if it is in the local list or in the database
+                    if (baseDataItemLocal != null)
+                    {
+                        //base data object in local list
+                       return baseDataItemLocal;
+                    }
+                    else
+                    {
+                        //base data object not in local List get it from Database
+                        BaseData baseDataItemDB = new BaseData();
+                        baseDataItemDB = knowledgeDB.BaseData.FirstOrDefault(c => c.BaseDataId == basedataId);
+                        
+                        return baseDataItemDB;
+                    }
+                }
+                else
+                {
+                    BaseData tempBaseData = new BaseData() { BaseDataId = basedataId };
+                    baseDataIdentifierList.Add(basedataId);
+                    baseDataLocalList.Add(tempBaseData);
+                    return tempBaseData;
+                }
+
+        }
+
+
+        private void updateKnowledgeBaseEntry(TweetKnowledgeObj tweetknowledge, Ngram ngram,BaseData baseDataItem)
         {
             KnowledgeBase tempKnowledgeBaseItemLocal = new KnowledgeBase();
             tempKnowledgeBaseItemLocal = knowledgeBaseLocalList.Find(c => c.GeoNamesId == tweetknowledge.geoEntityId && c.NGram.Equals(ngram.nGram));
+            
 
             //check if in current iterration or already transferred to database
             if (tempKnowledgeBaseItemLocal != null)
             {
+            //is local in the List
+                
                 tempKnowledgeBaseItemLocal.NGramCount += 1;
-                //add basedataId if not already present
-                if (tempKnowledgeBaseItemLocal.BaseData.FirstOrDefault(c => c.BaseDataId == tweetknowledge.baseDataId) == null) {
-                    int basedataid = (int)tweetknowledge.baseDataId;
-                    tempKnowledgeBaseItemLocal.BaseData.Add(new BaseData() { BaseDataId = basedataid }); 
-                }
+                tempKnowledgeBaseItemLocal.BaseData.Add(baseDataItem);
+
             }
             else
             {
-                updateKnowledgeBaseEntry(ngram.nGram, (int)tweetknowledge.geoEntityId);
+            //is in database
+                updateKnowledgeBaseDBEntry(ngram.nGram, (int)tweetknowledge.geoEntityId,baseDataItem);
             }
         }
 
-        private void updateKnowledgeBaseEntry(string ngram,int geoentityId)
+        private void updateKnowledgeBaseDBEntry(string ngram,int geoentityId, BaseData baseDataItem)
         {
             
             var knowledgeBaseEntry = knowledgeDB.KnowledgeBase.SingleOrDefault(c => c.NGram.Equals(ngram)&&c.GeoNamesId == geoentityId);
             
             knowledgeBaseEntry.NGramCount += 1;
-            
+            knowledgeBaseEntry.BaseData.Add(baseDataItem);
+
             knowledgeDB.KnowledgeBase.Attach(knowledgeBaseEntry);
             knowledgeDB.Entry(knowledgeBaseEntry).State = System.Data.Entity.EntityState.Modified;
            
@@ -364,7 +416,7 @@ namespace tweetLocalizerApp.TweetLocator
             tweetKnowledge.indicatorTokens.Add(tweetKnowledge.timezoneIndicator.indicatorType, tweetKnowledge.timezoneIndicator.finalIndicatorTokens);
 
             //create nGrams
-            tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens,2);
+            tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens,3);
 
             List<int> geonamesIds = new List<int>();
             
@@ -380,7 +432,7 @@ namespace tweetLocalizerApp.TweetLocator
             statistics.addDistances((double)geogData.distance);
             statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
 
-            saveToDatabase(tweetKnowledge,100);
+            saveToDatabase(tweetKnowledge,99);
             
         }
 

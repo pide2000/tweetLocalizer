@@ -20,7 +20,7 @@ namespace tweetLocalizerApp
 
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
                 var tweetsCollection = (from tweets in tweetDB.tweetRandomSample2
-                                        select tweets).Take(1000).ToList();
+                                        select tweets).ToList();
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
