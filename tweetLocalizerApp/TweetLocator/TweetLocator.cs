@@ -126,7 +126,7 @@ namespace tweetLocalizerApp.TweetLocator
                 knowledgeDB.Configuration.ValidateOnSaveEnabled = false;
 
             
-            learnCallCounter = 0;
+            learnCallCounter = 1;
 
             //setting up twitter to tweet status
             PinAuthorizer tw = twitter();
@@ -224,8 +224,6 @@ namespace tweetLocalizerApp.TweetLocator
                     List<BaseData> baseDataIds = new List<BaseData>();
                     baseDataIds.Add(baseDataItem);
 
-                    
-
                     KnowledgeBase knowBase = new KnowledgeBase()
                     {
                         NGram = ngram.nGram,
@@ -238,7 +236,6 @@ namespace tweetLocalizerApp.TweetLocator
                         Admin4Id = tweetknowledge.admin4Id,
                         NGramItems = items,
                         BaseData = baseDataIds
-                        
                         
                     };
                     
@@ -263,10 +260,13 @@ namespace tweetLocalizerApp.TweetLocator
             if (learnCallCounter > bulkInsertSize)
             {
                 globalWatchStartStop();
-                learnCallCounter = 0;
+                learnCallCounter = 1;
                 try
                 {
                     knowledgeDB.SaveChanges();
+                    knowledgeBaseLocalList = new List<KnowledgeBase>();
+                    baseDataLocalList = new List<BaseData>();
+                    ngramItemsLocalList = new List<NGramItems>();
                 }
                 catch (Exception ex)
                 {
@@ -290,7 +290,8 @@ namespace tweetLocalizerApp.TweetLocator
 
                 if (baseDataIdentifierList.Contains(basedataId))
                 {
-                    BaseData baseDataItemLocal = baseDataLocalList.Find(c => c.BaseDataId == basedataId);
+                    BaseData baseDataItemLocal = new BaseData(); 
+                       baseDataItemLocal =  baseDataLocalList.Find(c => c.BaseDataId == basedataId);
                     //basedataObject is already Present determine if it is in the local list or in the database
                     if (baseDataItemLocal != null)
                     {
@@ -311,6 +312,8 @@ namespace tweetLocalizerApp.TweetLocator
                     BaseData tempBaseData = new BaseData() { BaseDataId = basedataId };
                     baseDataIdentifierList.Add(basedataId);
                     baseDataLocalList.Add(tempBaseData);
+                    knowledgeDB.BaseData.Add(tempBaseData);
+                    knowledgeDB.Entry(tempBaseData).State = System.Data.Entity.EntityState.Added;
                     return tempBaseData;
                 }
 
@@ -320,9 +323,12 @@ namespace tweetLocalizerApp.TweetLocator
         private void updateKnowledgeBaseEntry(TweetKnowledgeObj tweetknowledge, Ngram ngram,BaseData baseDataItem)
         {
             KnowledgeBase tempKnowledgeBaseItemLocal = new KnowledgeBase();
-            tempKnowledgeBaseItemLocal = knowledgeBaseLocalList.Find(c => c.GeoNamesId == tweetknowledge.geoEntityId && c.NGram.Equals(ngram.nGram));
-            
 
+            //important because automatic change detection is disabled
+            knowledgeDB.ChangeTracker.DetectChanges();
+            tempKnowledgeBaseItemLocal = knowledgeBaseLocalList.Find(c => c.GeoNamesId == tweetknowledge.geoEntityId && c.NGram.Equals(ngram.nGram));
+
+            
             //check if in current iterration or already transferred to database
             if (tempKnowledgeBaseItemLocal != null)
             {
@@ -330,7 +336,8 @@ namespace tweetLocalizerApp.TweetLocator
                 
                 tempKnowledgeBaseItemLocal.NGramCount += 1;
                 tempKnowledgeBaseItemLocal.BaseData.Add(baseDataItem);
-
+                
+                //todo: problem with the local list, if the changetracker is on it works. So the it has something to do with the Entity framwork,
             }
             else
             {
@@ -345,10 +352,15 @@ namespace tweetLocalizerApp.TweetLocator
             var knowledgeBaseEntry = knowledgeDB.KnowledgeBase.SingleOrDefault(c => c.NGram.Equals(ngram)&&c.GeoNamesId == geoentityId);
             
             knowledgeBaseEntry.NGramCount += 1;
-            knowledgeBaseEntry.BaseData.Add(baseDataItem);
+            
+            if(null==knowledgeBaseEntry.BaseData.SingleOrDefault(c=> c.BaseDataId == baseDataItem.BaseDataId)){
+                knowledgeBaseEntry.BaseData.Add(baseDataItem);
+                
+            }
 
             knowledgeDB.KnowledgeBase.Attach(knowledgeBaseEntry);
             knowledgeDB.Entry(knowledgeBaseEntry).State = System.Data.Entity.EntityState.Modified;
+            
            
         }
 
@@ -432,7 +444,7 @@ namespace tweetLocalizerApp.TweetLocator
             statistics.addDistances((double)geogData.distance);
             statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
 
-            saveToDatabase(tweetKnowledge,99);
+            saveToDatabase(tweetKnowledge,500);
             
         }
 

@@ -20,7 +20,7 @@ namespace tweetLocalizerApp
 
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
                 var tweetsCollection = (from tweets in tweetDB.tweetRandomSample2
-                                        select tweets).ToList();
+                                        select tweets).Take(1000).ToList();
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
@@ -32,6 +32,7 @@ namespace tweetLocalizerApp
 
                 foreach (var item in tweetsCollection)
                 {
+
                     i++;
                     stopwatch.Start();
                     ti = new TweetInformation();
@@ -54,11 +55,19 @@ namespace tweetLocalizerApp
 
 
                 //ti = new TweetInformation();
-                //ti.userlocation = "a a a b b b c";
+                //ti.userlocation = "atlantic";
                 //ti.timezone = "zeitzone";
                 //ti.longitude = -3.79908776283268;
                 //ti.latitude = 43.4694290161133;
-                //ti.baseDataId = 12;
+                //ti.baseDataId = 222;
+                //tl.learn(ti);
+
+                //ti = new TweetInformation();
+                //ti.userlocation = "atlantic";
+                //ti.timezone = "zeitzone";
+                //ti.longitude = -3.79908776283268;
+                //ti.latitude = 43.4694290161133;
+                //ti.baseDataId = 14;
                 //tl.learn(ti);
 
                 //ti = new TweetInformation();
@@ -66,16 +75,12 @@ namespace tweetLocalizerApp
                 //ti.timezone = "zeitzone";
                 //ti.longitude = 107.026786804199;
                 //ti.latitude = -6.21288728713989;
-                //ti.baseDataId = 12;
+                //ti.baseDataId = 13;
                 //tl.learn(ti);
 
-                //ti = new TweetInformation();
-                //ti.userlocation = "a a a b b b c";
-                //ti.timezone = "zeitzone";
-                //ti.longitude = -3.79908776283268;
-                //ti.latitude = 43.4694290161133;
-                //ti.baseDataId = 12;
-                //tl.learn(ti);
+                
+
+                
 
                 
 
