@@ -214,8 +214,7 @@ namespace tweetLocalizerApp.TweetLocator
                     updateKnowledgeBaseEntry(tweetknowledge, ngram,baseDataItem);
 
                 }else
-                {
-                    
+                { 
                     List<NGramItems> items = persistNGramItems(knowledgeDB, ngram, ngramItemsLocalList);
                     //in persist just check if the basedata entry is already present and add it. 
                     //List<BaseData> baseIds = persistBaseIds(knowledgeDB, tweetknowledge, baseDataLocalList);
@@ -244,7 +243,6 @@ namespace tweetLocalizerApp.TweetLocator
                     {
                         tempGeoIdknowledgeIdList.Add((int)tweetknowledge.geoEntityId);
                         knowledgeBaseIdentifierList[ngram.nGram] = tempGeoIdknowledgeIdList;
-                        
                     }
                     else {
                         knowledgeBaseIdentifierList.Add(ngram.nGram,new HashSet<int>{(int)tweetknowledge.geoEntityId});
@@ -267,7 +265,7 @@ namespace tweetLocalizerApp.TweetLocator
                     knowledgeBaseLocalList = new List<KnowledgeBase>();
                     baseDataLocalList = new List<BaseData>();
                     ngramItemsLocalList = new List<NGramItems>();
-                }
+                    }
                 catch (Exception ex)
                 {
 
@@ -444,7 +442,7 @@ namespace tweetLocalizerApp.TweetLocator
             statistics.addDistances((double)geogData.distance);
             statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
 
-            saveToDatabase(tweetKnowledge,500);
+            saveToDatabase(tweetKnowledge,1000);
             
         }
 
