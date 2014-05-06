@@ -7,9 +7,9 @@ using tweetLocalizerApp.Libs.Locator;
 using tweetLocalizerApp.TweetLocator;
 using tweetLocalizerApp.Libs;
 using System.Diagnostics;
-using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity;
 using LinqToTwitter;
 
 
@@ -24,7 +24,9 @@ namespace tweetLocalizerApp.TweetLocator
         TweetNGramGenerator ngramGenerator = new TweetNGramGenerator();
         TweetGeoCoder geoCoder = new TweetGeoCoder();
         GeonamesDataEntities geonamesDB = new GeonamesDataEntities();
+        
         knowledgeObjects knowledgeDB = new knowledgeObjects();
+        
         public StatisticsData statistics = new StatisticsData();
         //a combination of the idetifiying properties ngram and geoentityId
         public Dictionary<string, HashSet<int>> knowledgeBaseIdentifierList = new Dictionary<string, HashSet<int>>();
@@ -205,7 +207,9 @@ namespace tweetLocalizerApp.TweetLocator
                 HashSet<int> tempGeoIdknowledgeIdList = new HashSet<int>();
                 
                 //check if the combination of ngram and geoid was already tracked, either in the database or in the current iterration
-                if (knowledgeBaseIdentifierList.TryGetValue(ngram.nGram,out tempGeoIdknowledgeIdList)&&tempGeoIdknowledgeIdList.Contains((int)tweetknowledge.geoEntityId))
+                
+                bool checkforNgram = knowledgeBaseIdentifierList.TryGetValue(ngram.nGram,out tempGeoIdknowledgeIdList);
+                if (checkforNgram&&tempGeoIdknowledgeIdList.Contains((int)tweetknowledge.geoEntityId))
                 {
                     /**
                      * todo: there has to be one more case checked. ngram: "a;b ...... a;b" => bigram : a;b,..... a;b and first a is e.g userlocation whereas 2nd a is timezone
@@ -217,7 +221,6 @@ namespace tweetLocalizerApp.TweetLocator
                 { 
                     List<NGramItems> items = persistNGramItems(knowledgeDB, ngram, ngramItemsLocalList);
                     //in persist just check if the basedata entry is already present and add it. 
-                    //List<BaseData> baseIds = persistBaseIds(knowledgeDB, tweetknowledge, baseDataLocalList);
                     //create the knowledgeBase Object to save
 
                     List<BaseData> baseDataIds = new List<BaseData>();
@@ -235,11 +238,10 @@ namespace tweetLocalizerApp.TweetLocator
                         Admin4Id = tweetknowledge.admin4Id,
                         NGramItems = items,
                         BaseData = baseDataIds
-                        
                     };
                     
-                    //just for actuality of the Identifier Lists
-                    if (knowledgeBaseIdentifierList.TryGetValue(ngram.nGram, out tempGeoIdknowledgeIdList))
+                    //just for actuality of the Identifier Lists. First check if ngram is available, if so add geoid. If not add compelte knowbase
+                    if (checkforNgram)
                     {
                         tempGeoIdknowledgeIdList.Add((int)tweetknowledge.geoEntityId);
                         knowledgeBaseIdentifierList[ngram.nGram] = tempGeoIdknowledgeIdList;
@@ -247,8 +249,6 @@ namespace tweetLocalizerApp.TweetLocator
                     else {
                         knowledgeBaseIdentifierList.Add(ngram.nGram,new HashSet<int>{(int)tweetknowledge.geoEntityId});
                     }
-
-
 
                     knowledgeBaseLocalList.Add(knowBase);
                     knowledgeDB.KnowledgeBase.Add(knowBase);
@@ -265,6 +265,8 @@ namespace tweetLocalizerApp.TweetLocator
                     knowledgeBaseLocalList = new List<KnowledgeBase>();
                     baseDataLocalList = new List<BaseData>();
                     ngramItemsLocalList = new List<NGramItems>();
+                    
+                    
                     }
                 catch (Exception ex)
                 {
@@ -323,7 +325,10 @@ namespace tweetLocalizerApp.TweetLocator
             KnowledgeBase tempKnowledgeBaseItemLocal = new KnowledgeBase();
 
             //important because automatic change detection is disabled
+            
             knowledgeDB.ChangeTracker.DetectChanges();
+            
+            
             tempKnowledgeBaseItemLocal = knowledgeBaseLocalList.Find(c => c.GeoNamesId == tweetknowledge.geoEntityId && c.NGram.Equals(ngram.nGram));
 
             
@@ -334,9 +339,7 @@ namespace tweetLocalizerApp.TweetLocator
                 
                 tempKnowledgeBaseItemLocal.NGramCount += 1;
                 tempKnowledgeBaseItemLocal.BaseData.Add(baseDataItem);
-                
-                //todo: problem with the local list, if the changetracker is on it works. So the it has something to do with the Entity framwork,
-            }
+                }
             else
             {
             //is in database
@@ -349,15 +352,15 @@ namespace tweetLocalizerApp.TweetLocator
             
             var knowledgeBaseEntry = knowledgeDB.KnowledgeBase.SingleOrDefault(c => c.NGram.Equals(ngram)&&c.GeoNamesId == geoentityId);
             
-            knowledgeBaseEntry.NGramCount += 1;
             
             if(null==knowledgeBaseEntry.BaseData.SingleOrDefault(c=> c.BaseDataId == baseDataItem.BaseDataId)){
                 knowledgeBaseEntry.BaseData.Add(baseDataItem);
+                knowledgeBaseEntry.NGramCount += 1;
                 
+                knowledgeDB.Entry(knowledgeBaseEntry).State = System.Data.Entity.EntityState.Modified;
             }
 
-            knowledgeDB.KnowledgeBase.Attach(knowledgeBaseEntry);
-            knowledgeDB.Entry(knowledgeBaseEntry).State = System.Data.Entity.EntityState.Modified;
+            
             
            
         }
