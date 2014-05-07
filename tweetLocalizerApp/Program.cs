@@ -102,7 +102,7 @@ namespace tweetLocalizerApp
             
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
                 var tweetsCollection = (from tweets in tweetDB.learningBase
-                                        select tweets).ToList();
+                                        select tweets);
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
