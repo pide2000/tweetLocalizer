@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using tweetLocalizerApp;
 
 namespace tweetLocalizerApp.Libs.Locator
 {
@@ -27,6 +28,6 @@ namespace tweetLocalizerApp.Libs.Locator
          **/
         List<string> nGrams {get;set;}
         void learn(T knowledgeObj);
-        void locate(T knowledgeObj);
+        //todo: add locate method
     }
 }

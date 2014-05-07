@@ -99,10 +99,13 @@ namespace tweetLocalizerApp
         static void Main(string[] args)
         {
             PinAuthorizer tw = twitter();
+
             
+
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
-                var tweetsCollection = (from tweets in tweetDB.learningBase
-                                        select tweets);
+                tweetDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+                var tweetsCollection = (from tweets in tweetDB.learningBase orderby tweets.id 
+                                        select tweets).ToList();
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
@@ -162,13 +165,6 @@ namespace tweetLocalizerApp
                 //ti.baseDataId = 13;
                 //tl.learn(ti);
 
-                
-
-                
-
-                
-
-	
 
                 System.Console.WriteLine("Median " + tl.statistics.getMedianOfDistances());
                 System.Console.WriteLine("Average " + tl.statistics.getAverageDistance());
