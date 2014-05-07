@@ -450,9 +450,72 @@ namespace tweetLocalizerApp.TweetLocator
             
         }
 
-        public void locate(TweetInformation tweet)
+        public GeoNames locate(TweetInformation tweet)
         {
-            throw new NotImplementedException();
+            GeoNames resultLocation = new GeoNames();
+            //create working and Result Objects
+            TweetKnowledgeObj tweetKnowledge = new TweetKnowledgeObj();
+
+            GeographyData geogData = new GeographyData();
+            //add Data to work with
+            tweetKnowledge.userlocation = tweet.userlocation;
+            tweetKnowledge.timezone = tweet.timezone;
+            tweetKnowledge.baseDataId = tweet.baseDataId;
+            tweetKnowledge.longitude = tweet.longitude;
+            tweetKnowledge.latitude = tweet.latitude;
+
+            //create new Indicators with Information about the Type
+            tweetKnowledge.userlocationIndicator = new UserlocationIndicator<string>("USERLOCATION", tweetKnowledge.userlocation);
+            tweetKnowledge.timezoneIndicator = new TimezoneIndicator<string>("TIMEZONE", tweetKnowledge.timezone);
+
+            //generate Tokens
+            userlocationTokenGenerator.assemblyToken(tweetKnowledge.userlocationIndicator);
+            timezoneTokenGenerator.assemblyToken(tweetKnowledge.timezoneIndicator);
+
+            // set tokens in knowledge object
+            // todo: make it a little more beautiful, hide this in the knwoledge Object..... somehow
+            tweetKnowledge.indicatorTokens.Add(tweetKnowledge.userlocationIndicator.indicatorType, tweetKnowledge.userlocationIndicator.finalIndicatorTokens);
+            tweetKnowledge.indicatorTokens.Add(tweetKnowledge.timezoneIndicator.indicatorType, tweetKnowledge.timezoneIndicator.finalIndicatorTokens);
+
+            //create nGrams
+            tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens, 3);
+
+            List<int> geonamesIds = new List<int>();
+
+            geonamesIds = geoCoder.locateGeonames(tweetKnowledge.longitude, tweetKnowledge.latitude, geonamesDB, geogData);
+
+            tweetKnowledge.geoEntityId = geogData.geonamesId;
+            tweetKnowledge.countryId = geogData.countryId;
+            tweetKnowledge.admin1Id = geogData.admin1Id;
+            tweetKnowledge.admin2Id = geogData.admin2Id;
+            tweetKnowledge.admin3Id = null;
+            tweetKnowledge.admin4Id = null;
+
+            getLocation(tweetKnowledge);
+
+            return resultLocation;
+
+        }
+
+        private List<Tuple<GeoNames,KnowledgeBase>> getLocation(TweetKnowledgeObj tweetKnowledge)
+        {
+            List<Tuple<GeoNames, KnowledgeBase>> possibleLocations = new List<Tuple<GeoNames, KnowledgeBase>>();  
+
+            foreach (Ngram ngram in tweetKnowledge.nGrams) {
+                var possibility = (from knowBase in knowledgeDB.KnowledgeBase
+                                   where knowBase.NGram.Equals(ngram)
+                                   select knowBase).First();
+
+                if(possibility != null){
+                var geonamesObject = (from geoName in geonamesDB.GeoNames
+                                      where geoName.geonameid == possibility.GeoNamesId
+                                      select geoName).First();
+
+                possibleLocations.Add(Tuple.Create(geonamesObject,possibility));    
+                }
+            }
+
+            return possibleLocations;
         }
 
         
