@@ -131,7 +131,7 @@ namespace tweetLocalizerApp
                     if (i % 100 == 0) {
                         string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks,2) +" avg " + new RoundedTimeSpan(timespan.Ticks / i,2) + " avg1 "+ new RoundedTimeSpan(actualTime.Ticks / 100,2);
                         System.Console.WriteLine(tweetTXT);
-                        statusUpdate("@pide2001 "+tweetTXT, tw);
+                        //statusUpdate("@pide2001 "+tweetTXT, tw);
                         
                         actualTime = TimeSpan.Zero;
                     }
