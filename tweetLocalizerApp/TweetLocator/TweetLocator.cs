@@ -307,6 +307,7 @@ namespace tweetLocalizerApp.TweetLocator
                         return baseDataItemDB;
                     }
                 }
+
                 else
                 {
                     BaseData tempBaseData = new BaseData() { BaseDataId = basedataId };
