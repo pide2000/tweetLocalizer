@@ -8,11 +8,16 @@ using Microsoft.SqlServer.Server;
 using tweetLocalizerApp.TweetLocator;
 using System.Diagnostics;
 using LinqToTwitter;
+using System;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core.Objects;
 
 namespace tweetLocalizerApp
 {
 
   
+
            
 
     class Program
@@ -101,8 +106,8 @@ namespace tweetLocalizerApp
             PinAuthorizer tw = twitter();
             
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
-                var tweetsCollection = (from tweets in tweetDB.learningBase
-                                        select tweets).ToList();
+                var tweetsCollection = (from tweets in tweetDB.learningBase orderby tweets.id
+                                        select tweets).ToList().Skip(20000);
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
@@ -123,6 +128,7 @@ namespace tweetLocalizerApp
                     ti.longitude = item.lon;
                     ti.latitude = item.lat;
                     ti.baseDataId = item.id;
+                    System.Console.WriteLine(ti.baseDataId);
                     tl.learn(ti);
                     stopwatch.Stop();
                     actualTime += stopwatch.Elapsed;
@@ -132,7 +138,6 @@ namespace tweetLocalizerApp
                         string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks,2) +" avg " + new RoundedTimeSpan(timespan.Ticks / i,2) + " avg1 "+ new RoundedTimeSpan(actualTime.Ticks / 100,2);
                         System.Console.WriteLine(tweetTXT);
                         statusUpdate("@pide2001 "+tweetTXT, tw);
-                        
                         actualTime = TimeSpan.Zero;
                     }
                 }
