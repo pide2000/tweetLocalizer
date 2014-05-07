@@ -407,7 +407,6 @@ namespace tweetLocalizerApp.TweetLocator
         {
             //create working and Result Objects
             TweetKnowledgeObj tweetKnowledge = new TweetKnowledgeObj();
-            
             GeographyData geogData = new GeographyData();
             //add Data to work with
             tweetKnowledge.userlocation = tweet.userlocation;
