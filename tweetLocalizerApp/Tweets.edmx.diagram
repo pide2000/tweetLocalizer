@@ -7,6 +7,7 @@
       <Diagram DiagramId="5a8d7386fead47fc8fb91cc16a1d392e" Name="Diagram1">
         <EntityTypeShape EntityType="TweetDataModel.tweetRandomSample" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TweetDataModel.tweetRandomSample2" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TweetDataModel.learningBase" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

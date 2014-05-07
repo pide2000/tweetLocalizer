@@ -7,20 +7,102 @@ using tweetLocalizerApp.Libs;
 using Microsoft.SqlServer.Server;
 using tweetLocalizerApp.TweetLocator;
 using System.Diagnostics;
+using LinqToTwitter;
 
 namespace tweetLocalizerApp
 {
 
   
+           
 
     class Program
     {
+
+        public struct RoundedTimeSpan
+    {
+
+        private const int TIMESPAN_SIZE = 7; // it always has seven digits
+
+        private TimeSpan roundedTimeSpan;
+        private int precision;
+
+        public RoundedTimeSpan(long ticks, int precision)
+        {
+            if (precision < 0) { throw new ArgumentException("precision must be non-negative"); }
+            this.precision = precision;
+            int factor = (int)System.Math.Pow(10, (TIMESPAN_SIZE - precision));
+
+            // This is only valid for rounding milliseconds-will *not* work on secs/mins/hrs!
+            roundedTimeSpan = new TimeSpan(((long)System.Math.Round((1.0 * ticks / factor)) * factor));
+        }
+
+        public TimeSpan TimeSpan { get { return roundedTimeSpan; } }
+
+        public override string ToString()
+        {
+            return ToString(precision);
+        }
+
+        public string ToString(int length)
+        { // this method revised 2010.01.31
+            int digitsToStrip = TIMESPAN_SIZE - length;
+            string s = roundedTimeSpan.ToString();
+            if (!s.Contains(".") && length == 0) { return s; }
+            if (!s.Contains(".")) { s += "." + new string('0', TIMESPAN_SIZE); }
+            int subLength = s.Length - digitsToStrip;
+            return subLength < 0 ? "" : subLength > s.Length ? s : s.Substring(0, subLength);
+        }
+    }
+
+
+        private static PinAuthorizer twitter()
+        {
+            var auth = new PinAuthorizer()
+            {
+
+                CredentialStore = new InMemoryCredentialStore
+                {
+                    ConsumerKey = "Ssa9qRLFOUS8SdaD1TE0w",
+                    ConsumerSecret = "sUcQ8oB7QJmXITjo8PGihGDxSbHrzCxmTs6BjVxlDo",
+                    OAuthToken = "92306096-X3nzRe89yM1zvjX5nqsENEkmKViHqoxequa8ysRAw",
+                    OAuthTokenSecret = "kYV8ZE3Px3PjeeOEjvo9VQZk37TktLXYM1UUJQCrta0yY"
+                }
+                //GoToTwitterAuthorization = pageLink => Process.Start(pageLink),
+                //GetPin = () =>
+                //{
+                //    Console.WriteLine(
+                //        "\nAfter authorizing this application, Twitter " +
+                //        "will give you a 7-digit PIN Number.\n");
+                //    Console.Write("Enter the PIN number here: ");
+                //    return Console.ReadLine();
+                //}
+            };
+
+            auth.AuthorizeAsync();
+
+            return auth;
+        }
+
+        private static void statusUpdate(String tweetText, PinAuthorizer auth)
+        {
+            using (var twitter = new TwitterContext(auth))
+            {
+                var tweet = twitter.TweetAsync(tweetText);
+            }
+
+
+        } 
+
+
+
+
         static void Main(string[] args)
         {
-
+            PinAuthorizer tw = twitter();
+            
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
-                var tweetsCollection = (from tweets in tweetDB.tweetRandomSample2
-                                        select tweets).Take(2000).ToList();
+                var tweetsCollection = (from tweets in tweetDB.learningBase
+                                        select tweets).ToList();
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
@@ -46,9 +128,11 @@ namespace tweetLocalizerApp
                     actualTime += stopwatch.Elapsed;
                     timespan += stopwatch.Elapsed;
                     stopwatch.Reset();
-                    if (i % 10 == 0) {
-                        System.Console.WriteLine();
-                        System.Console.WriteLine("Tweets: {0} Total time {1} avg overall {2} avg last 10 {3}",i,timespan.TotalSeconds,timespan.TotalSeconds / i,actualTime.TotalSeconds / 10);
+                    if (i % 100 == 0) {
+                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks,2) +" avg " + new RoundedTimeSpan(timespan.Ticks / i,2) + " avg1 "+ new RoundedTimeSpan(actualTime.Ticks / 100,2);
+                        System.Console.WriteLine(tweetTXT);
+                        statusUpdate("@pide2001 "+tweetTXT, tw);
+                        
                         actualTime = TimeSpan.Zero;
                     }
                 }

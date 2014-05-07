@@ -27,5 +27,6 @@ namespace tweetLocalizerApp
     
         public virtual DbSet<tweetRandomSample> tweetRandomSample { get; set; }
         public virtual DbSet<tweetRandomSample2> tweetRandomSample2 { get; set; }
+        public virtual DbSet<learningBase> learningBase { get; set; }
     }
 }

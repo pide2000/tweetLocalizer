@@ -407,6 +407,7 @@ namespace tweetLocalizerApp.TweetLocator
         {
             //create working and Result Objects
             TweetKnowledgeObj tweetKnowledge = new TweetKnowledgeObj();
+            
             GeographyData geogData = new GeographyData();
             //add Data to work with
             tweetKnowledge.userlocation = tweet.userlocation;
@@ -445,7 +446,7 @@ namespace tweetLocalizerApp.TweetLocator
             statistics.addDistances((double)geogData.distance);
             statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
 
-            saveToDatabase(tweetKnowledge,1000);
+            saveToDatabase(tweetKnowledge,5000);
             
         }
 

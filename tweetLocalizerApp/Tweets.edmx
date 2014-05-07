@@ -4,46 +4,28 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TweetDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'GeonamesData.dbo.tweetCollection' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tweetCollection">
-          <Property Name="Id" Type="bigint" />
-          <Property Name="u_created_at" Type="nvarchar" MaxLength="1000" />
-          <Property Name="u_description" Type="nvarchar" MaxLength="1000" />
-          <Property Name="u_entity_urls" Type="nvarchar(max)" />
-          <Property Name="u_entity_descr_url" Type="nvarchar(max)" />
-          <Property Name="u_fav_count" Type="bigint" />
-          <Property Name="u_followers_count" Type="bigint" />
-          <Property Name="u_friends_count" Type="bigint" />
-          <Property Name="u_geo_enabled" Type="bigint" />
-          <Property Name="u_id" Type="bigint" />
-          <Property Name="u_interface_lang" Type="nvarchar" MaxLength="500" />
-          <Property Name="u_listed_count" Type="bigint" />
-          <Property Name="u_location" Type="nvarchar" MaxLength="4000" />
-          <Property Name="u_name" Type="nvarchar" MaxLength="4000" />
-          <Property Name="u_screenname" Type="nvarchar" MaxLength="4000" />
-          <Property Name="u_statuses_count" Type="bigint" />
-          <Property Name="u_time_zone" Type="nvarchar" MaxLength="500" />
-          <Property Name="u_url" Type="nvarchar" MaxLength="4000" />
-          <Property Name="u_utc_offset" Type="bigint" />
-          <Property Name="t_coordinates_coordinates_long" Type="real" />
-          <Property Name="t_coordinates_coordinates_lat" Type="real" />
-          <Property Name="t_coordinates_type" Type="nvarchar" MaxLength="4000" />
-          <Property Name="t_created_at" Type="nvarchar" MaxLength="1000" />
-          <Property Name="t_current_user_retweet_id" Type="nvarchar(max)" />
-          <Property Name="t_entities_hashtags" Type="nvarchar" MaxLength="4000" />
-          <Property Name="t_entities_urls" Type="nvarchar" MaxLength="4000" />
-          <Property Name="t_entities_user_mentions" Type="nvarchar" MaxLength="4000" />
-          <Property Name="t_favorite_count" Type="bigint" />
-          <Property Name="t_id" Type="bigint" />
-          <Property Name="t_in_reply_to_user_id" Type="bigint" />
-          <Property Name="in_reply_to_status_id" Type="bigint" />
-          <Property Name="t_lang" Type="nvarchar" MaxLength="4000" />
-          <Property Name="t_retweet_count" Type="bigint" />
-          <Property Name="t_retweeted" Type="bigint" />
-          <Property Name="t_text" Type="nvarchar" MaxLength="4000" />
-        </EntityType>-->
+    <Schema Namespace="TweetDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="learningBase">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tweetid" Type="bigint" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="lon" Type="float" Nullable="false" />
+          <Property Name="lat" Type="float" Nullable="false" />
+          <Property Name="hashtag" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="status" Type="ntext" Nullable="false" />
+          <Property Name="tweetTime" Type="datetime" Nullable="false" />
+          <Property Name="skipped" Type="bigint" Nullable="false" />
+          <Property Name="place" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="geotagged" Type="bit" Nullable="false" />
+          <Property Name="userlocation" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="lang" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="utc_offset" Type="int" Nullable="false" />
+          <Property Name="timezone" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
         <EntityType Name="tweetRandomSample">
           <Key>
             <PropertyRef Name="id" />
@@ -89,11 +71,11 @@ warning 6013: The table/view 'GeonamesData.dbo.tweetCollection' does not have a 
           <Property Name="geoNames_geoNamesId" Type="int" />
         </EntityType>
         <EntityContainer Name="TweetDataModelStoreContainer">
+          <EntitySet Name="learningBase" EntityType="Self.learningBase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tweetRandomSample" EntityType="Self.tweetRandomSample" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tweetRandomSample2" EntityType="Self.tweetRandomSample2" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TweetDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -144,7 +126,29 @@ warning 6013: The table/view 'GeonamesData.dbo.tweetCollection' does not have a 
         <EntityContainer Name="TweetsDataEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tweetRandomSample" EntityType="Self.tweetRandomSample" />
           <EntitySet Name="tweetRandomSample2" EntityType="Self.tweetRandomSample2" />
+          <EntitySet Name="learningBase" EntityType="TweetDataModel.learningBase" />
         </EntityContainer>
+        <EntityType Name="learningBase">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tweetid" Type="Int64" Nullable="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="lon" Type="Double" Nullable="false" />
+          <Property Name="lat" Type="Double" Nullable="false" />
+          <Property Name="hashtag" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="tweetTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="skipped" Type="Int64" Nullable="false" />
+          <Property Name="place" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="geotagged" Type="Boolean" Nullable="false" />
+          <Property Name="userlocation" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="lang" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="utc_offset" Type="Int32" Nullable="false" />
+          <Property Name="timezone" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -194,6 +198,28 @@ warning 6013: The table/view 'GeonamesData.dbo.tweetCollection' does not have a 
                 <ScalarProperty Name="coord" ColumnName="coord" />
                 <ScalarProperty Name="processed" ColumnName="processed" />
                 <ScalarProperty Name="geoNames_geoNamesId" ColumnName="geoNames_geoNamesId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="learningBase">
+            <EntityTypeMapping TypeName="TweetDataModel.learningBase">
+              <MappingFragment StoreEntitySet="learningBase">
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="utc_offset" ColumnName="utc_offset" />
+                <ScalarProperty Name="lang" ColumnName="lang" />
+                <ScalarProperty Name="userlocation" ColumnName="userlocation" />
+                <ScalarProperty Name="geotagged" ColumnName="geotagged" />
+                <ScalarProperty Name="place" ColumnName="place" />
+                <ScalarProperty Name="skipped" ColumnName="skipped" />
+                <ScalarProperty Name="tweetTime" ColumnName="tweetTime" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="hashtag" ColumnName="hashtag" />
+                <ScalarProperty Name="lat" ColumnName="lat" />
+                <ScalarProperty Name="lon" ColumnName="lon" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="tweetid" ColumnName="tweetid" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
