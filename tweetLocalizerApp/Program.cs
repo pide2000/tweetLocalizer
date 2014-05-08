@@ -107,14 +107,14 @@ namespace tweetLocalizerApp
 
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
                 var tweetsCollection = (from tweets in tweetDB.learningBase orderby tweets.id
-                                        select tweets).ToList().Skip(0);
+                                        select tweets).ToList().Skip(67100);
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
                 
                 TimeSpan timespan = new TimeSpan();
                 TimeSpan actualTime = new TimeSpan();
-                int bulkinsertSize = 1000;
+                int bulkinsertSize = 100;
 
                 TweetLoc tl = new TweetLoc(bulkinsertSize);
                 int i = 0;
@@ -141,7 +141,7 @@ namespace tweetLocalizerApp
                     if (i % 100 == 0) {
                         string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks,2) +" avg " + new RoundedTimeSpan(timespan.Ticks / i,2) + " avg1 "+ new RoundedTimeSpan(actualTime.Ticks / 100,2);
                         System.Console.WriteLine(tweetTXT);
-                        statusUpdate("@pide2001 "+tweetTXT, tw);
+                        //statusUpdate("@pide2001 "+tweetTXT, tw);
                         actualTime = TimeSpan.Zero;
                     }
                 }
