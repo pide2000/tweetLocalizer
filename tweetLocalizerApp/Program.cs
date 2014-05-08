@@ -9,6 +9,7 @@ using tweetLocalizerApp.TweetLocator;
 using System.Diagnostics;
 using LinqToTwitter;
 using tweetLocalizerApp.Helper;
+using System.Collections;
 
 namespace tweetLocalizerApp
 {
@@ -19,22 +20,46 @@ namespace tweetLocalizerApp
         {
             PinAuthorizer tw = twitter();
 
+            System.Console.WriteLine("Please Type in how many LearningData should be taken (0 for all): ");
+            int takeUserInput = Convert.ToInt32(Console.ReadLine());
+            System.Console.WriteLine("Please Type in how many Datalines should be skipped (0 for none): ");
+            int skipUserInput = Convert.ToInt32(Console.ReadLine());
+            System.Console.WriteLine("Please choose the amount of Data which should be saved to the Database in one step: ");
+            int bulkInsertSizeUserInput = Convert.ToInt32(Console.ReadLine());
+
+
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
-                tweetDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
-                var tweetsCollection = (from tweets in tweetDB.learningBase orderby tweets.id 
-                                        select tweets).ToList();
+            
+                List<learningBase> tweetsCollection = new List<learningBase>();
+
+                if(takeUserInput == 0){
+                
+                    tweetsCollection = (List<learningBase>)(from tweets in tweetDB.learningBase orderby tweets.id
+                                            select tweets).ToList().Skip(skipUserInput);
+                }else{
+                
+                    tweetsCollection = (List<learningBase>)(from tweets in tweetDB.learningBase orderby tweets.id
+                                            select tweets).ToList().Take(takeUserInput).Skip(skipUserInput);
+                }
+
+           
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
-                TweetLoc tl = new TweetLoc();
+                
                 TimeSpan timespan = new TimeSpan();
                 TimeSpan actualTime = new TimeSpan();
-                int i = 0;
+                int bulkinsertSize = bulkInsertSizeUserInput;
 
+                TweetLoc tl = new TweetLoc(bulkinsertSize);
+                int i = 0;
 
                 foreach (var item in tweetsCollection)
                 {
-
+                    if (i % bulkinsertSize == 0)
+                    {
+                        tl = new TweetLoc(bulkinsertSize);
+                    }
                     i++;
                     stopwatch.Start();
                     ti = new TweetInformation();
@@ -52,7 +77,6 @@ namespace tweetLocalizerApp
                         string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks,2) +" avg " + new RoundedTimeSpan(timespan.Ticks / i,2) + " avg1 "+ new RoundedTimeSpan(actualTime.Ticks / 100,2);
                         System.Console.WriteLine(tweetTXT);
                         statusUpdate("@pide2001 "+tweetTXT, tw);
-                        
                         actualTime = TimeSpan.Zero;
                     }
                 }
@@ -82,6 +106,13 @@ namespace tweetLocalizerApp
                 //ti.baseDataId = 13;
                 //tl.learn(ti);
 
+                
+
+                
+
+                
+
+	
 
                 System.Console.WriteLine("Median " + tl.statistics.getMedianOfDistances());
                 System.Console.WriteLine("Average " + tl.statistics.getAverageDistance());
@@ -97,15 +128,6 @@ namespace tweetLocalizerApp
                 
             
             }
-            
-            
-
-#if DEBUG
-            System.Console.WriteLine("Press any key to quit !");
-            System.Console.ReadLine();
-#endif
-
-        }
 
         private static PinAuthorizer twitter()
         {
