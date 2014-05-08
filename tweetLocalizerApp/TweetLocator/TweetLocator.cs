@@ -330,8 +330,6 @@ namespace tweetLocalizerApp.TweetLocator
             //important because automatic change detection is disabled
             
             knowledgeDB.ChangeTracker.DetectChanges();
-            
-            
             tempKnowledgeBaseItemLocal = knowledgeBaseLocalList.Find(c => c.GeoNamesId == tweetknowledge.geoEntityId && c.NGram.Equals(ngram.nGram));
 
             
