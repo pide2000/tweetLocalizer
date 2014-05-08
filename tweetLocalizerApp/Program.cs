@@ -28,7 +28,7 @@ namespace tweetLocalizerApp
             int bulkInsertSizeUserInput = Convert.ToInt32(Console.ReadLine());
 
 
-            using (TweetsDataEntities tweetDB = new TweetsDataEntities())
+            using (knowledgeObjects DB = new knowledgeObjects())
             {
 
                 List<learningBase> tweetsCollection = new List<learningBase>();
@@ -36,16 +36,15 @@ namespace tweetLocalizerApp
                 if (takeUserInput == 0)
                 {
 
-                    tweetsCollection = (List<learningBase>)(from tweets in tweetDB.learningBase
+                    tweetsCollection = (List<learningBase>)(from tweets in DB.learningBase
                                                             orderby tweets.id
-                                                            select tweets).ToList().Skip(skipUserInput);
+                                                            select tweets).Skip(skipUserInput).ToList();
                 }
                 else
                 {
-
-                    tweetsCollection = (List<learningBase>)(from tweets in tweetDB.learningBase
+                    tweetsCollection = (List<learningBase>)(from tweets in DB.learningBase
                                                             orderby tweets.id
-                                                            select tweets).ToList().Take(takeUserInput).Skip(skipUserInput);
+                                                            select tweets).Take(takeUserInput).Skip(skipUserInput).ToList();
                 }
 
 

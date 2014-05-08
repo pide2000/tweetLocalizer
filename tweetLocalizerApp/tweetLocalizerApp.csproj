@@ -115,9 +115,6 @@
     <Compile Include="cities5000.cs">
       <DependentUpon>Geonames.tt</DependentUpon>
     </Compile>
-    <Compile Include="Coordinates.cs">
-      <DependentUpon>knowledgeBase.tt</DependentUpon>
-    </Compile>
     <Compile Include="countryCodes.cs">
       <DependentUpon>Geonames.tt</DependentUpon>
     </Compile>
@@ -174,7 +171,7 @@
       <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
     <Compile Include="learningBase.cs">
-      <DependentUpon>Tweets.tt</DependentUpon>
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
     <Compile Include="Libs\Locator\knowledgeObject\IGeographyData.cs" />
     <Compile Include="Libs\Locator\knowledgeObject\knowledgeObj.cs" />

@@ -22,16 +22,6 @@
           <Property Name="KnowledgeBaseId" Type="int" Nullable="false" />
           <Property Name="BaseDataId" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Coordinates">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Coord" Type="geography" />
-          <Property Name="Longitude" Type="float" />
-          <Property Name="Latitude" Type="float" />
-          <Property Name="KnowledgeBaseId" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="KnowledgeBase">
           <Key>
             <PropertyRef Name="Id" />
@@ -47,6 +37,27 @@
           <Property Name="Admin4Id" Type="int" />
           <Property Name="FkIdAdditional" Type="int" />
           <Property Name="ParentId" Type="int" />
+        </EntityType>
+        <EntityType Name="learningBase">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tweetid" Type="bigint" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="lon" Type="float" Nullable="false" />
+          <Property Name="lat" Type="float" Nullable="false" />
+          <Property Name="hashtag" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="status" Type="ntext" Nullable="false" />
+          <Property Name="tweetTime" Type="datetime" Nullable="false" />
+          <Property Name="skipped" Type="bigint" Nullable="false" />
+          <Property Name="place" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="geotagged" Type="bit" Nullable="false" />
+          <Property Name="userlocation" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="lang" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="utc_offset" Type="int" Nullable="false" />
+          <Property Name="timezone" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="NGramItems">
           <Key>
@@ -65,7 +76,7 @@
           <Property Name="KnowledgeBaseId" Type="int" Nullable="false" />
           <Property Name="NGramItemsId" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__BaseDataT__BaseD__191F5A78">
+        <Association Name="FK__BaseDataT__BaseD__7D0D2BAF">
           <End Role="BaseData" Type="Self.BaseData" Multiplicity="1" />
           <End Role="BaseDataToKnowledgeBase" Type="Self.BaseDataToKnowledgeBase" Multiplicity="*" />
           <ReferentialConstraint>
@@ -85,18 +96,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="BaseDataToKnowledgeBase">
-              <PropertyRef Name="KnowledgeBaseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Coordinat__Knowl__1C30D14D">
-          <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="1" />
-          <End Role="Coordinates" Type="Self.Coordinates" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KnowledgeBase">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Coordinates">
               <PropertyRef Name="KnowledgeBaseId" />
             </Dependent>
           </ReferentialConstraint>
@@ -154,21 +153,17 @@
         <EntityContainer Name="KnowledgeBaseDataModelStoreContainer">
           <EntitySet Name="BaseData" EntityType="Self.BaseData" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="BaseDataToKnowledgeBase" EntityType="Self.BaseDataToKnowledgeBase" Schema="knowledgeObjects" store:Type="Tables" />
-          <EntitySet Name="Coordinates" EntityType="Self.Coordinates" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="KnowledgeBase" EntityType="Self.KnowledgeBase" Schema="knowledgeObjects" store:Type="Tables" />
+          <EntitySet Name="learningBase" EntityType="Self.learningBase" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="NGramItems" EntityType="Self.NGramItems" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="NGramItemsInNGram" EntityType="Self.NGramItemsInNGram" Schema="knowledgeObjects" store:Type="Tables" />
-          <AssociationSet Name="FK__BaseDataT__BaseD__191F5A78" Association="Self.FK__BaseDataT__BaseD__191F5A78">
+          <AssociationSet Name="FK__BaseDataT__BaseD__7D0D2BAF" Association="Self.FK__BaseDataT__BaseD__7D0D2BAF">
             <End Role="BaseData" EntitySet="BaseData" />
             <End Role="BaseDataToKnowledgeBase" EntitySet="BaseDataToKnowledgeBase" />
           </AssociationSet>
           <AssociationSet Name="FK__BaseDataT__Knowl__154EC994" Association="Self.FK__BaseDataT__Knowl__154EC994">
             <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
             <End Role="BaseDataToKnowledgeBase" EntitySet="BaseDataToKnowledgeBase" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Coordinat__Knowl__1C30D14D" Association="Self.FK__Coordinat__Knowl__1C30D14D">
-            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
-            <End Role="Coordinates" EntitySet="Coordinates" />
           </AssociationSet>
           <AssociationSet Name="FK__Knowledge__Paren__12725CE9" Association="Self.FK__Knowledge__Paren__12725CE9">
             <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
@@ -191,17 +186,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KnowledgeBaseDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Coordinates">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Coord" Type="Geography" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="KnowledgeBaseId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="KnowledgeBase" Relationship="Self.FK__Coordinat__Knowl__1C30D14D" FromRole="Coordinates" ToRole="KnowledgeBase" />
-        </EntityType>
         <EntityType Name="KnowledgeBase">
           <Key>
             <PropertyRef Name="Id" />
@@ -216,7 +200,6 @@
           <Property Name="Admin3Id" Type="Int32" />
           <Property Name="Admin4Id" Type="Int32" />
           <Property Name="FkIdAdditional" Type="Int32" />
-          <NavigationProperty Name="Coordinates" Relationship="Self.FK__Coordinat__Knowl__1C30D14D" FromRole="KnowledgeBase" ToRole="Coordinates" />
           <NavigationProperty Name="NGramItems" Relationship="Self.NGramItemsInNGram" FromRole="KnowledgeBase" ToRole="NGramItems" />
           <Property Name="ParentId" Type="Int32" />
           <NavigationProperty Name="KnowledgeBase1" Relationship="KnowledgeBaseDataModel.FK__Knowledge__Paren__12725CE9" FromRole="KnowledgeBase" ToRole="KnowledgeBase1" />
@@ -233,30 +216,13 @@
           <NavigationProperty Name="KnowledgeBase" Relationship="Self.NGramItemsInNGram" FromRole="NGramItems" ToRole="KnowledgeBase" />
           <Property Name="NGramItemType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <Association Name="FK__Coordinat__Knowl__1C30D14D">
-          <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="1" />
-          <End Role="Coordinates" Type="Self.Coordinates" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KnowledgeBase">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Coordinates">
-              <PropertyRef Name="KnowledgeBaseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="NGramItemsInNGram">
           <End Role="KnowledgeBase" Type="Self.KnowledgeBase" Multiplicity="*" />
           <End Role="NGramItems" Type="Self.NGramItems" Multiplicity="*" />
         </Association>
         <EntityContainer Name="knowledgeObjects" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Coordinates" EntityType="Self.Coordinates" />
           <EntitySet Name="KnowledgeBase" EntityType="Self.KnowledgeBase" />
           <EntitySet Name="NGramItems" EntityType="Self.NGramItems" />
-          <AssociationSet Name="FK__Coordinat__Knowl__1C30D14D" Association="Self.FK__Coordinat__Knowl__1C30D14D">
-            <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
-            <End Role="Coordinates" EntitySet="Coordinates" />
-          </AssociationSet>
           <AssociationSet Name="NGramItemsInNGram" Association="Self.NGramItemsInNGram">
             <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
             <End Role="NGramItems" EntitySet="NGramItems" />
@@ -270,6 +236,7 @@
             <End Role="BaseData" EntitySet="BaseData" />
             <End Role="KnowledgeBase" EntitySet="KnowledgeBase" />
           </AssociationSet>
+          <EntitySet Name="learningBase" EntityType="KnowledgeBaseDataModel.learningBase" />
         </EntityContainer>
         <EntityType Name="BaseData">
           <Key>
@@ -297,23 +264,33 @@
           <End Type="KnowledgeBaseDataModel.BaseData" Role="BaseData" Multiplicity="*" />
           <End Type="KnowledgeBaseDataModel.KnowledgeBase" Role="KnowledgeBase" Multiplicity="*" />
         </Association>
+        <EntityType Name="learningBase">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tweetid" Type="Int64" Nullable="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="lon" Type="Double" Nullable="false" />
+          <Property Name="lat" Type="Double" Nullable="false" />
+          <Property Name="hashtag" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="tweetTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="skipped" Type="Int64" Nullable="false" />
+          <Property Name="place" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="geotagged" Type="Boolean" Nullable="false" />
+          <Property Name="userlocation" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="lang" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="utc_offset" Type="Int32" Nullable="false" />
+          <Property Name="timezone" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="KnowledgeBaseDataModelStoreContainer" CdmEntityContainer="knowledgeObjects">
-          <EntitySetMapping Name="Coordinates">
-            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.Coordinates">
-              <MappingFragment StoreEntitySet="Coordinates">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Coord" ColumnName="Coord" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="KnowledgeBaseId" ColumnName="KnowledgeBaseId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="KnowledgeBase">
             <EntityTypeMapping TypeName="KnowledgeBaseDataModel.KnowledgeBase">
               <MappingFragment StoreEntitySet="KnowledgeBase">
@@ -367,6 +344,28 @@
               <ScalarProperty Name="Id" ColumnName="BaseDataId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="learningBase">
+            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.learningBase">
+              <MappingFragment StoreEntitySet="learningBase">
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="utc_offset" ColumnName="utc_offset" />
+                <ScalarProperty Name="lang" ColumnName="lang" />
+                <ScalarProperty Name="userlocation" ColumnName="userlocation" />
+                <ScalarProperty Name="geotagged" ColumnName="geotagged" />
+                <ScalarProperty Name="place" ColumnName="place" />
+                <ScalarProperty Name="skipped" ColumnName="skipped" />
+                <ScalarProperty Name="tweetTime" ColumnName="tweetTime" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="hashtag" ColumnName="hashtag" />
+                <ScalarProperty Name="lat" ColumnName="lat" />
+                <ScalarProperty Name="lon" ColumnName="lon" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="tweetid" ColumnName="tweetid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
