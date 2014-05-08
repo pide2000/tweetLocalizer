@@ -154,6 +154,7 @@
     <Compile Include="getNearestNeighbours_Result.cs">
       <DependentUpon>Geonames.tt</DependentUpon>
     </Compile>
+    <Compile Include="Helper\RoundedTimeSpan.cs" />
     <Compile Include="knowledgeBase.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -298,7 +299,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Helper\" />
     <Folder Include="Libs\Locator\DatabaseConnection\Interfaces\" />
     <Folder Include="TweetLocator\Abstract\GeoCoder\" />
     <Folder Include="TweetLocator\Abstract\NGramGenerator\" />
