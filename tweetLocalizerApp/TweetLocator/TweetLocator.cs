@@ -40,10 +40,11 @@ namespace tweetLocalizerApp.TweetLocator
         List<NGramItems> ngramItemsLocalList = new List<NGramItems>();
         List<BaseData> baseDataLocalList = new List<BaseData>();
         int learnCallCounter = new int();
-        
+        int internalBulkInsertSize = new int();
 
 
-        public TweetLoc() {
+        public TweetLoc(int bulkInsertSize)
+        {
 
             //instantiate Preprocessors, tokenizer, encoder, orderer
             DeleteSigns delSigns = new DeleteSigns();
@@ -53,6 +54,7 @@ namespace tweetLocalizerApp.TweetLocator
             Standardtokenizer tokenizer = new Standardtokenizer();
             StandardEncoder encoder = new StandardEncoder();
             tokenizer.seperator = ':';
+            internalBulkInsertSize = bulkInsertSize;
 
             // Add the Preprocessors to the List, the preprocessors will be executed in this order. 
             List<IPreprocessor<string>> userlocationPreprocessorList = new List<IPreprocessor<string>>();
@@ -447,7 +449,7 @@ namespace tweetLocalizerApp.TweetLocator
             statistics.addDistances((double)geogData.distance);
             statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
 
-            saveToDatabase(tweetKnowledge,1000);
+            saveToDatabase(tweetKnowledge, internalBulkInsertSize);
             
         }
 

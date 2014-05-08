@@ -107,19 +107,24 @@ namespace tweetLocalizerApp
             
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
                 var tweetsCollection = (from tweets in tweetDB.learningBase orderby tweets.id
-                                        select tweets).ToList().Skip(20000);
+                                        select tweets).ToList().Skip(67000);
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
-                TweetLoc tl = new TweetLoc();
+                
                 TimeSpan timespan = new TimeSpan();
                 TimeSpan actualTime = new TimeSpan();
-                int i = 0;
+                int bulkinsertSize = 1000;
 
+                TweetLoc tl = new TweetLoc(bulkinsertSize);
+                int i = 0;
 
                 foreach (var item in tweetsCollection)
                 {
-
+                    if (i % bulkinsertSize == 0)
+                    {
+                        tl = new TweetLoc(bulkinsertSize);
+                    }
                     i++;
                     stopwatch.Start();
                     ti = new TweetInformation();
@@ -128,7 +133,6 @@ namespace tweetLocalizerApp
                     ti.longitude = item.lon;
                     ti.latitude = item.lat;
                     ti.baseDataId = item.id;
-                    System.Console.WriteLine(ti.baseDataId);
                     tl.learn(ti);
                     stopwatch.Stop();
                     actualTime += stopwatch.Elapsed;
