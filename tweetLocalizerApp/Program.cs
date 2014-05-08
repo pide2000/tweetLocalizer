@@ -104,10 +104,10 @@ namespace tweetLocalizerApp
         static void Main(string[] args)
         {
             PinAuthorizer tw = twitter();
-            
+
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
                 var tweetsCollection = (from tweets in tweetDB.learningBase orderby tweets.id
-                                        select tweets).ToList().Skip(67000);
+                                        select tweets).ToList().Skip(0);
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
