@@ -28,25 +28,31 @@ namespace tweetLocalizerApp
             int bulkInsertSizeUserInput = Convert.ToInt32(Console.ReadLine());
 
 
-            using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
-            
+            using (TweetsDataEntities tweetDB = new TweetsDataEntities())
+            {
+
                 List<learningBase> tweetsCollection = new List<learningBase>();
 
-                if(takeUserInput == 0){
-                
-                    tweetsCollection = (List<learningBase>)(from tweets in tweetDB.learningBase orderby tweets.id
-                                            select tweets).ToList().Skip(skipUserInput);
-                }else{
-                
-                    tweetsCollection = (List<learningBase>)(from tweets in tweetDB.learningBase orderby tweets.id
-                                            select tweets).ToList().Take(takeUserInput).Skip(skipUserInput);
+                if (takeUserInput == 0)
+                {
+
+                    tweetsCollection = (List<learningBase>)(from tweets in tweetDB.learningBase
+                                                            orderby tweets.id
+                                                            select tweets).ToList().Skip(skipUserInput);
+                }
+                else
+                {
+
+                    tweetsCollection = (List<learningBase>)(from tweets in tweetDB.learningBase
+                                                            orderby tweets.id
+                                                            select tweets).ToList().Take(takeUserInput).Skip(skipUserInput);
                 }
 
-           
+
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
-                
+
                 TimeSpan timespan = new TimeSpan();
                 TimeSpan actualTime = new TimeSpan();
                 int bulkinsertSize = bulkInsertSizeUserInput;
@@ -73,10 +79,11 @@ namespace tweetLocalizerApp
                     actualTime += stopwatch.Elapsed;
                     timespan += stopwatch.Elapsed;
                     stopwatch.Reset();
-                    if (i % 100 == 0) {
-                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks,2) +" avg " + new RoundedTimeSpan(timespan.Ticks / i,2) + " avg1 "+ new RoundedTimeSpan(actualTime.Ticks / 100,2);
+                    if (i % 100 == 0)
+                    {
+                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg1 " + new RoundedTimeSpan(actualTime.Ticks / 100, 2);
                         System.Console.WriteLine(tweetTXT);
-                        statusUpdate("@pide2001 "+tweetTXT, tw);
+                        statusUpdate("@pide2001 " + tweetTXT, tw);
                         actualTime = TimeSpan.Zero;
                     }
                 }
@@ -106,28 +113,29 @@ namespace tweetLocalizerApp
                 //ti.baseDataId = 13;
                 //tl.learn(ti);
 
-                
 
-                
 
-                
 
-	
+
+
+
+
 
                 System.Console.WriteLine("Median " + tl.statistics.getMedianOfDistances());
                 System.Console.WriteLine("Average " + tl.statistics.getAverageDistance());
                 System.Console.WriteLine("Biggest " + tl.statistics.getBiggestDistance());
                 System.Console.WriteLine("Smallest " + tl.statistics.getSmallestDistance());
-                Tuple<GeographyData,TweetKnowledgeObj> know= tl.statistics.getBiggestDistanceAndInformation();
+                Tuple<GeographyData, TweetKnowledgeObj> know = tl.statistics.getBiggestDistanceAndInformation();
                 System.Console.WriteLine("Biggest distance between" + know.Item1.geonamesId + " and " + know.Item2.baseDataId);
 
-              
 
-                
 
-                
-            
+
+
+
+
             }
+        }
 
         private static PinAuthorizer twitter()
         {
