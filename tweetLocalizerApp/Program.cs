@@ -107,14 +107,14 @@ namespace tweetLocalizerApp
 
             using (TweetsDataEntities tweetDB = new TweetsDataEntities()) {
                 var tweetsCollection = (from tweets in tweetDB.learningBase orderby tweets.id
-                                        select tweets).ToList().Skip(67100);
+                                        select tweets).ToList().Skip(67700);
 
                 Stopwatch stopwatch = new Stopwatch();
                 TweetInformation ti = new TweetInformation();
                 
                 TimeSpan timespan = new TimeSpan();
                 TimeSpan actualTime = new TimeSpan();
-                int bulkinsertSize = 100;
+                int bulkinsertSize = 1;
 
                 TweetLoc tl = new TweetLoc(bulkinsertSize);
                 int i = 0;
