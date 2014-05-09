@@ -75,7 +75,7 @@ namespace tweetLocalizerApp.TweetLocator
 
 
             //Getting all knowledge Entries in the Database. This is for Performance boost because EF6 is very slow
-            globalWatchStartStop();
+            
             var nGramItemsEntriesList = (from nGramItemEntry in knowledgeDB.NGramItems
                                  select new
                                  {
@@ -119,7 +119,7 @@ namespace tweetLocalizerApp.TweetLocator
 
             baseDataEntriesList.ForEach(c => baseDataIdentifierList.Add(c.BaseDataId));
 
-            globalWatchStartStop("Get Lists " );
+            
             
 
             //Database Configurations (for Performance)
