@@ -128,7 +128,7 @@ namespace tweetLocalizerApp.TweetLocator
                 //knowledgeDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
                 knowledgeDB.Configuration.AutoDetectChangesEnabled = false;
                 knowledgeDB.Configuration.ValidateOnSaveEnabled = false;
-
+                ((IObjectContextAdapter)geonamesDB).ObjectContext.CommandTimeout = 180;
             
             learnCallCounter = 1;
             localBulkInsertSize = bulkInsertSize;
