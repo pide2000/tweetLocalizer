@@ -495,9 +495,38 @@ namespace tweetLocalizerApp.TweetLocator
             return possibleLocations;
         }
 
-        
 
-       
+        /**
+        *Calculates the Statistics Data without tweetknowledge calculation.
+         */
+        public void getGeographyStatistics(TweetInformation tweet)
+        {
+            GeographyData geogData;
+            TweetKnowledgeObj tweetKnowledge = new TweetKnowledgeObj();
+            calculateGeographyData(tweet, out geogData);
+
+            tweetKnowledge.baseDataId = tweet.baseDataId;
+            tweetKnowledge.longitude = tweet.longitude;
+            tweetKnowledge.latitude = tweet.latitude;
+            List<int> geonamesIds = new List<int>();
+           
+            tweetKnowledge.geoEntityId = geogData.geonamesId;
+            tweetKnowledge.countryId = geogData.countryId;
+            tweetKnowledge.admin1Id = geogData.admin1Id;
+            tweetKnowledge.admin2Id = geogData.admin2Id;
+            tweetKnowledge.admin3Id = null;
+            tweetKnowledge.admin4Id = null;
+
+            statistics.addDistances((double)geogData.distance);
+            statistics.addGeographyDataTweetKnowledge(geogData, tweetKnowledge);
+        }
+
+        private void calculateGeographyData(TweetInformation tweet, out GeographyData geogData)
+        {
+            geogData = new GeographyData();
+            List<int> geonamesIds = new List<int>();
+            geonamesIds = geoCoder.locateGeonames(tweet.longitude, tweet.latitude, geonamesDB, geogData);
+        }
 
         
 
