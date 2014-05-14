@@ -142,20 +142,6 @@ namespace tweetLocalizerApp
                 //tl.learn(ti);
 
 
-
-
-
-
-
-
-
-                System.Console.WriteLine("Median " + tl.statistics.getMedianOfDistances());
-                System.Console.WriteLine("Average " + tl.statistics.getAverageDistance());
-                System.Console.WriteLine("Biggest " + tl.statistics.getBiggestDistance());
-                System.Console.WriteLine("Smallest " + tl.statistics.getSmallestDistance());
-                Tuple<GeographyData, TweetKnowledgeObj> know = tl.statistics.getBiggestDistanceAndInformation();
-                System.Console.WriteLine("Biggest distance between" + know.Item1.geonamesId + " and " + know.Item2.baseDataId);
-
                 System.Console.WriteLine("Press any key to quit !");
                 System.Console.ReadLine();
 
@@ -178,8 +164,6 @@ namespace tweetLocalizerApp
                 tweetsCollection = (List<learningBase>)(from tweets in DB.learningBase
                                                         orderby tweets.id
                                                         select tweets).ToList();
-
-
 
 
                 Stopwatch stopwatch = new Stopwatch();
