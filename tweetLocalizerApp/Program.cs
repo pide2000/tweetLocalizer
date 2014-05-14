@@ -20,7 +20,7 @@ namespace tweetLocalizerApp
         {
             PinAuthorizer tw = twitter();
 
-            learning(tw);
+           // learning(tw);
             statistics(tw);
 
             }
