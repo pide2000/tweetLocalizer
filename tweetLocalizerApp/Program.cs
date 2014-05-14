@@ -203,7 +203,8 @@ namespace tweetLocalizerApp
                 System.Console.WriteLine("Biggest distance between " + know.Item1.geonamesId + " and " + know.Item2.baseDataId);
 
 
-
+                System.Console.WriteLine("Press any key to exit");
+                System.Console.ReadLine();
 
 
 
