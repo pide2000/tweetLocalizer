@@ -19,7 +19,7 @@ namespace tweetLocalizerApp
         static void Main(string[] args)
         {
             PinAuthorizer tw = twitter();
-            learning(tw);
+            //learning(tw);
             statistics(tw);
         }
 
