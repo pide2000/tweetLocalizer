@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>tweetLocalizerApp</RootNamespace>
-    <AssemblyName>tweetLocalizerAppV1.0.0.1-statistics</AssemblyName>
+    <AssemblyName>tweetLocalizerAppV1.0.0.1</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
