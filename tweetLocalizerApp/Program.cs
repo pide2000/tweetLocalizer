@@ -20,6 +20,35 @@ namespace tweetLocalizerApp
         {
             PinAuthorizer tw = twitter();
 
+            System.Console.WriteLine("What would you do?: ");
+            System.Console.WriteLine("1 : locate ");
+            System.Console.WriteLine("2 : statistics ");
+            System.Console.WriteLine("3 : learning ");
+            int task = Convert.ToInt32(Console.ReadLine());
+
+            if (task == 1) { }
+            else if (task == 2) {
+                statistics(tw);
+            }
+            else if (task == 3)
+            {
+                learning(tw);
+            }
+            else {
+                System.Console.WriteLine("Bye");
+                System.Console.WriteLine("Press any key to quit !");
+                System.Console.ReadLine();
+            }
+
+            
+
+
+            }
+        
+
+
+        private static void learning(PinAuthorizer tw)
+        {
             System.Console.WriteLine("Please Type in how many LearningData should be taken (0 for all): ");
             int takeUserInput = Convert.ToInt32(Console.ReadLine());
             System.Console.WriteLine("Please Type in how many Datalines should be skipped (0 for none): ");
@@ -80,7 +109,7 @@ namespace tweetLocalizerApp
                     stopwatch.Reset();
                     if (i % 100 == 0)
                     {
-                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg1 " + new RoundedTimeSpan(actualTime.Ticks / 100, 2);
+                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg5k " + new RoundedTimeSpan(actualTime.Ticks / 1000, 2);
                         System.Console.WriteLine(tweetTXT);
                         statusUpdate("@pide2001 " + tweetTXT, tw);
                         actualTime = TimeSpan.Zero;
@@ -127,7 +156,8 @@ namespace tweetLocalizerApp
                 Tuple<GeographyData, TweetKnowledgeObj> know = tl.statistics.getBiggestDistanceAndInformation();
                 System.Console.WriteLine("Biggest distance between" + know.Item1.geonamesId + " and " + know.Item2.baseDataId);
 
-
+                System.Console.WriteLine("Press any key to quit !");
+                System.Console.ReadLine();
 
 
 
@@ -135,6 +165,78 @@ namespace tweetLocalizerApp
 
             }
         }
+
+        private static void statistics(PinAuthorizer tw)
+        {
+
+            using (knowledgeObjects DB = new knowledgeObjects())
+            {
+
+                List<learningBase> tweetsCollection = new List<learningBase>();
+
+
+                tweetsCollection = (List<learningBase>)(from tweets in DB.learningBase
+                                                        orderby tweets.id
+                                                        select tweets).ToList();
+
+
+
+
+                Stopwatch stopwatch = new Stopwatch();
+                TweetInformation ti = new TweetInformation();
+
+                TimeSpan timespan = new TimeSpan();
+                TimeSpan actualTime = new TimeSpan();
+
+
+                TweetLoc tl = new TweetLoc(10);
+
+                int i = 0;
+
+                foreach (var item in tweetsCollection)
+                {
+
+                    i++;
+                    stopwatch.Start();
+                    ti = new TweetInformation();
+                    ti.userlocation = item.userlocation;
+                    ti.timezone = item.timezone;
+                    ti.longitude = item.lon;
+                    ti.latitude = item.lat;
+                    ti.baseDataId = item.id;
+                    tl.getGeographyStatistics(ti);
+                    stopwatch.Stop();
+                    actualTime += stopwatch.Elapsed;
+                    timespan += stopwatch.Elapsed;
+                    stopwatch.Reset();
+                    if (i % 10 == 0)
+                    {
+                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg5k " + new RoundedTimeSpan(actualTime.Ticks / 1000, 2);
+                        System.Console.WriteLine(tweetTXT);
+                        //statusUpdate("@pide2001 " + tweetTXT, tw);
+                        actualTime = TimeSpan.Zero;
+                    }
+                }
+
+
+
+                System.Console.WriteLine("Median " + tl.statistics.getMedianOfDistances());
+                System.Console.WriteLine("Average " + tl.statistics.getAverageDistance());
+                System.Console.WriteLine("Biggest " + tl.statistics.getBiggestDistance());
+                System.Console.WriteLine("Smallest " + tl.statistics.getSmallestDistance());
+                Tuple<GeographyData, TweetKnowledgeObj> know = tl.statistics.getBiggestDistanceAndInformation();
+                System.Console.WriteLine("Biggest distance between " + know.Item1.geonamesId + " and " + know.Item2.baseDataId);
+
+
+
+
+                System.Console.WriteLine("Press any key to quit !");
+                System.Console.ReadLine();
+
+
+            }
+        }
+
 
         private static PinAuthorizer twitter()
         {
@@ -172,9 +274,10 @@ namespace tweetLocalizerApp
             }
 
         } 
+    }
 
 
     }
 
 
-}
+
