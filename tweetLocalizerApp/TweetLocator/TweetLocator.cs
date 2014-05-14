@@ -25,6 +25,7 @@ namespace tweetLocalizerApp.TweetLocator
         TweetGeoCoder geoCoder = new TweetGeoCoder();
         GeonamesDataEntities geonamesDB = new GeonamesDataEntities();
         
+        
         knowledgeObjects knowledgeDB = new knowledgeObjects();
         
         public StatisticsData statistics = new StatisticsData();
@@ -54,7 +55,6 @@ namespace tweetLocalizerApp.TweetLocator
             Standardtokenizer tokenizer = new Standardtokenizer();
             StandardEncoder encoder = new StandardEncoder();
             tokenizer.seperator = ':';
-            
 
             // Add the Preprocessors to the List, the preprocessors will be executed in this order. 
             List<IPreprocessor<string>> userlocationPreprocessorList = new List<IPreprocessor<string>>();
@@ -128,6 +128,9 @@ namespace tweetLocalizerApp.TweetLocator
                 //knowledgeDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
                 knowledgeDB.Configuration.AutoDetectChangesEnabled = false;
                 knowledgeDB.Configuration.ValidateOnSaveEnabled = false;
+                
+                //set new timeout for geonamesDB because some distance calculstions take long
+                ((IObjectContextAdapter)geonamesDB).ObjectContext.CommandTimeout = 180;
 
             
             learnCallCounter = 1;
@@ -525,6 +528,7 @@ namespace tweetLocalizerApp.TweetLocator
         {
             geogData = new GeographyData();
             List<int> geonamesIds = new List<int>();
+            
             geonamesIds = geoCoder.locateGeonames(tweet.longitude, tweet.latitude, geonamesDB, geogData);
         }
 

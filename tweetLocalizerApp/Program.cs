@@ -153,7 +153,7 @@ namespace tweetLocalizerApp
 
                     tweetsCollection = (List<learningBase>)(from tweets in DB.learningBase
                                                             orderby tweets.id
-                                                            select tweets).ToList();
+                                                            select tweets).Skip(61050).ToList();
                 
 
 
