@@ -468,6 +468,7 @@ namespace tweetLocalizerApp.TweetLocator
             TweetKnowledgeObj tweetKnowledge;
             GeographyData geogData;
             createTweetKnowledge(tweet, out tweetKnowledge, out geogData);
+            List<KnowledgeBase> possibleKnwoledgeData = new List<KnowledgeBase>();
 
             getLocation(tweetKnowledge);
 
@@ -475,9 +476,9 @@ namespace tweetLocalizerApp.TweetLocator
 
         }
 
-        private List<Tuple<GeoNames,KnowledgeBase>> getLocation(TweetKnowledgeObj tweetKnowledge)
+        private List<KnowledgeBase> getLocation(TweetKnowledgeObj tweetKnowledge)
         {
-            List<Tuple<GeoNames, KnowledgeBase>> possibleLocations = new List<Tuple<GeoNames, KnowledgeBase>>();  
+            List<KnowledgeBase> possibleLocations = new List<KnowledgeBase>();  
 
             foreach (Ngram ngram in tweetKnowledge.nGrams) {
                 var possibility = (from knowBase in knowledgeDB.KnowledgeBase
@@ -485,11 +486,8 @@ namespace tweetLocalizerApp.TweetLocator
                                    select knowBase).First();
 
                 if(possibility != null){
-                var geonamesObject = (from geoName in geonamesDB.GeoNames
-                                      where geoName.geonameid == possibility.GeoNamesId
-                                      select geoName).First();
 
-                possibleLocations.Add(Tuple.Create(geonamesObject,possibility));    
+                possibleLocations.Add(possibility);    
                 }
             }
 
