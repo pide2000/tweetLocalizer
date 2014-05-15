@@ -14,6 +14,11 @@ namespace tweetLocalizerApp
     
     public partial class tweetRandomSample2
     {
+        public tweetRandomSample2()
+        {
+            this.knowledgeBaseGeocoding = new HashSet<knowledgeBaseGeocoding>();
+        }
+    
         public int id { get; set; }
         public long tweetid { get; set; }
         public string username { get; set; }
@@ -33,5 +38,7 @@ namespace tweetLocalizerApp
         public System.Data.Entity.Spatial.DbGeography coord { get; set; }
         public Nullable<bool> processed { get; set; }
         public Nullable<int> geoNames_geoNamesId { get; set; }
+    
+        public virtual ICollection<knowledgeBaseGeocoding> knowledgeBaseGeocoding { get; set; }
     }
 }

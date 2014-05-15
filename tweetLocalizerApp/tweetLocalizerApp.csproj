@@ -170,6 +170,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="knowledgeBaseGeocoding.cs">
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
     <Compile Include="learningBase.cs">
       <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
@@ -220,7 +223,7 @@
       <DependentUpon>Tweets.tt</DependentUpon>
     </Compile>
     <Compile Include="tweetRandomSample2.cs">
-      <DependentUpon>Tweets.tt</DependentUpon>
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
     <Compile Include="Tweets.Context.cs">
       <AutoGen>True</AutoGen>

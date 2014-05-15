@@ -26,7 +26,9 @@ namespace tweetLocalizerApp
             System.Console.WriteLine("3 : learning ");
             int task = Convert.ToInt32(Console.ReadLine());
 
-            if (task == 1) { }
+            if (task == 1) {
+                locate(tw);
+            }
             else if (task == 2) {
                 statistics(tw);
             }
@@ -141,6 +143,90 @@ namespace tweetLocalizerApp
                 //ti.baseDataId = 13;
                 //tl.learn(ti);
 
+
+                System.Console.WriteLine("Press any key to quit !");
+                System.Console.ReadLine();
+
+
+
+
+
+            }
+        }
+
+
+        private static void locate(PinAuthorizer tw)
+        {
+            System.Console.WriteLine("Please Type in how many LearningData should be taken (0 for all): ");
+            int takeUserInput = Convert.ToInt32(Console.ReadLine());
+            System.Console.WriteLine("Please Type in how many Datalines should be skipped (0 for none): ");
+            int skipUserInput = Convert.ToInt32(Console.ReadLine());
+            
+
+            using (knowledgeObjects DB = new knowledgeObjects())
+            {
+
+                List<tweetRandomSample2> tweetsCollection = new List<tweetRandomSample2>();
+
+                if (takeUserInput == 0)
+                {
+
+                    tweetsCollection = (List<tweetRandomSample2>)(from tweets in DB.tweetRandomSample2
+                                                            orderby tweets.id
+                                                            select tweets).Skip(skipUserInput).ToList();
+                }
+                else
+                {
+                    tweetsCollection = (List<tweetRandomSample2>)(from tweets in DB.tweetRandomSample2
+                                                            orderby tweets.id
+                                                            select tweets).Take(takeUserInput).Skip(skipUserInput).ToList();
+                }
+
+
+
+                Stopwatch stopwatch = new Stopwatch();
+                TweetInformation ti = new TweetInformation();
+
+                TimeSpan timespan = new TimeSpan();
+                TimeSpan actualTime = new TimeSpan();
+                
+
+                TweetLoc tl = new TweetLoc(0);
+                
+                int i = 0;
+                GeoNames knowledgeResult = new GeoNames();
+                GeoNames tweetCountry = new GeoNames();
+                foreach (var item in tweetsCollection)
+                {
+                    using (GeonamesDataEntities geonamesDB = new GeonamesDataEntities()) {
+                        tweetCountry = (from geonames in geonamesDB.GeoNames 
+                                        where geonames.geonameid == item.geoNames_geoNamesId 
+                                        select geonames).ToList().First();
+                    }
+
+
+                    i++;
+                    stopwatch.Start();
+                    ti = new TweetInformation();
+                    ti.userlocation = item.userlocation;
+                    ti.timezone = item.timezone;
+                    ti.longitude = item.lon;
+                    ti.latitude = item.lat;
+                    ti.baseDataId = item.id;
+                    knowledgeResult = tl.locate(ti);
+                    System.Console.WriteLine("Country knowledge {0} tweet country {1}", knowledgeResult.country_code,tweetCountry.country_code);
+                    stopwatch.Stop();
+                    actualTime += stopwatch.Elapsed;
+                    timespan += stopwatch.Elapsed;
+                    stopwatch.Reset();
+                    if (i % 1000 == 0)
+                    {
+                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg5k " + new RoundedTimeSpan(actualTime.Ticks / 1000, 2);
+                        System.Console.WriteLine(tweetTXT);
+                        statusUpdate("@pide2001 " + tweetTXT, tw);
+                        actualTime = TimeSpan.Zero;
+                    }
+                }
 
                 System.Console.WriteLine("Press any key to quit !");
                 System.Console.ReadLine();

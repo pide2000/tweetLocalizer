@@ -19,6 +19,7 @@ namespace tweetLocalizerApp
             this.NGramItems = new HashSet<NGramItems>();
             this.KnowledgeBase1 = new HashSet<KnowledgeBase>();
             this.BaseData = new HashSet<BaseData>();
+            this.knowledgeBaseGeocoding = new HashSet<knowledgeBaseGeocoding>();
         }
     
         public int Id { get; set; }
@@ -37,5 +38,6 @@ namespace tweetLocalizerApp
         public virtual ICollection<KnowledgeBase> KnowledgeBase1 { get; set; }
         public virtual KnowledgeBase KnowledgeBase2 { get; set; }
         public virtual ICollection<BaseData> BaseData { get; set; }
+        public virtual ICollection<knowledgeBaseGeocoding> knowledgeBaseGeocoding { get; set; }
     }
 }

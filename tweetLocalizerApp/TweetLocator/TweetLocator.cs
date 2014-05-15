@@ -527,11 +527,10 @@ namespace tweetLocalizerApp.TweetLocator
 
             foreach (Ngram ngram in tweetKnowledge.nGrams) {
                 var possibility = (from knowBase in knowledgeDB.KnowledgeBase
-                                   where knowBase.NGram.Equals(ngram)
-                                   select knowBase).First();
+                                   where knowBase.NGram.Equals(ngram.nGram)
+                                   select knowBase).FirstOrDefault();
 
                 if(possibility != null){
-
                 knowledgeDataSets.Add(possibility);    
                 }
             }

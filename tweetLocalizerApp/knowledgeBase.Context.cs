@@ -29,5 +29,7 @@ namespace tweetLocalizerApp
         public virtual DbSet<NGramItems> NGramItems { get; set; }
         public virtual DbSet<BaseData> BaseData { get; set; }
         public virtual DbSet<learningBase> learningBase { get; set; }
+        public virtual DbSet<tweetRandomSample2> tweetRandomSample2 { get; set; }
+        public virtual DbSet<knowledgeBaseGeocoding> knowledgeBaseGeocoding { get; set; }
     }
 }

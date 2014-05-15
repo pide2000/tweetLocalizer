@@ -12,7 +12,11 @@
         <AssociationConnector Association="KnowledgeBaseDataModel.FK__Knowledge__Paren__12725CE9" />
         <AssociationConnector Association="KnowledgeBaseDataModel.BaseDataToKnowledgeBase" />
         <EntityTypeShape EntityType="KnowledgeBaseDataModel.learningBase" Width="1.5" PointX="5.375" PointY="0.75" />
-      </Diagram>
+        <EntityTypeShape EntityType="KnowledgeBaseDataModel.tweetRandomSample2" Width="1.5" PointX="2.875" PointY="10.125" />
+        <EntityTypeShape EntityType="KnowledgeBaseDataModel.knowledgeBaseGeocoding" Width="1.5" PointX="5.125" PointY="8.375" />
+        <AssociationConnector Association="KnowledgeBaseDataModel.FK__resolutio__knowl__0D439378" />
+        <AssociationConnector Association="KnowledgeBaseDataModel.FK__resolutio__tweet__0E37B7B1" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
