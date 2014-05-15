@@ -20,9 +20,8 @@ namespace tweetLocalizerApp
         {
             PinAuthorizer tw = twitter();
 
-           // learning(tw);
-            statistics(tw);
-
+           learning(tw);
+           // statistics(tw);
             }
         
 
@@ -86,7 +85,7 @@ namespace tweetLocalizerApp
                     actualTime += stopwatch.Elapsed;
                     timespan += stopwatch.Elapsed;
                     stopwatch.Reset();
-                    if (i % 1000 == 0)
+                    if (i % 5000 == 0)
                     {
                         string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg5k " + new RoundedTimeSpan(actualTime.Ticks / 1000, 2);
                         System.Console.WriteLine(tweetTXT);
