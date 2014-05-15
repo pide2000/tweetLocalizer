@@ -461,6 +461,23 @@ namespace tweetLocalizerApp.TweetLocator
             tweetKnowledge.admin4Id = null;
         }
 
+        public List<KnowledgeBase> resoleveToKnowledgeBaseObjects(TweetInformation tweet)
+        {
+            List<KnowledgeBase> resultLocation = new List<KnowledgeBase>();
+            //create working and Result Objects
+            TweetKnowledgeObj tweetKnowledge;
+            GeographyData geogData;
+            createTweetKnowledge(tweet, out tweetKnowledge, out geogData);
+            List<KnowledgeBase> possibleKnwoledgeData = new List<KnowledgeBase>();
+
+            getKnowledgeBaseResults(tweetKnowledge);
+
+
+
+            return resultLocation;
+
+        }
+
         public GeoNames locate(TweetInformation tweet)
         {
             GeoNames resultLocation = new GeoNames();
@@ -468,17 +485,45 @@ namespace tweetLocalizerApp.TweetLocator
             TweetKnowledgeObj tweetKnowledge;
             GeographyData geogData;
             createTweetKnowledge(tweet, out tweetKnowledge, out geogData);
-            List<KnowledgeBase> possibleKnwoledgeData = new List<KnowledgeBase>();
+            List<KnowledgeBase> possibleKnowledgeData = new List<KnowledgeBase>();
 
-            getLocation(tweetKnowledge);
+            possibleKnowledgeData = getKnowledgeBaseResults(tweetKnowledge);
+
+            resultLocation = getBestMatchByCount(possibleKnowledgeData);
 
             return resultLocation;
 
         }
 
-        private List<KnowledgeBase> getLocation(TweetKnowledgeObj tweetKnowledge)
+        private GeoNames getBestMatchByCount(List<KnowledgeBase> possibleKnowledgeData)
         {
-            List<KnowledgeBase> possibleLocations = new List<KnowledgeBase>();  
+            GeoNames resolvedGeoName = new GeoNames();
+            int resolvedGeoNameId = new int();
+            resolvedGeoNameId = 0;
+            long maxCount = 0;
+
+            foreach (var obj in possibleKnowledgeData) {
+                if (obj.NGramCount > maxCount) {
+                    maxCount = obj.NGramCount;
+                    resolvedGeoNameId = obj.GeoNamesId;
+                }
+                if (resolvedGeoNameId > 0)
+                {
+                    resolvedGeoName = (from geonames in geonamesDB.GeoNames
+                                       where geonames.geonameid == resolvedGeoNameId
+                                       select geonames).ToList().First();
+                }
+
+            }
+            return resolvedGeoName;
+
+        }
+
+        
+
+        private List<KnowledgeBase> getKnowledgeBaseResults(TweetKnowledgeObj tweetKnowledge)
+        {
+            List<KnowledgeBase> knowledgeDataSets = new List<KnowledgeBase>();  
 
             foreach (Ngram ngram in tweetKnowledge.nGrams) {
                 var possibility = (from knowBase in knowledgeDB.KnowledgeBase
@@ -487,11 +532,11 @@ namespace tweetLocalizerApp.TweetLocator
 
                 if(possibility != null){
 
-                possibleLocations.Add(possibility);    
+                knowledgeDataSets.Add(possibility);    
                 }
             }
 
-            return possibleLocations;
+            return knowledgeDataSets;
         }
 
 
