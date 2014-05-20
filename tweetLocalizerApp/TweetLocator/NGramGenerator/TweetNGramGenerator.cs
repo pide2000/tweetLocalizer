@@ -27,18 +27,17 @@ namespace tweetLocalizerApp.TweetLocator
             return result;
         }
 
-        private List<Tuple<string,string>> concatListsWithType(List<Tuple<string, List<string>>> tokens)
+        private List<Tuple<string,string>> concatListsWithType(List<Tuple<string, List<string>>> sortedList)
         {
             List<Tuple<string, string>> result = new List<Tuple<string, string>>();
-            object last = tokens.Last();
+            object last = sortedList.Last();
             string itemType = ""; 
-            foreach (Tuple<string, List<string>> ol in tokens)
+            foreach (Tuple<string, List<string>> ol in sortedList)
             {
                 itemType = ol.Item1;
                 foreach(string item in ol.Item2)
                     result.Add(Tuple.Create(itemType,item));
-                //another delimiter to distinguish between type borders. Not implemnted yet.
-                //if(!ol.Equals(last))result.Add(";");
+                
             }
             return result;
         }
@@ -121,9 +120,6 @@ namespace tweetLocalizerApp.TweetLocator
             return ngramlist;
         } 
 
-
-        
-
         private HashSet<Ngram> nGramize(List<string> tokenList, int  ngramOrder) {
             HashSet<Ngram> ngramlist = new HashSet<Ngram>();
             string ngramString = "";
@@ -158,10 +154,8 @@ namespace tweetLocalizerApp.TweetLocator
                             ngramString = ngramString + tokenList[currentToken];
                         }
 
-                        
                     }
                     ngramlist.Add(new Ngram(ngramString, order));
-                    
                 }
             }
 
@@ -179,10 +173,6 @@ namespace tweetLocalizerApp.TweetLocator
             sortedList = sorter.sortEncodedIndicatorTokens(indicatorTokenList);
 
             concatenatedList = concatListsWithType(sortedList);
-
-            //foreach (Tuple<string,string> tup in testliste) {
-            //    System.Console.WriteLine(tup.Item1 + " " + tup.Item2);
-            //}
 
             ngrams = nGramize(concatenatedList, nGramOrder).ToList();
 
