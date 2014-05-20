@@ -57,6 +57,10 @@ namespace tweetLocalizerApp
             int skipUserInput = Convert.ToInt32(Console.ReadLine());
             System.Console.WriteLine("Please choose the amount of Data which should be saved to the Database in one step: ");
             int bulkInsertSizeUserInput = Convert.ToInt32(Console.ReadLine());
+            System.Console.WriteLine("Please type in the Information intervall: ");
+            int informationIntervall = Convert.ToInt32(Console.ReadLine());
+            System.Console.WriteLine("Do you want to retrieve Tweets about the progress? (0 no 1 yes)");
+            int tweetInformation = Convert.ToInt32(Console.ReadLine());
 
 
             using (knowledgeObjects DB = new knowledgeObjects())
@@ -86,7 +90,6 @@ namespace tweetLocalizerApp
                 TimeSpan timespan = new TimeSpan();
                 TimeSpan actualTime = new TimeSpan();
                 int bulkinsertSize = bulkInsertSizeUserInput;
-                int infoInterval = 100;
 
                 TweetLoc tl = new TweetLoc(bulkinsertSize);
                 int i = 0;
@@ -111,11 +114,14 @@ namespace tweetLocalizerApp
                     timespan += stopwatch.Elapsed;
                     stopwatch.Reset();
 
-                    if (i % infoInterval == 0)
+                    if (i % informationIntervall == 0)
                     {
-                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avgAll " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg " + new RoundedTimeSpan(actualTime.Ticks / infoInterval, 2);
+                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg5k " + new RoundedTimeSpan(actualTime.Ticks / informationIntervall, 2);
                         System.Console.WriteLine(tweetTXT);
-                        //statusUpdate("@pide2001 " + tweetTXT, tw);
+                        if (tweetInformation == 1)
+                        {
+                            statusUpdate("@pide2001 " + tweetTXT, tw);
+                        }
                         actualTime = TimeSpan.Zero;
                     }
                 }

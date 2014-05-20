@@ -451,7 +451,6 @@ namespace tweetLocalizerApp.TweetLocator
             tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens, 3);
 
             List<int> geonamesIds = new List<int>();
-
             geonamesIds = geoCoder.locateGeonames(tweetKnowledge.longitude, tweetKnowledge.latitude, geonamesDB, geogData);
 
             tweetKnowledge.geoEntityId = geogData.geonamesId;
@@ -581,8 +580,6 @@ namespace tweetLocalizerApp.TweetLocator
             geonamesIds = geoCoder.locateGeonames(tweet.longitude, tweet.latitude, geonamesDB, geogData);
         }
 
-
-        
 
 
     }

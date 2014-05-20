@@ -118,6 +118,72 @@ namespace tweetLocalizerApp.TweetLocator
                 }
             }
             return ngramlist;
+        }
+
+
+        private HashSet<Ngram> nGramizeSingleIndicator(List<Tuple<string, string>> tokenList, int ngramOrder)
+        {
+            HashSet<Ngram> ngramlist = new HashSet<Ngram>();
+            List<Tuple<string, string>> usedItems = new List<Tuple<string, string>>();
+
+            string ngramString = "";
+
+            HashSet<string> itemTypes = new HashSet<string>();
+            
+            //maxgram
+            bool firstElement = true;
+            foreach (Tuple<string, string> token in tokenList)
+            {
+                if (firstElement)
+                {
+                    itemTypes.Add(token.Item1);
+                    ngramString = ngramString + token.Item2;
+                    firstElement = false;
+                }
+                else
+                {
+                        ngramString = ngramString + '.' + token.Item2;
+                }
+            }
+            ngramlist.Add(new Ngram(ngramString, 0, itemTypes.ToList(), tokenList.Distinct().ToList()));
+
+            itemTypes.Clear();
+
+            //iterate over orders to get all orders
+            if (ngramOrder >= tokenList.Count)
+            {
+                ngramOrder = tokenList.Count - 1;
+            }
+            for (int order = ngramOrder; order > 0; order--)
+            {
+                //set starting point
+                for (int startingPoint = 0; startingPoint <= tokenList.Count() - order; startingPoint++)
+                {
+                    itemTypes.Clear();
+                    ngramString = "";
+                    firstElement = true;
+                    usedItems = new List<Tuple<string, string>>();
+                    //get all tokens
+                    for (int currentToken = startingPoint; currentToken - startingPoint < order; currentToken++)
+                    {
+                        if (firstElement)
+                        {
+                            itemTypes.Add(tokenList[currentToken].Item1);
+                            usedItems.Add(tokenList[currentToken]);
+                            ngramString = ngramString + tokenList[currentToken].Item2;
+                            firstElement = false;
+                        }
+                        else
+                        {
+                            usedItems.Add(tokenList[currentToken]);
+                            ngramString = ngramString + "." + tokenList[currentToken].Item2;
+                        }
+                    }
+                    usedItems = usedItems.Distinct().ToList();
+                    ngramlist.Add(new Ngram(ngramString, order, itemTypes.ToList(), usedItems));
+                }
+            }
+            return ngramlist;
         } 
 
         private HashSet<Ngram> nGramize(List<string> tokenList, int  ngramOrder) {
@@ -167,15 +233,34 @@ namespace tweetLocalizerApp.TweetLocator
         {
             List<string> concatenated = new List<string>();
             List<Ngram> ngrams = new List<Ngram>();
+            List<Ngram> ngramsTemp = new List<Ngram>();
             List<Tuple<string, List<string>>> sortedList = new List<Tuple<string, List<string>>>();
-            List<Tuple<string, string>> concatenatedList = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> concatenatedUserlocationList = new List<Tuple<string,string>>();
+            List<Tuple<string, List<string>>> userlocationList = new List<Tuple<string,List<string>>>();
+            List<string> timezoneList = new List<string>();
+            string timezoneNGram = "";
+            
+            userlocationList.Add(Tuple.Create("USERLOCATION",indicatorTokenList["USERLOCATION"]));
+            timezoneList = indicatorTokenList["TIMEZONE"];
+            timezoneNGram = timezoneList.First();
+            //sortedList = sorter.sortEncodedIndicatorTokens(indicatorTokenList);
+            
+            concatenatedUserlocationList = concatListsWithType(userlocationList);
 
-            sortedList = sorter.sortEncodedIndicatorTokens(indicatorTokenList);
+            ngrams = nGramizeSingleIndicator(concatenatedUserlocationList, nGramOrder).ToList();
 
-            concatenatedList = concatListsWithType(sortedList);
+            foreach(var ngram in ngrams){
+                string newNGram = ngram.nGram + "." + timezoneNGram;
+                int Order = ngram.nGramOrder+=1;
+                List<string> indicatorTypes = ngram.indicatorTypes;
+                indicatorTypes.Add("TIMEZONE");
+                List<Tuple<string,string>> ngramItems = new List<Tuple<string,string>>();
+                ngramItems = ngram.nGramItems;
+                ngramItems.Add(Tuple.Create("TIMEZONE",timezoneNGram));
 
-            ngrams = nGramize(concatenatedList, nGramOrder).ToList();
-
+                ngramsTemp.Add(new Ngram(newNGram, Order, indicatorTypes, ngramItems));
+            }
+            ngrams.AddRange(ngramsTemp);
             return ngrams;
 
         }

@@ -17,7 +17,6 @@ namespace tweetLocalizerApp.TweetLocator
             sortedList.Add(Tuple.Create("TIMEZONE", locationIndicator["TIMEZONE"]));
             return sortedList;
 
-
         }
     }
 }
