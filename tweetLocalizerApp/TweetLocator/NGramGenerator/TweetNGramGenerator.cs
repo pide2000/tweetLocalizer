@@ -250,12 +250,11 @@ namespace tweetLocalizerApp.TweetLocator
             ngrams = nGramizeSingleIndicator(concatenatedUserlocationList, nGramOrder).ToList();
 
             foreach(var ngram in ngrams){
-                string newNGram = ngram.nGram + "." + timezoneNGram;
+                string newNGram = ngram.nGram + ";" + timezoneNGram;
                 int Order = ngram.nGramOrder+=1;
-                List<string> indicatorTypes = ngram.indicatorTypes;
+                List<string> indicatorTypes = new List<string>(ngram.indicatorTypes);
                 indicatorTypes.Add("TIMEZONE");
-                List<Tuple<string,string>> ngramItems = new List<Tuple<string,string>>();
-                ngramItems = ngram.nGramItems;
+                List<Tuple<string,string>> ngramItems = new List<Tuple<string,string>>(ngram.nGramItems);
                 ngramItems.Add(Tuple.Create("TIMEZONE",timezoneNGram));
 
                 ngramsTemp.Add(new Ngram(newNGram, Order, indicatorTypes, ngramItems));
