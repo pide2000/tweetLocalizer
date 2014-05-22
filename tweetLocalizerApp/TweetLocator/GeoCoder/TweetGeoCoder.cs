@@ -23,7 +23,7 @@ namespace tweetLocalizerApp.TweetLocator
 
             //geoNamesDB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
 
-            var nearestCitiesList = (from geoNamesEntry in geoNamesDB.getNearestCities5000(longitude, latitude, 1)
+            var nearestCitiesList = (from geoNamesEntry in geoNamesDB.getNearestCities15000(longitude, latitude, 1)
                                select geoNamesEntry).Take(1).ToList();
 
             //var sql = nearestCity.ToString();
