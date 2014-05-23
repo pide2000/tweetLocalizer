@@ -310,6 +310,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_cities1000_GeoNames">
+          <End Role="GeoNames" Type="Self.GeoNames" Multiplicity="1" />
+          <End Role="cities1000" Type="Self.cities1000" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="cities1000">
+              <PropertyRef Name="geonameid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="checkNodeId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nodeId" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="nodeIdString" Type="int" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <Function Name="getNearestCities1000" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="lon" Type="float" Mode="In" />
           <Parameter Name="lat" Type="float" Mode="In" />
@@ -426,6 +448,17 @@
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="getNodeId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tokenText" Type="nvarchar" Mode="In" />
+          <Parameter Name="parentId" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="idString" Type="nvarchar" MaxLength="4000" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <EntityContainer Name="GeonamesDataModelStoreContainer">
           <EntitySet Name="admin1Codes" EntityType="Self.admin1Codes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admin2Codes" EntityType="Self.admin2Codes" Schema="dbo" store:Type="Tables" />
@@ -480,6 +513,10 @@
           <AssociationSet Name="FK__GeoNames__timezo__239E4DCF" Association="Self.FK__GeoNames__timezo__239E4DCF">
             <End Role="timeZones" EntitySet="timeZones" />
             <End Role="GeoNames" EntitySet="GeoNames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cities1000_GeoNames" Association="Self.FK_cities1000_GeoNames">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="cities1000" EntitySet="cities1000" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -606,6 +643,7 @@
           <Property Name="coord" Type="Geography" />
           <NavigationProperty Name="timeZones" Relationship="Self.FK__cities100__timez__54752A70" FromRole="cities1000" ToRole="timeZones" />
           <NavigationProperty Name="countryinfo" Relationship="GeonamesDataModel.FK__cities100__count__051861CB" FromRole="cities1000" ToRole="countryinfo" />
+          <NavigationProperty Name="GeoNames" Relationship="GeonamesDataModel.FK_cities1000_GeoNames" FromRole="cities1000" ToRole="GeoNames" />
         </EntityType>
         <EntityType Name="cities15000">
           <Key>
@@ -727,6 +765,7 @@
           <NavigationProperty Name="countryinfo1" Relationship="GeonamesDataModel.FK__GeoNames__countr__09DD16E8" FromRole="GeoNames" ToRole="countryinfo" />
           <NavigationProperty Name="admin1Codes" Relationship="GeonamesDataModel.FK__admin1codes__geonames" FromRole="GeoNames" ToRole="admin1Codes" />
           <NavigationProperty Name="admin2Codes" Relationship="GeonamesDataModel.FK__admin2codes__geonames" FromRole="GeoNames" ToRole="admin2Codes" />
+          <NavigationProperty Name="cities1000" Relationship="GeonamesDataModel.FK_cities1000_GeoNames" FromRole="GeoNames" ToRole="cities1000" />
         </EntityType>
         <EntityType Name="timeZones">
           <Key>
@@ -894,6 +933,17 @@
             <End Role="GeoNames" EntitySet="GeoNames" />
             <End Role="admin2Codes" EntitySet="admin2Codes" />
           </AssociationSet>
+          <AssociationSet Name="FK_cities1000_GeoNames" Association="GeonamesDataModel.FK_cities1000_GeoNames">
+            <End Role="GeoNames" EntitySet="GeoNames" />
+            <End Role="cities1000" EntitySet="cities1000" />
+          </AssociationSet>
+          <FunctionImport Name="checkNodeId" IsComposable="true" ReturnType="Collection(Int32)">
+            <Parameter Name="nodeId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getNodeId" IsComposable="true" ReturnType="Collection(String)">
+            <Parameter Name="tokenText" Mode="In" Type="String" />
+            <Parameter Name="parentId" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <Association Name="FK__cities100__count__051861CB">
           <End Type="GeonamesDataModel.countryinfo" Role="countryinfo" Multiplicity="0..1" />
@@ -987,6 +1037,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_cities1000_GeoNames">
+          <End Type="GeonamesDataModel.GeoNames" Role="GeoNames" Multiplicity="1" />
+          <End Type="GeonamesDataModel.cities1000" Role="cities1000" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="GeoNames">
+              <PropertyRef Name="geonameid" />
+            </Principal>
+            <Dependent Role="cities1000">
+              <PropertyRef Name="geonameid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="checkNodeId_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="GeoNames_geonamesid" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getNodeId_Result">
+          <Property Type="Int16" Name="NodeLevel" Nullable="true" />
+          <Property Type="String" Name="tokenText" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="HierarchyString" Nullable="true" MaxLength="4000" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1272,6 +1343,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="checkNodeId" FunctionName="GeonamesDataModel.Store.checkNodeId" />
+          <FunctionImportMapping FunctionImportName="getNodeId" FunctionName="GeonamesDataModel.Store.getNodeId" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

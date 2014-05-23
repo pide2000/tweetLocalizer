@@ -27,6 +27,7 @@
         <EntityTypeShape EntityType="GeonamesDataModel.admin2Codes" Width="1.5" PointX="4.875" PointY="30.125" />
         <AssociationConnector Association="GeonamesDataModel.FK__admin1codes__geonames" />
         <AssociationConnector Association="GeonamesDataModel.FK__admin2codes__geonames" />
+        <AssociationConnector Association="GeonamesDataModel.FK_cities1000_GeoNames" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

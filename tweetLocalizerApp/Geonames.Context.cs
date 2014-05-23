@@ -109,5 +109,29 @@ namespace tweetLocalizerApp
     
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<getNearestNeighbours_Result>("[GeonamesDataEntities].[getNearestNeighbours](@lon, @lat, @nearestNeighboursCount)", lonParameter, latParameter, nearestNeighboursCountParameter);
         }
+    
+        [DbFunction("GeonamesDataEntities", "checkNodeId")]
+        public virtual IQueryable<Nullable<int>> checkNodeId(string nodeId)
+        {
+            var nodeIdParameter = nodeId != null ?
+                new ObjectParameter("nodeId", nodeId) :
+                new ObjectParameter("nodeId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Nullable<int>>("[GeonamesDataEntities].[checkNodeId](@nodeId)", nodeIdParameter);
+        }
+    
+        [DbFunction("GeonamesDataEntities", "getNodeId")]
+        public virtual IQueryable<string> getNodeId(string tokenText, string parentId)
+        {
+            var tokenTextParameter = tokenText != null ?
+                new ObjectParameter("tokenText", tokenText) :
+                new ObjectParameter("tokenText", typeof(string));
+    
+            var parentIdParameter = parentId != null ?
+                new ObjectParameter("parentId", parentId) :
+                new ObjectParameter("parentId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<string>("[GeonamesDataEntities].[getNodeId](@tokenText, @parentId)", tokenTextParameter, parentIdParameter);
+        }
     }
 }

@@ -37,5 +37,6 @@ namespace tweetLocalizerApp
     
         public virtual timeZones timeZones { get; set; }
         public virtual countryinfo countryinfo { get; set; }
+        public virtual GeoNames GeoNames { get; set; }
     }
 }

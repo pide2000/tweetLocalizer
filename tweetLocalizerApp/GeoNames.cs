@@ -49,5 +49,6 @@ namespace tweetLocalizerApp
         public virtual countryinfo countryinfo1 { get; set; }
         public virtual ICollection<admin1Codes> admin1Codes { get; set; }
         public virtual ICollection<admin2Codes> admin2Codes { get; set; }
+        public virtual cities1000 cities1000 { get; set; }
     }
 }

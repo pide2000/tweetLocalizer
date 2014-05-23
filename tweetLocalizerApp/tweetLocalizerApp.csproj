@@ -106,6 +106,9 @@
     <Compile Include="BaseData.cs">
       <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="checkNodeId_Result.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
     <Compile Include="cities1000.cs">
       <DependentUpon>Geonames.tt</DependentUpon>
     </Compile>
@@ -149,6 +152,9 @@
       <DependentUpon>Geonames.tt</DependentUpon>
     </Compile>
     <Compile Include="getNearestNeighbours_Result.cs">
+      <DependentUpon>Geonames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="getNodeId_Result.cs">
       <DependentUpon>Geonames.tt</DependentUpon>
     </Compile>
     <Compile Include="Helper\RoundedTimeSpan.cs" />
