@@ -59,17 +59,27 @@ namespace tweetLocalizerApp.TweetLocator
                             
                             for (int arrayiter = startingPoint; arrayiter < split.Length; arrayiter++)
                             {
+                                lastParent = parentId;
                                 parentId = geonamesDB.getNodeId(split[arrayiter],parentId).FirstOrDefault();
                                 //first elemtn isnt in the tree on level 1
+                                
                                 if(parentId == null && temporaryGeoname.Count == 0){
                                     result.Add(split[arrayiter]);
                                     parentId = "/";
+                                    
                                     break;
                                 // geoname with more than one token found, add it as new token to result
                                 }else if(parentId == null && temporaryGeoname.Count > 0){
                                     
                                     startingPoint = arrayiter-1;
-                                    result.Add(string.Join(" ",temporaryGeoname));
+                                    if (null != geonamesDB.checkNodeId(lastParent).FirstOrDefault())
+                                    {
+                                        result.Add(string.Join(" ", temporaryGeoname));
+                                    }
+                                    else {
+                                        result.AddRange(temporaryGeoname);
+                                    }
+                                    
                                     temporaryGeoname.Clear();
                                     parentId = "/";
                                     break;
@@ -81,7 +91,14 @@ namespace tweetLocalizerApp.TweetLocator
                                 }
                             }
                             if (temporaryGeoname.Count > 0) {
-                                result.Add(string.Join(" ", temporaryGeoname));
+                                if (null != geonamesDB.checkNodeId(lastParent).FirstOrDefault())
+                                {
+                                    result.Add(string.Join(" ", temporaryGeoname));
+                                }
+                                else
+                                {
+                                    result.AddRange(temporaryGeoname);
+                                }
                             }
                         
                         
