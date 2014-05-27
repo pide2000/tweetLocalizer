@@ -25,84 +25,73 @@ namespace tweetLocalizerApp.TweetLocator
             string[] split = Array.ConvertAll(indicatorItem.Split(new Char[] { ' ' }), p => p.Trim());
             
             List<string> result = new List<string>();
+            string resultString = "";
             string parentId = "/";
             string lastParent = "/";
             int count = 0;
-            if (split.Length > 1)
-            {
-                using (GeonamesDataEntities geonamesDB = new GeonamesDataEntities())
+            using (GeonamesDataEntities geonamesDB = new GeonamesDataEntities())
                 {
-                    for (int startingPoint = 0; startingPoint < split.Length - 1; startingPoint++)
-                    {
-                        List<string> temporaryGeoname = new List<string>();
 
-                        for (int arrayiter = startingPoint; arrayiter < split.Length; arrayiter++)
-                        {
-                            lastParent = parentId;
-                            parentId = geonamesDB.getNodeId(split[arrayiter], parentId).FirstOrDefault();
-                            if (parentId == null)
-                            {
-                                if (temporaryGeoname.Count == 0)
-                                {
-                                    result.Add(split[arrayiter]);
-                                }
-                                parentId = "/";
-                                count = arrayiter;
-                                break;
-                            }
-                            else
-                            {
-                                temporaryGeoname.Add(split[arrayiter]);
-                            }
+                if (split.Length == 1) {
+                    resultString = split[0];
+                }
+                else if (split.Length == 2) { 
+                    //check first element
+                    parentId = geonamesDB.getNodeId(split[0], parentId).FirstOrDefault();
+                    if(parentId!=null){
+                        //check second element
+                        parentId = geonamesDB.getNodeId(split[1], parentId).FirstOrDefault();
+                        if(parentId!=null && geonamesDB.checkNodeId(parentId)!=null){
+                            resultString = string.Join(" ",split);
+                        }else{
+                            resultString = string.Join(":",split);
                         }
-
-                        if (temporaryGeoname.Count > 0)
-                        {
-                            int? geonamesId = geonamesDB.checkNodeId(lastParent).FirstOrDefault();
-
-                            if (geonamesId != null)
-                            {
-                                string[] tempgeoname = temporaryGeoname.ToArray();
-                                result.Add(string.Join(" ", tempgeoname));
-                            }
-                            else
-                            {
-                                result.AddRange(temporaryGeoname);
-                            }
-                        }
-
-
-                        if (split.Length == 2)
-                        {
-                            result.Add(split[split.Length - 1]);
-                            break;
-                        }
-                        else if (temporaryGeoname.Count == 0 && count == split.Length-1)
-                        {
-                            result.Add(split[split.Length - 1]);
-                        }
-                        else if (temporaryGeoname.Count == 0){
-                           
-                        }
-                        else if (count < split.Length - 1)
-                        {
-                            startingPoint = count - 1;
-                        }
-                        else if (count == split.Length - 1)
-                        {
-                            result.Add(split[split.Length - 1]);
-                            break;
-                        }
-
-
+                    }else{
+                    resultString = string.Join(":",split);
                     }
+                
+                //split.length bigger than two
+                }else{
+                        for (int startingPoint = 0; startingPoint < split.Length; startingPoint++)
+                        {
+                            
+                            List<string> temporaryGeoname = new List<string>();
+                            
+                            for (int arrayiter = startingPoint; arrayiter < split.Length; arrayiter++)
+                            {
+                                parentId = geonamesDB.getNodeId(split[arrayiter],parentId).FirstOrDefault();
+                                //first elemtn isnt in the tree on level 1
+                                if(parentId == null && temporaryGeoname.Count == 0){
+                                    result.Add(split[arrayiter]);
+                                    parentId = "/";
+                                    break;
+                                // geoname with more than one token found, add it as new token to result
+                                }else if(parentId == null && temporaryGeoname.Count > 0){
+                                    
+                                    startingPoint = arrayiter-1;
+                                    result.Add(string.Join(" ",temporaryGeoname));
+                                    temporaryGeoname.Clear();
+                                    parentId = "/";
+                                    break;
+                                }else{
+                                    temporaryGeoname.Add(split[arrayiter]);
+                                    if(arrayiter == split.Length-1){
+                                        startingPoint = arrayiter;
+                                    }
+                                }
+                            }
+                            if (temporaryGeoname.Count > 0) {
+                                result.Add(string.Join(" ", temporaryGeoname));
+                            }
+                        
+                        
+                        }
+
+                        resultString = string.Join<string>(":", result);
                 }
             }
-            else {
-                result = split.ToList();
-            }
-            //check every combination of Tokens against geonames database. search single tokens in normal base and 2-, 3- tokens in the tree
-            string resultString = string.Join<string>(":", result);
+            
+            
             return resultString;
         }
     }
