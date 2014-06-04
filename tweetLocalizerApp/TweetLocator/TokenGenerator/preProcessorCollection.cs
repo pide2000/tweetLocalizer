@@ -108,7 +108,6 @@ namespace tweetLocalizerApp.TweetLocator
                 }
             }
             
-            
             return resultString;
         }
     }

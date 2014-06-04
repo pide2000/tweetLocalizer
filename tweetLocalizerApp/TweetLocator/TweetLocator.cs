@@ -414,8 +414,8 @@ namespace tweetLocalizerApp.TweetLocator
             GeographyData geogData;
             createTweetKnowledge(tweet, out tweetKnowledge, out geogData);
 
-            statistics.addDistances((double)geogData.distance);
-            statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
+            //statistics.addDistances((double)geogData.distance);
+            //statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
 
             saveToDatabase(tweetKnowledge, localBulkInsertSize);
             
