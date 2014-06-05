@@ -534,12 +534,12 @@ namespace tweetLocalizerApp.TweetLocator
             List<KnowledgeBase> possibleLocations = new List<KnowledgeBase>();  
 
             foreach (Ngram ngram in tweetKnowledge.nGrams) {
-                var possibility = (from knowBase in knowledgeDB.KnowledgeBase
+                var possibilities = (from knowBase in knowledgeDB.KnowledgeBase
                                    where knowBase.NGram.Equals(ngram.nGram)
-                                   select knowBase).FirstOrDefault();
+                                   select knowBase).ToList();
 
-                if(possibility != null){
-                possibleLocations.Add(possibility);    
+                if(possibilities != null){
+                possibleLocations.AddRange(possibilities);    
                 }
             }
 
