@@ -478,7 +478,8 @@ namespace tweetLocalizerApp.TweetLocator
 
         }
 
-        public void saveLocateResults(TweetInformation tweet) {
+        public void saveLocateResults(TweetInformation tweet)
+        {
             TweetKnowledgeObj tweetKnowledge;
             GeographyData geogData;
             createTweetKnowledge(tweet, out tweetKnowledge, out geogData);
@@ -486,13 +487,14 @@ namespace tweetLocalizerApp.TweetLocator
 
             possibleKnowledgeData = getKnowledgeBaseResults(tweetKnowledge);
 
-            foreach (var obj in possibleKnowledgeData) {
+            foreach (var obj in possibleKnowledgeData)
+            {
                 knowledgeBaseGeocoding dbentry = new knowledgeBaseGeocoding();
                 GeoNames resolvedGeoName = new GeoNames();
 
                 resolvedGeoName = (from geonames in geonamesDB.GeoNames
-                                       where geonames.geonameid == obj.GeoNamesId
-                                       select geonames).ToList().First();
+                                   where geonames.geonameid == obj.GeoNamesId
+                                   select geonames).ToList().First();
 
                 dbentry.coord_knowledgeBaseResolution = resolvedGeoName.coord;
                 dbentry.coord_tweet = tweet.coord;
@@ -500,6 +502,20 @@ namespace tweetLocalizerApp.TweetLocator
                 dbentry.tweetRandomSampleId = tweet.randomSampleId;
                 knowledgeDB.knowledgeBaseGeocoding.Add(dbentry);
             }
+
+            if (possibleKnowledgeData.Count == 0)
+            {
+                knowledgeBaseGeocoding dbentry = new knowledgeBaseGeocoding();
+                dbentry.coord_knowledgeBaseResolution = null;
+                dbentry.coord_tweet = tweet.coord;
+                dbentry.knowledgeBaseId = null;
+                dbentry.tweetRandomSampleId = tweet.randomSampleId;
+                knowledgeDB.knowledgeBaseGeocoding.Add(dbentry);
+
+            }
+
+
+
             knowledgeDB.SaveChanges();
         }
 
@@ -527,19 +543,21 @@ namespace tweetLocalizerApp.TweetLocator
 
         }
 
-        
+
 
         private List<KnowledgeBase> getKnowledgeBaseResults(TweetKnowledgeObj tweetKnowledge)
         {
-            List<KnowledgeBase> possibleLocations = new List<KnowledgeBase>();  
+            List<KnowledgeBase> possibleLocations = new List<KnowledgeBase>();
 
-            foreach (Ngram ngram in tweetKnowledge.nGrams) {
-                var possibility = (from knowBase in knowledgeDB.KnowledgeBase
-                                   where knowBase.NGram.Equals(ngram.nGram)
-                                   select knowBase).FirstOrDefault();
+            foreach (Ngram ngram in tweetKnowledge.nGrams)
+            {
+                var possibilities = (from knowBase in knowledgeDB.KnowledgeBase
+                                     where knowBase.NGram.Equals(ngram.nGram)
+                                     select knowBase).ToList();
 
-                if(possibility != null){
-                possibleLocations.Add(possibility);    
+                if (possibilities != null)
+                {
+                    possibleLocations.AddRange(possibilities);
                 }
             }
 
