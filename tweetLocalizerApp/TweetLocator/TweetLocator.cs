@@ -495,7 +495,6 @@ namespace tweetLocalizerApp.TweetLocator
                 resolvedGeoName = (from geonames in geonamesDB.GeoNames
                                    where geonames.geonameid == obj.GeoNamesId
                                    select geonames).ToList().First();
-
                 dbentry.coord_knowledgeBaseResolution = resolvedGeoName.coord;
                 dbentry.coord_tweet = tweet.coord;
                 dbentry.knowledgeBaseId = obj.Id;
