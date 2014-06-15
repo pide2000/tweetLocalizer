@@ -24,6 +24,7 @@ namespace tweetLocalizerApp
             System.Console.WriteLine("1 : locate ");
             System.Console.WriteLine("2 : statistics ");
             System.Console.WriteLine("3 : learning ");
+            System.Console.WriteLine("4 : analysis");
             int task = Convert.ToInt32(Console.ReadLine());
 
             if (task == 1) {
@@ -36,7 +37,12 @@ namespace tweetLocalizerApp
             {
                 learning(tw);
             }
-            else {
+            else if (task == 4)
+            {
+                analysis();
+            }
+            else
+            {
                 System.Console.WriteLine("Bye");
                 System.Console.WriteLine("Press any key to quit !");
                 System.Console.ReadLine();
@@ -46,6 +52,27 @@ namespace tweetLocalizerApp
 
 
             }
+
+        private static void analysis()
+        {
+            using (knowledgeObjects DB = new knowledgeObjects())
+            { 
+                var data = (from tweetRandomSample2 in DB.tweetRandomSample2 
+                           select tweetRandomSample2).ToList();
+
+
+                foreach (var item in data)
+                {
+                    System.Console.WriteLine(item.id);
+                    foreach (var item2 in item.knowledgeBaseGeocoding) {
+
+                        System.Console.WriteLine(item2.KnowledgeBase.NGram);
+                    }
+                    break;
+                }
+
+            }
+        }
         
 
 
@@ -125,33 +152,6 @@ namespace tweetLocalizerApp
                         actualTime = TimeSpan.Zero;
                     }
                 }
-
-
-                //ti = new TweetInformation();
-                //ti.userlocation = "atlantic";
-                //ti.timezone = "zeitzone";
-                //ti.longitude = -3.79908776283268;
-                //ti.latitude = 43.4694290161133;
-                //ti.baseDataId = 222;
-                //tl.learn(ti);
-
-                //ti = new TweetInformation();
-                //ti.userlocation = "atlantic";
-                //ti.timezone = "zeitzone";
-                //ti.longitude = -3.79908776283268;
-                //ti.latitude = 43.4694290161133;
-                //ti.baseDataId = 14;
-                //tl.learn(ti);
-
-                //ti = new TweetInformation();
-                //ti.userlocation = "a a a b b b c";
-                //ti.timezone = "zeitzone";
-                //ti.longitude = 107.026786804199;
-                //ti.latitude = -6.21288728713989;
-                //ti.baseDataId = 13;
-                //tl.learn(ti);
-
-
                 System.Console.WriteLine("Press any key to quit !");
                 System.Console.ReadLine();
 
