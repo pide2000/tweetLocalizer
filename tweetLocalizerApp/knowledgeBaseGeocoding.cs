@@ -21,6 +21,8 @@ namespace tweetLocalizerApp
         public System.Data.Entity.Spatial.DbGeography coord_knowledgeBaseResolution { get; set; }
         public System.Data.Entity.Spatial.DbGeography coord_tweet { get; set; }
         public string country_code { get; set; }
+        public Nullable<int> NGramOrder { get; set; }
+        public Nullable<int> NgramCount { get; set; }
     
         public virtual KnowledgeBase KnowledgeBase { get; set; }
         public virtual tweetRandomSample2 tweetRandomSample2 { get; set; }

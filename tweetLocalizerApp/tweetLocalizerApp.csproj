@@ -190,6 +190,9 @@
     <Compile Include="NGramItems.cs">
       <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="resultsKnowledgeBaseGeocoding.cs">
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
     <Compile Include="timeZones.cs">
       <DependentUpon>Geonames.tt</DependentUpon>
     </Compile>

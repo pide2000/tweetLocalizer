@@ -16,6 +16,34 @@
           <Property Name="coord_knowledgeBaseResolution" Type="geography" />
           <Property Name="coord_tweet" Type="geography" />
           <Property Name="country_code" Type="char" MaxLength="3" />
+          <Property Name="NGramOrder" Type="int" />
+          <Property Name="NgramCount" Type="int" />
+        </EntityType>
+        <EntityType Name="resultsKnowledgeBaseGeocoding">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tweetRandomSampleId" Type="int" />
+          <Property Name="nGramOrder" Type="int" />
+          <Property Name="overallCount" Type="int" />
+          <Property Name="city_knowledgeBaseId" Type="int" />
+          <Property Name="city_geonamesId" Type="int" />
+          <Property Name="city_percentage" Type="float" />
+          <Property Name="adm2_knowledgeBaseId" Type="int" />
+          <Property Name="adm2_geonamesId" Type="int" />
+          <Property Name="adm2_percentage" Type="float" />
+          <Property Name="adm2_count" Type="int" />
+          <Property Name="adm2_loss" Type="int" />
+          <Property Name="adm1_knowledgeBaseId" Type="int" />
+          <Property Name="adm1_geonamesId" Type="int" />
+          <Property Name="adm1_percentage" Type="float" />
+          <Property Name="adm1_count" Type="int" />
+          <Property Name="adm1_loss" Type="int" />
+          <Property Name="country_knowledgeBaseId" Type="int" />
+          <Property Name="country_geonamesId" Type="int" />
+          <Property Name="country_percentage" Type="float" />
+          <Property Name="country_count" Type="int" />
         </EntityType>
         <EntityType Name="tweetRandomSample2">
           <Key>
@@ -196,6 +224,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__resolutio__tweet__0E7B7B1">
+          <End Role="tweetRandomSample2" Type="Self.tweetRandomSample2" Multiplicity="0..1" />
+          <End Role="knowledgeBaseGeocoding" Type="Self.knowledgeBaseGeocoding" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tweetRandomSample2">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="knowledgeBaseGeocoding">
+              <PropertyRef Name="tweetRandomSampleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__resolutio__tweet__0EB7B1">
+          <End Role="tweetRandomSample2" Type="Self.tweetRandomSample2" Multiplicity="0..1" />
+          <End Role="knowledgeBaseGeocoding" Type="Self.knowledgeBaseGeocoding" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tweetRandomSample2">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="knowledgeBaseGeocoding">
+              <PropertyRef Name="tweetRandomSampleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_BaseDataToKnowledgeBase_BaseDataToKnowledgeBase">
           <End Role="BaseDataToKnowledgeBase" Type="Self.BaseDataToKnowledgeBase" Multiplicity="1" />
           <End Role="BaseDataToKnowledgeBase1" Type="Self.BaseDataToKnowledgeBase" Multiplicity="0..1" />
@@ -210,8 +262,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="getSumOfNGramCounts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tweetRandomSampleId" Type="int" Mode="In" />
+          <Parameter Name="NGramOrder" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="sum" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <EntityContainer Name="KnowledgeBaseDataModelStoreContainer">
           <EntitySet Name="knowledgeBaseGeocoding" EntityType="Self.knowledgeBaseGeocoding" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="resultsKnowledgeBaseGeocoding" EntityType="Self.resultsKnowledgeBaseGeocoding" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tweetRandomSample2" EntityType="Self.tweetRandomSample2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BaseData" EntityType="Self.BaseData" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="BaseDataToKnowledgeBase" EntityType="Self.BaseDataToKnowledgeBase" Schema="knowledgeObjects" store:Type="Tables" />
@@ -244,6 +308,14 @@
             <End Role="knowledgeBaseGeocoding" EntitySet="knowledgeBaseGeocoding" />
           </AssociationSet>
           <AssociationSet Name="FK__resolutio__tweet__0E37B7B1" Association="Self.FK__resolutio__tweet__0E37B7B1">
+            <End Role="tweetRandomSample2" EntitySet="tweetRandomSample2" />
+            <End Role="knowledgeBaseGeocoding" EntitySet="knowledgeBaseGeocoding" />
+          </AssociationSet>
+          <AssociationSet Name="FK__resolutio__tweet__0E7B7B1" Association="Self.FK__resolutio__tweet__0E7B7B1">
+            <End Role="tweetRandomSample2" EntitySet="tweetRandomSample2" />
+            <End Role="knowledgeBaseGeocoding" EntitySet="knowledgeBaseGeocoding" />
+          </AssociationSet>
+          <AssociationSet Name="FK__resolutio__tweet__0EB7B1" Association="Self.FK__resolutio__tweet__0EB7B1">
             <End Role="tweetRandomSample2" EntitySet="tweetRandomSample2" />
             <End Role="knowledgeBaseGeocoding" EntitySet="knowledgeBaseGeocoding" />
           </AssociationSet>
@@ -318,6 +390,11 @@
             <End Role="tweetRandomSample2" EntitySet="tweetRandomSample2" />
             <End Role="knowledgeBaseGeocoding" EntitySet="knowledgeBaseGeocoding" />
           </AssociationSet>
+          <EntitySet Name="resultsKnowledgeBaseGeocoding" EntityType="KnowledgeBaseDataModel.resultsKnowledgeBaseGeocoding" />
+          <FunctionImport Name="getSumOfNGramCounts" IsComposable="true" ReturnType="Collection(Int64)">
+            <Parameter Name="tweetRandomSampleId" Mode="In" Type="Int32" />
+            <Parameter Name="NGramOrder" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="BaseData">
           <Key>
@@ -404,6 +481,8 @@
           <Property Name="country_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="KnowledgeBase" Relationship="KnowledgeBaseDataModel.FK__resolutio__knowl__0D439378" FromRole="knowledgeBaseGeocoding" ToRole="KnowledgeBase" />
           <NavigationProperty Name="tweetRandomSample2" Relationship="KnowledgeBaseDataModel.FK__resolutio__tweet__0E37B7B1" FromRole="knowledgeBaseGeocoding" ToRole="tweetRandomSample2" />
+          <Property Name="NGramOrder" Type="Int32" />
+          <Property Name="NgramCount" Type="Int32" />
         </EntityType>
         <Association Name="FK__resolutio__knowl__0D439378">
           <End Type="KnowledgeBaseDataModel.KnowledgeBase" Role="KnowledgeBase" Multiplicity="0..1" />
@@ -429,6 +508,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="resultsKnowledgeBaseGeocoding">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tweetRandomSampleId" Type="Int32" />
+          <Property Name="nGramOrder" Type="Int32" />
+          <Property Name="overallCount" Type="Int32" />
+          <Property Name="city_knowledgeBaseId" Type="Int32" />
+          <Property Name="city_geonamesId" Type="Int32" />
+          <Property Name="city_percentage" Type="Double" />
+          <Property Name="adm2_knowledgeBaseId" Type="Int32" />
+          <Property Name="adm2_geonamesId" Type="Int32" />
+          <Property Name="adm2_percentage" Type="Double" />
+          <Property Name="adm2_count" Type="Int32" />
+          <Property Name="adm2_loss" Type="Int32" />
+          <Property Name="adm1_knowledgeBaseId" Type="Int32" />
+          <Property Name="adm1_geonamesId" Type="Int32" />
+          <Property Name="adm1_percentage" Type="Double" />
+          <Property Name="adm1_count" Type="Int32" />
+          <Property Name="adm1_loss" Type="Int32" />
+          <Property Name="country_knowledgeBaseId" Type="Int32" />
+          <Property Name="country_geonamesId" Type="Int32" />
+          <Property Name="country_percentage" Type="Double" />
+          <Property Name="country_count" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -538,6 +643,8 @@
           <EntitySetMapping Name="knowledgeBaseGeocoding">
             <EntityTypeMapping TypeName="KnowledgeBaseDataModel.knowledgeBaseGeocoding">
               <MappingFragment StoreEntitySet="knowledgeBaseGeocoding">
+                <ScalarProperty Name="NgramCount" ColumnName="NgramCount" />
+                <ScalarProperty Name="NGramOrder" ColumnName="NGramOrder" />
                 <ScalarProperty Name="country_code" ColumnName="country_code" />
                 <ScalarProperty Name="coord_tweet" ColumnName="coord_tweet" />
                 <ScalarProperty Name="coord_knowledgeBaseResolution" ColumnName="coord_knowledgeBaseResolution" />
@@ -548,6 +655,34 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="resultsKnowledgeBaseGeocoding">
+            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.resultsKnowledgeBaseGeocoding">
+              <MappingFragment StoreEntitySet="resultsKnowledgeBaseGeocoding">
+                <ScalarProperty Name="country_count" ColumnName="country_count" />
+                <ScalarProperty Name="country_percentage" ColumnName="country_percentage" />
+                <ScalarProperty Name="country_geonamesId" ColumnName="country_geonamesId" />
+                <ScalarProperty Name="country_knowledgeBaseId" ColumnName="country_knowledgeBaseId" />
+                <ScalarProperty Name="adm1_loss" ColumnName="adm1_loss" />
+                <ScalarProperty Name="adm1_count" ColumnName="adm1_count" />
+                <ScalarProperty Name="adm1_percentage" ColumnName="adm1_percentage" />
+                <ScalarProperty Name="adm1_geonamesId" ColumnName="adm1_geonamesId" />
+                <ScalarProperty Name="adm1_knowledgeBaseId" ColumnName="adm1_knowledgeBaseId" />
+                <ScalarProperty Name="adm2_loss" ColumnName="adm2_loss" />
+                <ScalarProperty Name="adm2_count" ColumnName="adm2_count" />
+                <ScalarProperty Name="adm2_percentage" ColumnName="adm2_percentage" />
+                <ScalarProperty Name="adm2_geonamesId" ColumnName="adm2_geonamesId" />
+                <ScalarProperty Name="adm2_knowledgeBaseId" ColumnName="adm2_knowledgeBaseId" />
+                <ScalarProperty Name="city_percentage" ColumnName="city_percentage" />
+                <ScalarProperty Name="city_geonamesId" ColumnName="city_geonamesId" />
+                <ScalarProperty Name="city_knowledgeBaseId" ColumnName="city_knowledgeBaseId" />
+                <ScalarProperty Name="overallCount" ColumnName="overallCount" />
+                <ScalarProperty Name="nGramOrder" ColumnName="nGramOrder" />
+                <ScalarProperty Name="tweetRandomSampleId" ColumnName="tweetRandomSampleId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="getSumOfNGramCounts" FunctionName="KnowledgeBaseDataModel.Store.getSumOfNGramCounts" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

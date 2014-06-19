@@ -12,6 +12,8 @@ namespace tweetLocalizerApp
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class knowledgeObjects : DbContext
     {
@@ -31,5 +33,20 @@ namespace tweetLocalizerApp
         public virtual DbSet<learningBase> learningBase { get; set; }
         public virtual DbSet<tweetRandomSample2> tweetRandomSample2 { get; set; }
         public virtual DbSet<knowledgeBaseGeocoding> knowledgeBaseGeocoding { get; set; }
+        public virtual DbSet<resultsKnowledgeBaseGeocoding> resultsKnowledgeBaseGeocoding { get; set; }
+    
+        [DbFunction("knowledgeObjects", "getSumOfNGramCounts")]
+        public virtual IQueryable<Nullable<long>> getSumOfNGramCounts(Nullable<int> tweetRandomSampleId, Nullable<int> nGramOrder)
+        {
+            var tweetRandomSampleIdParameter = tweetRandomSampleId.HasValue ?
+                new ObjectParameter("tweetRandomSampleId", tweetRandomSampleId) :
+                new ObjectParameter("tweetRandomSampleId", typeof(int));
+    
+            var nGramOrderParameter = nGramOrder.HasValue ?
+                new ObjectParameter("NGramOrder", nGramOrder) :
+                new ObjectParameter("NGramOrder", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Nullable<long>>("[knowledgeObjects].[getSumOfNGramCounts](@tweetRandomSampleId, @NGramOrder)", tweetRandomSampleIdParameter, nGramOrderParameter);
+        }
     }
 }
