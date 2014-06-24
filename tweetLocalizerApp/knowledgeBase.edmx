@@ -30,6 +30,7 @@
           <Property Name="city_knowledgeBaseId" Type="int" />
           <Property Name="city_geonamesId" Type="int" />
           <Property Name="city_percentage" Type="float" />
+          <Property Name="city_count" Type="int" />
           <Property Name="adm2_knowledgeBaseId" Type="int" />
           <Property Name="adm2_geonamesId" Type="int" />
           <Property Name="adm2_percentage" Type="float" />
@@ -533,6 +534,7 @@
           <Property Name="country_geonamesId" Type="Int32" />
           <Property Name="country_percentage" Type="Double" />
           <Property Name="country_count" Type="Int32" />
+          <Property Name="city_count" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -658,6 +660,7 @@
           <EntitySetMapping Name="resultsKnowledgeBaseGeocoding">
             <EntityTypeMapping TypeName="KnowledgeBaseDataModel.resultsKnowledgeBaseGeocoding">
               <MappingFragment StoreEntitySet="resultsKnowledgeBaseGeocoding">
+                <ScalarProperty Name="city_count" ColumnName="city_count" />
                 <ScalarProperty Name="country_count" ColumnName="country_count" />
                 <ScalarProperty Name="country_percentage" ColumnName="country_percentage" />
                 <ScalarProperty Name="country_geonamesId" ColumnName="country_geonamesId" />

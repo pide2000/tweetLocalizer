@@ -499,6 +499,7 @@ namespace tweetLocalizerApp.TweetLocator
                 dbentry.coord_tweet = tweet.coord;
                 dbentry.knowledgeBaseId = obj.Id;
                 dbentry.tweetRandomSampleId = tweet.randomSampleId;
+                
                 knowledgeDB.knowledgeBaseGeocoding.Add(dbentry);
             }
 

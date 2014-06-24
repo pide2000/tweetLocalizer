@@ -35,5 +35,6 @@ namespace tweetLocalizerApp
         public Nullable<int> country_geonamesId { get; set; }
         public Nullable<double> country_percentage { get; set; }
         public Nullable<int> country_count { get; set; }
+        public Nullable<int> city_count { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using System.Diagnostics;
 using LinqToTwitter;
 using tweetLocalizerApp.Helper;
 using System.Collections;
+using System.Data.Entity;
 
 namespace tweetLocalizerApp
 {
@@ -21,7 +22,7 @@ namespace tweetLocalizerApp
         {
             PinAuthorizer tw = twitter();
 
-            System.Console.WriteLine("What would you do?: ");
+            System.Console.WriteLine("What to do?: ");
             System.Console.WriteLine("1 : locate ");
             System.Console.WriteLine("2 : statistics ");
             System.Console.WriteLine("3 : learning ");
@@ -40,7 +41,7 @@ namespace tweetLocalizerApp
             }
             else if (task == 4)
             {
-                analysis();
+                analysis(tw);
             }
             else
             {
@@ -54,199 +55,202 @@ namespace tweetLocalizerApp
 
             }
 
-        private static void analysis()
+        private static void analysis(PinAuthorizer tw)
         {
             using (knowledgeObjects DB = new knowledgeObjects())
             {
-                DB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+                //DB.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+                DB.Configuration.AutoDetectChangesEnabled = false;
+                DB.Configuration.ValidateOnSaveEnabled = false;
+
                 //get tweetRandomSample to iterate over tweets and analyse the results
-                var data = (from trs 
-                            in DB.tweetRandomSample2 
-                            select trs).ToList();
+                var tweetRandomSample = (from trs 
+                            in DB.tweetRandomSample2
+                                         select trs).ToList();
 
-                int counter = 0;
 
-                //iterate over tweets
+               
                 Stopwatch stopwatch = new Stopwatch();
-                
-                foreach (var item in data)
+                int counter = 0;
+                //iterate over tweets 
+                foreach (var tweet in tweetRandomSample)
                 {
-                    stopwatch.Start();
+                    counter++;
+                    //new List to hold Lists sorted by NGramOrder
                     List<List<knowledgeBaseGeocoding>> ListsByOrder = new List<List<knowledgeBaseGeocoding>>();
 
-                    //getting knowledgeBaseGeocoding entries with Ngramorder
-                    List<knowledgeBaseGeocoding> knowledgeBaseGeocodingList = item.knowledgeBaseGeocoding.ToList();
-                    
-                    counter ++;
-
-                    //snippet to call distinct by ngram
-                        //var distNGram = DB.knowledgeBaseGeocoding.Where(g => g.tweetRandomSample2.id == item.id).Select(g => g.KnowledgeBase.NGram).Distinct();
+                    //getting knowledgeBaseGeocoding entries per tweet
+                    List<knowledgeBaseGeocoding> knowledgeBaseGeocodingList = tweet.knowledgeBaseGeocoding.ToList();
 
                     if (knowledgeBaseGeocodingList.Select(g => g.knowledgeBaseId).FirstOrDefault()!= null)
                     {
-                        //split byNgramOrder
+                        //get maximumNGram
                         var max = knowledgeBaseGeocodingList.Max(g => g.NGramOrder);
-                       
-                        
-                        stopwatch.Reset();  
-                        //Add lists
+                        List<knowledgeBaseGeocoding> temporaryList = new List<knowledgeBaseGeocoding>();
+                        //Add lists from max NGramOrder down to 1
+                        var knowledgeBaseGeocoding = (from kbg
+                            in DB.knowledgeBaseGeocoding where kbg.tweetRandomSampleId == tweet.id 
+                                                 select kbg).Include("knowledgeBase").ToList();
+
                         for (int i = 1; i <= max; i++)
                         {
-                            ListsByOrder.Add(item.knowledgeBaseGeocoding.Where(g => g.NGramOrder.Value == i).ToList());
+                            
+                            if (knowledgeBaseGeocoding.Where(g => g.NGramOrder.Value == i).ToList().Count > 0)
+                            {
+                                ListsByOrder.Add(knowledgeBaseGeocoding.Where(g => g.NGramOrder.Value == i).ToList());                            }
+                            
                         }
+                        
+                        
 
                         //iterate over lists
                         foreach (var liste in ListsByOrder)
                         {
-                            var order = liste.First().NGramOrder;
-                            var tweetId = liste.First().tweetRandomSampleId;
-                            int sum = (int)DB.getSumOfNGramCounts(tweetId,order).FirstOrDefault();
-                            System.Console.WriteLine("twetid  {0} ngramorder {1} Summe {2}" ,tweetId,order,sum);
+                                var order = liste.First().NGramOrder;
+                                var tweetId = liste.First().tweetRandomSampleId;
+                                
+                               
+                                //sql function to make it even faster
+                                int sum = (int)DB.getSumOfNGramCounts(tweetId, order).FirstOrDefault();
+                                  
 
-                            Tuple<int, float> idMaxPercentageCity = Tuple.Create(0, (float)0.0);
-                            float currentPercentage = 0;
-                            int ngramcoCity = 0;
-                            foreach (var knowledgeBaseGeocodingEntry in liste)
-                            {
-                               int  ngramco = (int)knowledgeBaseGeocodingEntry.NgramCount;
-                                currentPercentage = ((float)ngramco / (float)sum);
-                                if (idMaxPercentageCity.Item2 < currentPercentage)
+                                
+                                //cityLevel
+                                Tuple<int, float> idMaxPercentageCity = Tuple.Create(0, (float)0.0);
+                                float currentPercentage = 0;
+                                int ngramcoCity = 0;
+                                foreach (var knowledgeBaseGeocodingEntry in liste)
                                 {
-                                    idMaxPercentageCity = Tuple.Create(knowledgeBaseGeocodingEntry.id, currentPercentage);
-                                    ngramcoCity = ngramco;
+                                    int ngramco = (int)knowledgeBaseGeocodingEntry.NgramCount;
+                                    currentPercentage = ((float)ngramco / (float)sum);
+                                    if (idMaxPercentageCity.Item2 < currentPercentage)
+                                    {
+                                        idMaxPercentageCity = Tuple.Create(knowledgeBaseGeocodingEntry.id, currentPercentage);
+                                        ngramcoCity = ngramco;
+                                    }
                                 }
-                            }
 
-                            int geonamesidCity = liste.Where(g => g.id == idMaxPercentageCity.Item1).Select(g => g.KnowledgeBase.GeoNamesId).FirstOrDefault();
-                            int knowledgeBaseIdCity = liste.Where(g => g.id == idMaxPercentageCity.Item1).Select(g => g.KnowledgeBase.Id).FirstOrDefault(); ;
-                            double? percentageMaxCity = idMaxPercentageCity.Item2;
-                            int countCity = (int)liste.Where(g => g.id == idMaxPercentageCity.Item1).Select(g => g.KnowledgeBase.NGramCount).FirstOrDefault();
-                            //System.Console.WriteLine("geonId {0} knowledgeBaseid {1} percentageMax {2} count {3}" ,geonamesid,knowledgeBaseId,percentageMax,count);
+                                int geonamesidCity = liste.Where(g => g.id == idMaxPercentageCity.Item1).Select(g => g.KnowledgeBase.GeoNamesId).FirstOrDefault();
+                                int knowledgeBaseIdCity = liste.Where(g => g.id == idMaxPercentageCity.Item1).Select(g => g.KnowledgeBase.Id).FirstOrDefault(); ;
+                                double? percentageMaxCity = idMaxPercentageCity.Item2;
+                                int countCity = (int)liste.Where(g => g.id == idMaxPercentageCity.Item1).Select(g => g.KnowledgeBase.NGramCount).FirstOrDefault();
+                                //System.Console.WriteLine("geonId {0} knowledgeBaseid {1} percentageMax {2} count {3}" ,geonamesid,knowledgeBaseId,percentageMax,count);
 
+                                
+                                //admin2
+                                var result = liste.GroupBy(o => o.KnowledgeBase.Admin2Id)
+                                            .Select(g => new { admin2Id = g.Key, total = g.Sum(i => i.NgramCount) });
+
+                                Tuple<int, float> idMaxPercentageAdmin2 = Tuple.Create(0, (float)0.0);
+                                int lossAdmin2 = 0;
+                                int ngramcoAdmin2 = 0;
+                                foreach (var entryadmin2 in result)
+                                {
+                                    int ngramco = (int)entryadmin2.total;
+                                    currentPercentage = ((float)ngramco / (float)sum);
+                                    //System.Console.WriteLine(currentPercentage + " " + entryadmin2.admin2Id);
+                                    if (idMaxPercentageAdmin2.Item2 < currentPercentage)
+                                    {
+                                        if (entryadmin2.admin2Id != null)
+                                        {
+                                            idMaxPercentageAdmin2 = Tuple.Create((int)entryadmin2.admin2Id, currentPercentage);
+                                            ngramcoAdmin2 = ngramco;
+                                        }
+                                        else
+                                        {
+                                            lossAdmin2 = (int)entryadmin2.total;
+
+                                        }
+                                    }
+                                }
+                                //System.Console.WriteLine(idMaxPercentageAdmin2);
+                                //System.Console.WriteLine("loss adm2 " + lossAdmin2);
+
+
+                                
+                                //admin1
+                                var resultAdmin1 = liste.GroupBy(o => o.KnowledgeBase.Admin1Id)
+                                            .Select(g => new { admin1Id = g.Key, total = g.Sum(i => i.NgramCount) });
+
+                                Tuple<int, float> idMaxPercentageAdmin1 = Tuple.Create(0, (float)0.0);
+                                int lossAdmin1 = 0;
+                                int ngramcoAdmin1 = 0;
+                                foreach (var entryadmin1 in resultAdmin1)
+                                {
+                                    int ngramco = (int)entryadmin1.total;
+                                    currentPercentage = ((float)ngramco / (float)sum);
+                                    //.Console.WriteLine(currentPercentage + " " + entryadmin1.admin1Id);
+                                    if (idMaxPercentageAdmin1.Item2 < currentPercentage)
+                                    {
+                                        if (entryadmin1.admin1Id != null)
+                                        {
+                                            idMaxPercentageAdmin1 = Tuple.Create((int)entryadmin1.admin1Id, currentPercentage);
+                                            ngramcoAdmin1 = ngramco;
+                                        }
+                                        else
+                                        {
+                                            lossAdmin1 = (int)entryadmin1.total;
+
+                                        }
+                                    }
+                                }
+                                //.Console.WriteLine(idMaxPercentageAdmin1);
+
+                                //System.Console.WriteLine("loss adm1 " + lossAdmin1);
+
+
+                                //country
+                                var resultCountry = liste.GroupBy(o => o.KnowledgeBase.CountryId)
+                                            .Select(g => new { countryId = g.Key, total = g.Sum(i => i.NgramCount) });
+
+                                Tuple<int, float> idMaxPercentageCountry = Tuple.Create(0, (float)0.0);
+                                int ngramcoCountry = 0;
+                                foreach (var entryCountry in resultCountry)
+                                {
+                                    int ngramco = (int)entryCountry.total;
+                                    currentPercentage = ((float)ngramco / (float)sum);
+                                    //System.Console.WriteLine(currentPercentage + " " + entryCountry.countryId);
+                                    if (idMaxPercentageCountry.Item2 < currentPercentage)
+                                    {
+
+                                        idMaxPercentageCountry = Tuple.Create((int)entryCountry.countryId, currentPercentage);
+                                        ngramcoCountry = ngramco;
+                                    }
+                                }
+                                //System.Console.WriteLine(idMaxPercentageCountry);
+
+
+                                DB.resultsKnowledgeBaseGeocoding.Add(new resultsKnowledgeBaseGeocoding
+                                {
+                                    nGramOrder = order,
+                                    overallCount = sum,
+                                    tweetRandomSampleId = tweetId,
+                                    city_geonamesId = geonamesidCity,
+                                    city_knowledgeBaseId = knowledgeBaseIdCity,
+                                    city_percentage = percentageMaxCity,
+                                    city_count = ngramcoCity,
+                                    adm2_geonamesId = idMaxPercentageAdmin2.Item1,
+                                    adm2_percentage = idMaxPercentageAdmin2.Item2,
+                                    adm2_loss = lossAdmin2,
+                                    adm2_count = ngramcoAdmin2,
+                                    adm1_geonamesId = idMaxPercentageAdmin1.Item1,
+                                    adm1_percentage = idMaxPercentageAdmin1.Item2,
+                                    adm1_loss = lossAdmin1,
+                                    adm1_count = ngramcoAdmin1,
+                                    country_geonamesId = idMaxPercentageCountry.Item1,
+                                    country_percentage = idMaxPercentageCountry.Item2,
+                                    country_count = ngramcoCountry
+                                });
+                                DB.SaveChanges();
                             
-                            //admin2
-                            var result = liste.GroupBy(o => o.KnowledgeBase.Admin2Id)
-                                        .Select(g => new { admin2Id = g.Key, total = g.Sum(i => i.NgramCount) });
-
-                            Tuple<int,float> idMaxPercentageAdmin2 = Tuple.Create(0, (float)0.0);
-                            int lossAdmin2 = 0;
-                            int ngramcoAdmin2 = 0;
-                            foreach (var entryadmin2 in result)
-                            {
-                                int ngramco = (int)entryadmin2.total;
-                                currentPercentage = ((float)ngramco / (float)sum);
-                                System.Console.WriteLine(currentPercentage + " " + entryadmin2.admin2Id);
-                                if (idMaxPercentageAdmin2.Item2 < currentPercentage)
-                                {
-                                    if (entryadmin2.admin2Id != null)
-                                    {
-                                        idMaxPercentageAdmin2 = Tuple.Create((int)entryadmin2.admin2Id, currentPercentage);
-                                        ngramcoAdmin2 = ngramco;
-                                    }
-                                    else {
-                                        lossAdmin2 = (int)entryadmin2.total;
-                                       
-                                    }
-                                 }
-                            }
-                            System.Console.WriteLine(idMaxPercentageAdmin2);
-                            System.Console.WriteLine("loss adm2 " + lossAdmin2);
-
-
-                            //admin1
-                            var resultAdmin1 = liste.GroupBy(o => o.KnowledgeBase.Admin1Id)
-                                        .Select(g => new { admin1Id = g.Key, total = g.Sum(i => i.NgramCount) });
-
-                            Tuple<int, float>  idMaxPercentageAdmin1 = Tuple.Create(0, (float)0.0);
-                            int lossAdmin1 = 0;
-                            int ngramcoAdmin1 = 0;
-                            foreach (var entryadmin1 in resultAdmin1)
-                            {
-                                int ngramco = (int)entryadmin1.total;
-                                currentPercentage = ((float)ngramco / (float)sum);
-                                System.Console.WriteLine(currentPercentage + " " + entryadmin1.admin1Id);
-                                if (idMaxPercentageAdmin1.Item2 < currentPercentage)
-                                {
-                                    if (entryadmin1.admin1Id != null)
-                                    {
-                                        idMaxPercentageAdmin1 = Tuple.Create((int)entryadmin1.admin1Id, currentPercentage);
-                                        ngramcoAdmin1 = ngramco;
-                                    }
-                                    else
-                                    {
-                                        lossAdmin1 = (int)entryadmin1.total;
-                                       
-                                    }
-                                }
-                            }
-                            System.Console.WriteLine(idMaxPercentageAdmin1);
-
-                            System.Console.WriteLine("loss adm1 " + lossAdmin1);
-
-                            //country
-                            var resultCountry = liste.GroupBy(o => o.KnowledgeBase.CountryId)
-                                        .Select(g => new { countryId = g.Key, total = g.Sum(i => i.NgramCount) });
-
-                            Tuple<int,float> idMaxPercentageCountry = Tuple.Create(0, (float)0.0);
-                            int ngramcoCountry = 0;
-                            foreach (var entryCountry in resultCountry)
-                            {
-                                int ngramco = (int)entryCountry.total;
-                                currentPercentage = ((float)ngramco / (float)sum);
-                                System.Console.WriteLine(currentPercentage + " " + entryCountry.countryId);
-                                if (idMaxPercentageCountry.Item2 < currentPercentage)
-                                {
-
-                                    idMaxPercentageCountry = Tuple.Create((int)entryCountry.countryId, currentPercentage);
-                                    ngramcoCountry = ngramco;
-                                }
-                            }
-                            System.Console.WriteLine(idMaxPercentageCountry);
-
-
-                            
-                    DB.resultsKnowledgeBaseGeocoding.Add(new resultsKnowledgeBaseGeocoding { 
-                        nGramOrder = order,
-                        overallCount = sum,
-                        tweetRandomSampleId = tweetId,
-                        city_geonamesId = geonamesidCity,
-                        city_knowledgeBaseId = knowledgeBaseIdCity,
-                        city_percentage = percentageMaxCity,
-                        adm2_geonamesId = idMaxPercentageAdmin2.Item1,
-                        adm2_percentage = idMaxPercentageAdmin2.Item2,
-                        adm2_loss = lossAdmin2,
-                        adm2_count = ngramcoAdmin2,
-                        adm1_geonamesId = idMaxPercentageAdmin1.Item1,
-                        adm1_percentage = idMaxPercentageAdmin1.Item2,
-                        adm1_loss = lossAdmin1,
-                        adm1_count = ngramcoAdmin1,
-                        country_geonamesId = idMaxPercentageCountry.Item1,
-                        country_percentage = idMaxPercentageCountry.Item2,
-                        country_count = ngramcoCountry});
-
-
-                    DB.SaveChanges();
-
                         }
                     }
+                    if (counter % 500 == 0) {
+                        System.Console.WriteLine("tweets so far: " + counter);
+                        statusUpdate("@pide2001 " + counter, tw);
+                    }
 
-
-
-                    
-                    
-                    
-                    
-                    //calculate percentage
-                    //foreach (var item2 in maxNGramOrderList)
-                    //{
-                        
-                    //    System.Console.WriteLine(item2.KnowledgeBase.NGram + " " + item2.KnowledgeBase.NGramCount + " " + (float)item2.KnowledgeBase.NGramCount/sum + " " + item2.NGramOrder);
-                       
-                    //}
-                    if (counter == 40) { break; }
-                      
-                    
-                }
+                   }
                 
                 
             }
@@ -269,7 +273,7 @@ namespace tweetLocalizerApp
             int informationIntervall = Convert.ToInt32(Console.ReadLine());
             System.Console.WriteLine("Do you want to retrieve Tweets about the progress? (0 no 1 yes)");
             int tweetInformation = Convert.ToInt32(Console.ReadLine());
-
+            
 
             using (knowledgeObjects DB = new knowledgeObjects())
             {
@@ -358,6 +362,8 @@ namespace tweetLocalizerApp
 
             using (knowledgeObjects DB = new knowledgeObjects())
             {
+                DB.Configuration.AutoDetectChangesEnabled = false;
+                DB.Configuration.ValidateOnSaveEnabled = false;
 
                 List<tweetRandomSample2> tweetsCollection = new List<tweetRandomSample2>();
 
