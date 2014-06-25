@@ -198,22 +198,26 @@ namespace tweetLocalizerApp.TweetLocator
          * 2. 
          **/
 
+
+
+
         private void saveToDatabase(TweetKnowledgeObj tweetknowledge,int bulkInsertSize) {
             learnCallCounter++;
 
             BaseData baseDataItem = new BaseData();
-            baseDataItem = getbaseDataObject((int)tweetknowledge.baseDataId);
+            //baseDataItem = getbaseDataObject((int)tweetknowledge.baseDataId);
             
 
             //create NgramItemsList
             foreach (var ngram in tweetknowledge.nGrams)
             {
+                // list of geoids to hold the geoids of the current ngram
                 HashSet<int> tempGeoIdknowledgeIdList = new HashSet<int>();
                 
                 //check if the combination of ngram and geoid was already tracked, either in the database or in the current iterration
                 
                 bool checkforNgram = knowledgeBaseIdentifierList.TryGetValue(ngram.nGram,out tempGeoIdknowledgeIdList);
-                if (checkforNgram&&tempGeoIdknowledgeIdList.Contains((int)tweetknowledge.geoEntityId))
+                if (checkforNgram && tempGeoIdknowledgeIdList.Contains((int)tweetknowledge.geoEntityId))
                 {
                     /**
                      * todo: there has to be one more case checked. ngram: "a;b ...... a;b" => bigram : a;b,..... a;b and first a is e.g userlocation whereas 2nd a is timezone
@@ -223,12 +227,12 @@ namespace tweetLocalizerApp.TweetLocator
 
                 }else
                 { 
-                    List<NGramItems> items = persistNGramItems(knowledgeDB, ngram, ngramItemsLocalList);
+                    //List<NGramItems> items = persistNGramItems(knowledgeDB, ngram, ngramItemsLocalList);
                     //in persist just check if the basedata entry is already present and add it. 
                     //create the knowledgeBase Object to save
 
-                    List<BaseData> baseDataIds = new List<BaseData>();
-                    baseDataIds.Add(baseDataItem);
+                    //List<BaseData> baseDataIds = new List<BaseData>();
+                    //baseDataIds.Add(baseDataItem);
 
                     KnowledgeBase knowBase = new KnowledgeBase()
                     {
@@ -237,11 +241,8 @@ namespace tweetLocalizerApp.TweetLocator
                         GeoNamesId = (int)tweetknowledge.geoEntityId,
                         CountryId = tweetknowledge.countryId,
                         Admin1Id = tweetknowledge.admin1Id,
-                        Admin2Id = tweetknowledge.admin2Id,
-                        Admin3Id = tweetknowledge.admin3Id,
-                        Admin4Id = tweetknowledge.admin4Id,
-                        NGramItems = items,
-                        BaseData = baseDataIds
+                        Admin2Id = tweetknowledge.admin2Id
+                        
                     };
                     
                     //just for actuality of the Identifier Lists. First check if ngram is available, if so add geoid. If not add compelte knowbase
@@ -332,8 +333,7 @@ namespace tweetLocalizerApp.TweetLocator
             //important because automatic change detection is disabled
             
             knowledgeDB.ChangeTracker.DetectChanges();
-            
-            
+           
             tempKnowledgeBaseItemLocal = knowledgeBaseLocalList.Find(c => c.GeoNamesId == tweetknowledge.geoEntityId && c.NGram.Equals(ngram.nGram));
 
             
@@ -341,9 +341,8 @@ namespace tweetLocalizerApp.TweetLocator
             if (tempKnowledgeBaseItemLocal != null)
             {
             //is local in the List
-                
                 tempKnowledgeBaseItemLocal.NGramCount += 1;
-                tempKnowledgeBaseItemLocal.BaseData.Add(baseDataItem);
+                //tempKnowledgeBaseItemLocal.BaseData.Add(baseDataItem);
                 }
             else
             {
@@ -357,17 +356,8 @@ namespace tweetLocalizerApp.TweetLocator
             
             var knowledgeBaseEntry = knowledgeDB.KnowledgeBase.SingleOrDefault(c => c.NGram.Equals(ngram)&&c.GeoNamesId == geoentityId);
             
-            
-            if(null==knowledgeBaseEntry.BaseData.SingleOrDefault(c=> c.BaseDataId == baseDataItem.BaseDataId)){
-                knowledgeBaseEntry.BaseData.Add(baseDataItem);
-                knowledgeBaseEntry.NGramCount += 1;
-                
-                knowledgeDB.Entry(knowledgeBaseEntry).State = System.Data.Entity.EntityState.Modified;
-            }
-
-            
-            
-           
+            knowledgeBaseEntry.NGramCount += 1;
+            knowledgeDB.Entry(knowledgeBaseEntry).State = System.Data.Entity.EntityState.Modified;
         }
 
         private List<NGramItems> persistNGramItems(knowledgeObjects knowledgeDB, Ngram ngram, List<NGramItems> ngramItemsList)
