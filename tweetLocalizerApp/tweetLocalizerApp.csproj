@@ -24,7 +24,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>52</ApplicationRevision>
+    <ApplicationRevision>58</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -196,6 +196,9 @@
       <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
     <Compile Include="resultsKnowledgeBaseGeocoding.cs">
+      <DependentUpon>knowledgeBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="stopWordsAll.cs">
       <DependentUpon>knowledgeBase.tt</DependentUpon>
     </Compile>
     <Compile Include="timeZones.cs">

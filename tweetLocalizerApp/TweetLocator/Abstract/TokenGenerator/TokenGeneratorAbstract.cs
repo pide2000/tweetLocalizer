@@ -14,8 +14,12 @@ namespace tweetLocalizerApp.TweetLocator
         public ITokenizer<T> tokenizer { get; set; }
         public IEncoder<T> encoder { get; set; }
         public ISorter<T> orderer { get; set; }
+
+        public List<string> stopwords { get; set; }
         
-        abstract public void configure(List<IPreprocessor<T>> preprocessorList, ITokenizer<T> tokenizer, IEncoder<T> encoder, ISorter<T> orderer);
+        abstract public void configure(List<IPreprocessor<T>> preprocessorList, ITokenizer<T> tokenizer, IEncoder<T> encoder, ISorter<T> orderer,List<string> stopwords);
+
+        
         abstract public void assemblyToken(ILocationIndicator<T> locationIndictor);
         
     }

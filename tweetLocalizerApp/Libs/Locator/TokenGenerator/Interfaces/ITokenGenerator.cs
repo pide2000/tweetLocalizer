@@ -14,7 +14,7 @@ namespace tweetLocalizerApp.Libs.Locator
         IEncoder<T> encoder { get; set; }
         ISorter<T> orderer { get; set; }
         void assemblyToken(ILocationIndicator<T> locationIndictor);
-        void configure(List<IPreprocessor<T>> preprocessorList, ITokenizer<T> tokenizer, IEncoder<T> encoder, ISorter<T> orderer);
+        void configure(List<IPreprocessor<T>> preprocessorList, ITokenizer<T> tokenizer, IEncoder<T> encoder, ISorter<T> orderer,List<string> stopwords);
         
     }
 }

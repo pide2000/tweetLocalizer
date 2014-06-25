@@ -34,6 +34,7 @@ namespace tweetLocalizerApp
         public virtual DbSet<tweetRandomSample2> tweetRandomSample2 { get; set; }
         public virtual DbSet<knowledgeBaseGeocoding> knowledgeBaseGeocoding { get; set; }
         public virtual DbSet<resultsKnowledgeBaseGeocoding> resultsKnowledgeBaseGeocoding { get; set; }
+        public virtual DbSet<stopWordsAll> stopWordsAll { get; set; }
     
         [DbFunction("knowledgeObjects", "getSumOfNGramCounts")]
         public virtual IQueryable<Nullable<long>> getSumOfNGramCounts(Nullable<int> tweetRandomSampleId, Nullable<int> nGramOrder)

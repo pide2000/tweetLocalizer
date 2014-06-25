@@ -17,6 +17,7 @@
         <AssociationConnector Association="KnowledgeBaseDataModel.FK__resolutio__knowl__0D439378" />
         <AssociationConnector Association="KnowledgeBaseDataModel.FK__resolutio__tweet__0E37B7B1" />
         <EntityTypeShape EntityType="KnowledgeBaseDataModel.resultsKnowledgeBaseGeocoding" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="KnowledgeBaseDataModel.stopWordsAll" Width="1.5" PointX="8.375" PointY="6.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

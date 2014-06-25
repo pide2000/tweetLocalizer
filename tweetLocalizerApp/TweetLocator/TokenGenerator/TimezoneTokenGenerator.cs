@@ -12,7 +12,7 @@ namespace tweetLocalizerApp.TweetLocator
     public class TimezoneTokenGenerator<T> : TokenGeneratorAbstract<T>
     {
 
-        public override void configure(List<IPreprocessor<T>> preprocessorList, ITokenizer<T> tokenizer, IEncoder<T> encoder, ISorter<T> orderer)
+        public override void configure(List<IPreprocessor<T>> preprocessorList, ITokenizer<T> tokenizer, IEncoder<T> encoder, ISorter<T> orderer,List<string> stopwords)
         {
             this.preprocessorList = preprocessorList;
             this.orderer = orderer;

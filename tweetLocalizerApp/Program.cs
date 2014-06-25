@@ -314,7 +314,6 @@ namespace tweetLocalizerApp
                     }
                     i++;
                     stopwatch.Start();
-                    ti = new TweetInformation();
                     ti.userlocation = item.userlocation;
                     ti.timezone = item.timezone;
                     ti.longitude = item.lon;
@@ -328,7 +327,7 @@ namespace tweetLocalizerApp
 
                     if (i % informationIntervall == 0)
                     {
-                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg5k " + new RoundedTimeSpan(actualTime.Ticks / informationIntervall, 2);
+                        string tweetTXT = i + " T " + new RoundedTimeSpan(timespan.Ticks, 2) + " avg all " + new RoundedTimeSpan(timespan.Ticks / i, 2) + " avg intervall " + new RoundedTimeSpan(actualTime.Ticks / informationIntervall, 2);
                         System.Console.WriteLine(tweetTXT);
                         if (tweetInformation == 1)
                         {

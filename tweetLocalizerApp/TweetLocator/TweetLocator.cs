@@ -67,12 +67,16 @@ namespace tweetLocalizerApp.TweetLocator
             List<IPreprocessor<string>> timezonePreprocessorList = new List<IPreprocessor<string>>();
             timezonePreprocessorList.Add(delSigns);
             timezonePreprocessorList.Add(toLowerCase);
+
+            //getstopwords
+            List<string> stopwords = (from stopword in knowledgeDB.stopWordsAll select stopword.stopword).ToList();
             
             //configure Userlocation Token Generator
-            userlocationTokenGenerator.configure(userlocationPreprocessorList,tokenizer,encoder,orderAlphanumeric);
+            userlocationTokenGenerator.configure(userlocationPreprocessorList,tokenizer,encoder,orderAlphanumeric,stopwords);
 
+            
             //configure Timezone Token Generator
-            timezoneTokenGenerator.configure(timezonePreprocessorList, tokenizer, encoder, orderAlphanumeric);
+            timezoneTokenGenerator.configure(timezonePreprocessorList, tokenizer, encoder, orderAlphanumeric,stopwords);
 
 
             //Getting all knowledge Entries in the Database. This is for Performance boost because EF6 is very slow
@@ -112,13 +116,13 @@ namespace tweetLocalizerApp.TweetLocator
             }
 
 
-            var baseDataEntriesList = (from baseDataEntry in knowledgeDB.BaseData
-                                            select new
-                                            {
-                                                baseDataEntry.BaseDataId
-                                            }).ToList();
+            //var baseDataEntriesList = (from baseDataEntry in knowledgeDB.BaseData
+            //                                select new
+            //                                {
+            //                                    baseDataEntry.BaseDataId
+            //                                }).ToList();
 
-            baseDataEntriesList.ForEach(c => baseDataIdentifierList.Add(c.BaseDataId));
+            //baseDataEntriesList.ForEach(c => baseDataIdentifierList.Add(c.BaseDataId));
 
             globalWatchStartStop("Get Lists " );
             
@@ -131,7 +135,7 @@ namespace tweetLocalizerApp.TweetLocator
                 knowledgeDB.Configuration.ValidateOnSaveEnabled = false;
                 ((IObjectContextAdapter)geonamesDB).ObjectContext.CommandTimeout = 180;
             
-            learnCallCounter = 1;
+            learnCallCounter = 0;
             localBulkInsertSize = bulkInsertSize;
 
             //setting up twitter to tweet status
@@ -202,76 +206,77 @@ namespace tweetLocalizerApp.TweetLocator
 
 
         private void saveToDatabase(TweetKnowledgeObj tweetknowledge,int bulkInsertSize) {
-            learnCallCounter++;
+            
 
             BaseData baseDataItem = new BaseData();
             //baseDataItem = getbaseDataObject((int)tweetknowledge.baseDataId);
-            
-
-            //create NgramItemsList
-            foreach (var ngram in tweetknowledge.nGrams)
+            if (tweetknowledge.nGrams != null)
             {
-                // list of geoids to hold the geoids of the current ngram
-                HashSet<int> tempGeoIdknowledgeIdList = new HashSet<int>();
-                
-                //check if the combination of ngram and geoid was already tracked, either in the database or in the current iterration
-                
-                bool checkforNgram = knowledgeBaseIdentifierList.TryGetValue(ngram.nGram,out tempGeoIdknowledgeIdList);
-                if (checkforNgram && tempGeoIdknowledgeIdList.Contains((int)tweetknowledge.geoEntityId))
+                //create NgramItemsList
+                foreach (var ngram in tweetknowledge.nGrams)
                 {
-                    /**
-                     * todo: there has to be one more case checked. ngram: "a;b ...... a;b" => bigram : a;b,..... a;b and first a is e.g userlocation whereas 2nd a is timezone
-                     * in this case the ngramitems for the two bigrams arent of the same type. => wrong item list is the result. Really? 
-                    **/
-                    updateKnowledgeBaseEntry(tweetknowledge, ngram,baseDataItem);
+                    // list of geoids to hold the geoids of the current ngram
+                    HashSet<int> tempGeoIdknowledgeIdList = new HashSet<int>();
 
-                }else
-                { 
-                    //List<NGramItems> items = persistNGramItems(knowledgeDB, ngram, ngramItemsLocalList);
-                    //in persist just check if the basedata entry is already present and add it. 
-                    //create the knowledgeBase Object to save
+                    //check if the combination of ngram and geoid was already tracked, either in the database or in the current iterration
 
-                    //List<BaseData> baseDataIds = new List<BaseData>();
-                    //baseDataIds.Add(baseDataItem);
-
-                    KnowledgeBase knowBase = new KnowledgeBase()
+                    bool checkforNgram = knowledgeBaseIdentifierList.TryGetValue(ngram.nGram, out tempGeoIdknowledgeIdList);
+                    if (checkforNgram && tempGeoIdknowledgeIdList.Contains((int)tweetknowledge.geoEntityId))
                     {
-                        NGram = ngram.nGram,
-                        NGramCount = 1,
-                        GeoNamesId = (int)tweetknowledge.geoEntityId,
-                        CountryId = tweetknowledge.countryId,
-                        Admin1Id = tweetknowledge.admin1Id,
-                        Admin2Id = tweetknowledge.admin2Id
-                        
-                    };
-                    
-                    //just for actuality of the Identifier Lists. First check if ngram is available, if so add geoid. If not add compelte knowbase
-                    if (checkforNgram)
-                    {
-                        tempGeoIdknowledgeIdList.Add((int)tweetknowledge.geoEntityId);
-                        knowledgeBaseIdentifierList[ngram.nGram] = tempGeoIdknowledgeIdList;
+                        /**
+                         * todo: there has to be one more case checked. ngram: "a;b ...... a;b" => bigram : a;b,..... a;b and first a is e.g userlocation whereas 2nd a is timezone
+                         * in this case the ngramitems for the two bigrams arent of the same type. => wrong item list is the result. Really? 
+                        **/
+                        updateKnowledgeBaseEntry(tweetknowledge, ngram, baseDataItem);
+
                     }
-                    else {
-                        knowledgeBaseIdentifierList.Add(ngram.nGram,new HashSet<int>{(int)tweetknowledge.geoEntityId});
+                    else
+                    {
+                        //List<NGramItems> items = persistNGramItems(knowledgeDB, ngram, ngramItemsLocalList);
+                        //in persist just check if the basedata entry is already present and add it. 
+                        //create the knowledgeBase Object to save
+
+                        //List<BaseData> baseDataIds = new List<BaseData>();
+                        //baseDataIds.Add(baseDataItem);
+
+                        KnowledgeBase knowBase = new KnowledgeBase()
+                        {
+                            NGram = ngram.nGram,
+                            NGramCount = 1,
+                            GeoNamesId = (int)tweetknowledge.geoEntityId,
+                            CountryId = tweetknowledge.countryId,
+                            Admin1Id = tweetknowledge.admin1Id,
+                            Admin2Id = tweetknowledge.admin2Id
+                        };
+
+                        //just for actuality of the Identifier Lists. First check if ngram is available, if so add geoid. If not add compelte knowbase
+                        if (checkforNgram)
+                        {
+                            tempGeoIdknowledgeIdList.Add((int)tweetknowledge.geoEntityId);
+                            knowledgeBaseIdentifierList[ngram.nGram] = tempGeoIdknowledgeIdList;
+                        }
+                        else
+                        {
+                            knowledgeBaseIdentifierList.Add(ngram.nGram, new HashSet<int> { (int)tweetknowledge.geoEntityId });
+                        }
+
+                        knowledgeBaseLocalList.Add(knowBase);
+                        knowledgeDB.KnowledgeBase.Add(knowBase);
                     }
 
-                    knowledgeBaseLocalList.Add(knowBase);
-                    knowledgeDB.KnowledgeBase.Add(knowBase);
                 }
-                
             }
-            if (learnCallCounter > bulkInsertSize)
+            learnCallCounter++;
+            if (learnCallCounter % bulkInsertSize == 0)
             {
                 globalWatchStartStop();
-                learnCallCounter = 1;
+                learnCallCounter = 0;
                 try
                 {
                     knowledgeDB.SaveChanges();
                     knowledgeBaseLocalList = new List<KnowledgeBase>();
                     baseDataLocalList = new List<BaseData>();
                     ngramItemsLocalList = new List<NGramItems>();
-                    
-                    
                     }
                 catch (Exception ex)
                 {
@@ -402,10 +407,9 @@ namespace tweetLocalizerApp.TweetLocator
         {
             TweetKnowledgeObj tweetKnowledge;
             GeographyData geogData;
-            createTweetKnowledge(tweet, out tweetKnowledge, out geogData);
-
             
-
+            createTweetKnowledge(tweet, out tweetKnowledge, out geogData);
+           
             //statistics.addDistances((double)geogData.distance);
             //statistics.addGeographyDataTweetKnowledge(geogData,tweetKnowledge);
 
@@ -440,7 +444,14 @@ namespace tweetLocalizerApp.TweetLocator
             tweetKnowledge.indicatorTokens.Add(tweetKnowledge.timezoneIndicator.indicatorType, tweetKnowledge.timezoneIndicator.finalIndicatorTokens);
 
             //create nGrams
-            tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens, 3);
+            //check for empty tokens
+            if (!(tweetKnowledge.userlocationIndicator.finalIndicatorTokens.Count < 2)
+                && !(String.IsNullOrWhiteSpace(tweetKnowledge.userlocationIndicator.finalIndicatorTokens.First())))
+            {
+                tweetKnowledge.nGrams = ngramGenerator.generateNGrams(tweetKnowledge.indicatorTokens, 3);
+            }
+            
+                
 
             List<int> geonamesIds = new List<int>();
             geonamesIds = geoCoder.locateGeonames(tweetKnowledge.longitude, tweetKnowledge.latitude, geonamesDB, geogData);
@@ -540,16 +551,18 @@ namespace tweetLocalizerApp.TweetLocator
         private List<KnowledgeBase> getKnowledgeBaseResults(TweetKnowledgeObj tweetKnowledge)
         {
             List<KnowledgeBase> possibleLocations = new List<KnowledgeBase>();
-
-            foreach (Ngram ngram in tweetKnowledge.nGrams)
+            if (tweetKnowledge.nGrams != null)
             {
-                var possibilities = (from knowBase in knowledgeDB.KnowledgeBase
-                                     where knowBase.NGram.Equals(ngram.nGram)
-                                     select knowBase).ToList();
-
-                if (possibilities != null)
+                foreach (Ngram ngram in tweetKnowledge.nGrams)
                 {
-                    possibleLocations.AddRange(possibilities);
+                    var possibilities = (from knowBase in knowledgeDB.KnowledgeBase
+                                         where knowBase.NGram.Equals(ngram.nGram)
+                                         select knowBase).ToList();
+
+                    if (possibilities != null)
+                    {
+                        possibleLocations.AddRange(possibilities);
+                    }
                 }
             }
 

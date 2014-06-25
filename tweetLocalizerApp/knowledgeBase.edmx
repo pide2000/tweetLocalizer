@@ -46,6 +46,14 @@
           <Property Name="country_percentage" Type="float" />
           <Property Name="country_count" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'V1.0.0.6.dbo.stopWordsAll' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="stopWordsAll">
+          <Key>
+            <PropertyRef Name="stopword" />
+          </Key>
+          <Property Name="stopword" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="tweetRandomSample2">
           <Key>
             <PropertyRef Name="id" />
@@ -284,6 +292,11 @@
           <EntitySet Name="learningBase" EntityType="Self.learningBase" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="NGramItems" EntityType="Self.NGramItems" Schema="knowledgeObjects" store:Type="Tables" />
           <EntitySet Name="NGramItemsInNGram" EntityType="Self.NGramItemsInNGram" Schema="knowledgeObjects" store:Type="Tables" />
+          <EntitySet Name="stopWordsAll" EntityType="Self.stopWordsAll" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [stopWordsAll].[stopword] AS [stopword]
+    FROM [dbo].[stopWordsAll] AS [stopWordsAll]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK__BaseDataT__BaseD__7D0D2BAF" Association="Self.FK__BaseDataT__BaseD__7D0D2BAF">
             <End Role="BaseData" EntitySet="BaseData" />
             <End Role="BaseDataToKnowledgeBase" EntitySet="BaseDataToKnowledgeBase" />
@@ -396,6 +409,7 @@
             <Parameter Name="tweetRandomSampleId" Mode="In" Type="Int32" />
             <Parameter Name="NGramOrder" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="stopWordsAll" EntityType="KnowledgeBaseDataModel.stopWordsAll" />
           </EntityContainer>
         <EntityType Name="BaseData">
           <Key>
@@ -535,6 +549,12 @@
           <Property Name="country_percentage" Type="Double" />
           <Property Name="country_count" Type="Int32" />
           <Property Name="city_count" Type="Int32" />
+        </EntityType>
+        <EntityType Name="stopWordsAll">
+          <Key>
+            <PropertyRef Name="stopword" />
+          </Key>
+          <Property Name="stopword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -686,6 +706,13 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="getSumOfNGramCounts" FunctionName="KnowledgeBaseDataModel.Store.getSumOfNGramCounts" />
+          <EntitySetMapping Name="stopWordsAll">
+            <EntityTypeMapping TypeName="KnowledgeBaseDataModel.stopWordsAll">
+              <MappingFragment StoreEntitySet="stopWordsAll">
+                <ScalarProperty Name="stopword" ColumnName="stopword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
